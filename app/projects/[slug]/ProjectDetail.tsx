@@ -49,7 +49,6 @@ export default function ProjectDetail({ project }: { project: ProjectLocation })
         </div>
         <div className="detail-hero-image">
           {project.cover ? <Image src={project.cover} alt={project.title[lang]} fill sizes="(max-width: 900px) 100vw, 58vw" priority /> : <div className={`project-placeholder ${project.category}`}><span>{project.district.slice(0, 2).toUpperCase()}</span><i /><small>{t.noGallery}</small></div>}
-          {project.category === "china" && <small>{t.concept}</small>}
         </div>
       </section>
 

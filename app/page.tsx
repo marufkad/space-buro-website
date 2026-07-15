@@ -21,7 +21,7 @@ const ProjectMap = dynamic(() => import("./ProjectMap"), {
 });
 
 type Filter = "all" | ProjectCategory;
-type CalculatorType = "renovation" | "furniture" | "china";
+type CalculatorType = "renovation" | "furniture";
 
 const filterOrder: Filter[] = ["all", "fitout", "furniture", "china", "commercial"];
 
@@ -44,7 +44,7 @@ const heroSlides = [
     tag: { ru: "Библиотека объектов", en: "Project library" },
   },
   {
-    image: "/media/china-furniture-concept.webp",
+    image: "/media/china-furniture-photo.webp",
     title: { ru: "Мебель из Китая с контролем от фабрики до Дубая", en: "Furniture from China, controlled from factory to Dubai" },
     text: { ru: "Подбор фабрик, образцы, контроль качества, консолидация и доставка.", en: "Factory sourcing, samples, quality control, consolidation and delivery." },
     tag: { ru: "Dubai · Foshan", en: "Dubai · Foshan" },
@@ -57,10 +57,11 @@ const ui = {
     heroPrimary: "Смотреть объекты",
     heroSecondary: "Рассчитать проект",
     slide: "Слайд",
-    proof: [["10+", "лет опыта команды"], ["01", "команда на весь проект"], ["UAE", "объекты на карте"], ["RU / EN", "коммуникация"]],
     advantagesKicker: "Почему Space Buro",
     advantagesTitle: "Снимаем риски, которые обычно остаются между подрядчиками",
     advantages: [
+      ["10+", "Лет практического опыта", "Опыт ключевых специалистов в ремонте, инженерии, строительстве и мебели на заказ."],
+      ["RU / EN", "Коммуникация без барьеров", "Ведём проект на русском или английском и переводим технические решения на понятный язык."],
       ["01", "Собственное производство мебели", "Ремонт и корпусная мебель синхронизированы по чертежам и срокам."],
       ["02", "Русскоязычная команда", "Обсуждаем сложные технические вопросы без потери смысла; работаем также на английском."],
       ["03", "Согласования и NOC", "Координируем building management, необходимые разрешения и доступ на объект."],
@@ -74,6 +75,13 @@ const ui = {
     filters: { all: "Все", fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческие" },
     noPhotos: "Фотографии готовятся",
     openProject: "Открыть объект",
+    showAllProjects: "Показать все объекты",
+    hideProjects: "Скрыть лишние",
+    showAllMap: "Показать все объекты на карте",
+    hideMap: "Свернуть список",
+    modalDetails: "Информация об объекте",
+    fullPage: "Открыть полную страницу",
+    close: "Закрыть",
     completed: "Завершён",
     progress: "В работе",
     service: "Услуга",
@@ -82,29 +90,28 @@ const ui = {
     mapTitle: "Выберите категорию, затем объект на карте ОАЭ",
     mapText: "Иконка показывает тип объекта. Точный номер квартиры или виллы не публикуется.",
     mapOpen: "Страница объекта",
-    chinaKicker: "Новая услуга",
+    chinaKicker: "Dubai · Foshan",
     chinaTitle: "Заказ мебели из Китая",
     chinaText: "Мы превращаем поездку по шоурумам и фабрикам в управляемый процесс: от ведомости мебели до доставки и установки в ОАЭ.",
     chinaSteps: [["01", "Комплектация", "Собираем ведомость, размеры, стиль и бюджет."], ["02", "Фабрики и образцы", "Сравниваем предложения и проверяем материалы."], ["03", "Контроль", "Сверяем производство с утверждённой спецификацией."], ["04", "Логистика", "Консолидируем, доставляем и координируем монтаж."]],
     concept: "Визуальная концепция услуги, не реализованный объект",
     chinaCta: "Обсудить комплектацию",
     processKicker: "Этапы работы",
-    processTitle: "Наведите на номер — получите результат этапа",
-    processText: "На телефоне нажмите на номер. Активный этап раскрывается ниже и показывает, что именно вы получаете.",
+    processTitle: "Этапы работы",
+    processText: "Выберите номер этапа, чтобы увидеть задачи и понятный результат.",
     stage: "Этап",
     result: "Результат",
     developersKicker: "Девелоперы Дубая",
     developersTitle: "Работаем с объектами ведущих застройщиков",
     developersText: "Знаем, что требования к доступу, NOC и проведению работ различаются в каждом здании и community. Названия ниже обозначают объекты девелоперов, а не официальное партнёрство.",
-    calculatorKicker: "Предварительный калькулятор",
-    calculatorTitle: "Получите ориентир бюджета за одну минуту",
+    calculatorKicker: "Предварительный расчёт",
+    calculatorTitle: "Калькулятор стоимости",
     calculatorText: "Это диапазон для планирования, не коммерческое предложение. Точная смета появляется после замера и согласования состава работ.",
-    calcTabs: { renovation: "Ремонт", furniture: "Мебель", china: "Мебель из Китая" },
+    calcTabs: { renovation: "Ремонт", furniture: "Мебель" },
     area: "Площадь помещения",
     level: "Уровень ремонта",
     levels: { cosmetic: "Косметический", standard: "Полный", premium: "Премиальный" },
     meters: "Погонные метры мебели",
-    rooms: "Количество комнат",
     estimate: "Ориентировочный диапазон",
     estimateNote: "Без учёта VAT, согласований и индивидуальных позиций. Финальная цена зависит от объекта и спецификации.",
     calcCta: "Уточнить расчёт",
@@ -127,10 +134,11 @@ const ui = {
     heroPrimary: "Explore projects",
     heroSecondary: "Estimate a project",
     slide: "Slide",
-    proof: [["10+", "years of team experience"], ["01", "team for the full project"], ["UAE", "projects on the map"], ["RU / EN", "communication"]],
     advantagesKicker: "Why Space Buro",
     advantagesTitle: "We remove the risks that usually sit between contractors",
     advantages: [
+      ["10+", "Years of practical experience", "Key specialists bring hands-on experience in fit-out, engineering, construction and bespoke furniture."],
+      ["RU / EN", "Clear communication", "We run the project in Russian or English and explain technical decisions in plain language."],
       ["01", "In-house furniture production", "Fit-out and joinery are coordinated through shared drawings and schedules."],
       ["02", "Russian-speaking team", "Technical decisions remain clear; all project communication is also available in English."],
       ["03", "Approvals and NOCs", "We coordinate building management, permits and site access requirements."],
@@ -144,6 +152,13 @@ const ui = {
     filters: { all: "All", fitout: "Fit-out", furniture: "Furniture", china: "Furniture from China", commercial: "Commercial" },
     noPhotos: "Photography in preparation",
     openProject: "Open project",
+    showAllProjects: "Show all projects",
+    hideProjects: "Show fewer",
+    showAllMap: "Show all map projects",
+    hideMap: "Collapse list",
+    modalDetails: "Project information",
+    fullPage: "Open full project page",
+    close: "Close",
     completed: "Completed",
     progress: "In progress",
     service: "Service",
@@ -152,29 +167,28 @@ const ui = {
     mapTitle: "Choose a category, then select a UAE project",
     mapText: "Each icon identifies the project type. Exact unit and villa numbers remain private.",
     mapOpen: "Project page",
-    chinaKicker: "New service",
+    chinaKicker: "Dubai · Foshan",
     chinaTitle: "Furniture from China",
     chinaText: "We turn showroom and factory sourcing into a controlled process, from the furniture schedule to UAE delivery and installation.",
     chinaSteps: [["01", "Schedule", "We define items, dimensions, style and budget."], ["02", "Factories and samples", "We compare offers and verify materials."], ["03", "Quality control", "Production is checked against the approved specification."], ["04", "Logistics", "We consolidate, deliver and coordinate installation."]],
     concept: "Service concept visual, not a completed project",
     chinaCta: "Discuss furnishing",
     processKicker: "Our process",
-    processTitle: "Hover over a number to see its deliverable",
-    processText: "On mobile, tap a number. The selected stage opens below with a clear explanation of what you receive.",
+    processTitle: "Work stages",
+    processText: "Select a stage number to see its tasks and clear deliverable.",
     stage: "Stage",
     result: "Deliverable",
     developersKicker: "Dubai developers",
     developersTitle: "Working in properties by leading developers",
     developersText: "Access, NOC and work requirements vary by building and community. The names below indicate developer properties, not formal partnerships.",
-    calculatorKicker: "Preliminary calculator",
-    calculatorTitle: "Get a planning range in one minute",
+    calculatorKicker: "Preliminary estimate",
+    calculatorTitle: "Cost calculator",
     calculatorText: "This is a budget guide, not a quotation. An accurate estimate follows a site survey and confirmed scope.",
-    calcTabs: { renovation: "Renovation", furniture: "Furniture", china: "Furniture from China" },
+    calcTabs: { renovation: "Renovation", furniture: "Furniture" },
     area: "Property area",
     level: "Renovation level",
     levels: { cosmetic: "Cosmetic", standard: "Full", premium: "Premium" },
     meters: "Linear metres of furniture",
-    rooms: "Number of rooms",
     estimate: "Indicative range",
     estimateNote: "VAT, approvals and individual items are excluded. Final pricing depends on the site and specification.",
     calcCta: "Refine estimate",
@@ -206,6 +220,13 @@ function StageIcon({ name }: { name: string }) {
   return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M10 14h28v24H10V14Zm8 0v-4h12v4M10 23h28M21 27h6" /></svg>;
 }
 
+function SocialIcon({ name }: { name: "whatsapp" | "telegram" }) {
+  if (name === "telegram") {
+    return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3 3.7 9.7c-1.2.5-1.2 1.2-.2 1.5l4.4 1.4 1.7 5.3c.2.7.1 1 .8 1 .5 0 .8-.2 1-.4l2.2-2.1 4.6 3.4c.8.5 1.5.2 1.7-.8L23 4.5C23.3 3.3 22.5 2.8 21 3Z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><path d="m8 12.6 10.7-6.7-8.4 8.4-.3 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+  }
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 11.6a8.4 8.4 0 0 1-12.5 7.3L3 20.2l1.3-4.7a8.4 8.4 0 1 1 16.1-3.9Z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M8.1 7.7c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3 0 .5-.2.7l-.6.7c-.2.2-.1.4 0 .6.5 1 1.3 1.8 2.3 2.3.3.2.5.2.7 0l.8-1c.2-.2.4-.3.7-.2l1.9.9c.3.1.4.3.4.5 0 .3-.1 1.3-.7 1.8-.6.5-1.4.8-2.4.5-1-.3-2.3-.8-3.8-2.1-1.2-1.1-2.1-2.5-2.4-3.5-.4-1.1-.1-2.4.3-3.1Z" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+}
+
 function ProjectVisual({ project, lang, priority = false }: { project: ProjectLocation; lang: Lang; priority?: boolean }) {
   if (project.cover) {
     return <Image src={project.cover} alt={project.title[lang]} fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw" priority={priority} />;
@@ -228,14 +249,17 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
   const [projectFilter, setProjectFilter] = useState<Filter>("all");
+  const [projectsExpanded, setProjectsExpanded] = useState(false);
   const [mapFilter, setMapFilter] = useState<Filter>("all");
+  const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projectLocations[0].id);
+  const [projectModal, setProjectModal] = useState<ProjectLocation | null>(null);
+  const [modalImage, setModalImage] = useState<string | null>(null);
   const [activeStage, setActiveStage] = useState(0);
   const [calculatorType, setCalculatorType] = useState<CalculatorType>("renovation");
   const [area, setArea] = useState(100);
   const [renovationLevel, setRenovationLevel] = useState<"cosmetic" | "standard" | "premium">("standard");
   const [furnitureMeters, setFurnitureMeters] = useState(12);
-  const [rooms, setRooms] = useState(3);
   const t = ui[lang];
 
   useEffect(() => {
@@ -260,19 +284,40 @@ export default function Home() {
     () => projectLocations.filter((project) => mapFilter === "all" || project.category === mapFilter),
     [mapFilter],
   );
+  const visibleProjects = projectsExpanded ? filteredProjects : filteredProjects.slice(0, 4);
+  const visibleMapProjects = mapExpanded ? mapProjects : mapProjects.slice(0, 5);
   const selected = mapProjects.find((project) => project.id === selectedProject) ?? mapProjects[0];
 
   const estimate = useMemo(() => {
     if (calculatorType === "furniture") return [furnitureMeters * 1800, furnitureMeters * 3300];
-    if (calculatorType === "china") return [rooms * 22000, rooms * 38000];
-    const rates = { cosmetic: [350, 550], standard: [850, 1250], premium: [1500, 2300] } as const;
+    const rates = { cosmetic: [350, 550], standard: [1105, 1625], premium: [1950, 2990] } as const;
     return [area * rates[renovationLevel][0], area * rates[renovationLevel][1]];
-  }, [area, calculatorType, furnitureMeters, renovationLevel, rooms]);
+  }, [area, calculatorType, furnitureMeters, renovationLevel]);
+
+  useEffect(() => {
+    if (!projectModal) return;
+    const previous = document.body.style.overflow;
+    const handleEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setProjectModal(null); };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEscape);
+    return () => { document.body.style.overflow = previous; window.removeEventListener("keydown", handleEscape); };
+  }, [projectModal]);
+
+  function chooseProjectFilter(value: Filter) {
+    setProjectFilter(value);
+    setProjectsExpanded(false);
+  }
 
   function chooseMapFilter(value: Filter) {
     setMapFilter(value);
+    setMapExpanded(false);
     const first = projectLocations.find((project) => value === "all" || project.category === value);
     if (first) setSelectedProject(first.id);
+  }
+
+  function openProject(project: ProjectLocation) {
+    setProjectModal(project);
+    setModalImage(project.images[0] ?? project.cover ?? null);
   }
 
   function handleHeroPointer(event: PointerEvent<HTMLDivElement>) {
@@ -308,8 +353,8 @@ export default function Home() {
           <button className="language" type="button" onClick={() => setLang(lang === "ru" ? "en" : "ru")} aria-label="Switch language">
             {lang === "ru" ? "EN" : "RU"}
           </button>
-          <a className="social-link" href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WA</a>
-          <a className="social-link" href="https://t.me/marufkad" target="_blank" rel="noreferrer">TG</a>
+          <a className="social-link" href="https://wa.me/971523569697" target="_blank" rel="noreferrer" aria-label="WhatsApp"><SocialIcon name="whatsapp" /></a>
+          <a className="social-link" href="https://t.me/marufkad" target="_blank" rel="noreferrer" aria-label="Telegram"><SocialIcon name="telegram" /></a>
           <button className="menu-button" type="button" onClick={() => setMenuOpen((value) => !value)} aria-label="Open menu"><span /><span /></button>
         </div>
       </header>
@@ -337,13 +382,8 @@ export default function Home() {
               <Image src={slide.image} alt={slide.title[lang]} fill sizes="(max-width: 900px) 100vw, 58vw" priority={index === 0} />
             </div>
           ))}
-          <div className="hero-orbit" aria-hidden="true"><span /><span /><b>SPACE<br />BURO</b></div>
           <div className="hero-caption"><span>25.2048° N</span><span>55.2708° E</span></div>
         </div>
-      </section>
-
-      <section className="proof-strip" aria-label="Space Buro facts">
-        {t.proof.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
       </section>
 
       <section className="section advantages-section">
@@ -365,29 +405,28 @@ export default function Home() {
         </div>
         <div className="filter-bar" data-reveal>
           {filterOrder.map((key) => (
-            <button key={key} type="button" className={projectFilter === key ? "active" : ""} onClick={() => setProjectFilter(key)}>
+            <button key={key} type="button" className={projectFilter === key ? "active" : ""} onClick={() => chooseProjectFilter(key)}>
               {t.filters[key]}<sup>{projectLocations.filter((project) => key === "all" || project.category === key).length}</sup>
             </button>
           ))}
         </div>
         <div className="projects-grid">
-          {filteredProjects.map((project, index) => (
-            <Link className="project-card" href={`/projects/${project.id}`} key={project.id} data-reveal style={{ transitionDelay: `${index * 55}ms` }}>
+          {visibleProjects.map((project, index) => (
+            <button className="project-card" type="button" onClick={() => openProject(project)} key={project.id} data-reveal style={{ transitionDelay: `${index * 55}ms` }}>
               <div className="project-card-image"><ProjectVisual project={project} lang={lang} priority={index < 2} /><span className={`status-badge ${project.status}`}>{t[project.status]}</span></div>
               <div className="project-card-copy">
                 <p>{categoryLabels[lang][project.category]} · {project.year}</p>
                 <h3>{project.shortTitle[lang]}</h3>
-                <div><span>{project.district}</span><span>{project.area[lang]}</span></div>
-                <b>{t.openProject}<i>↗</i></b>
               </div>
-            </Link>
+            </button>
           ))}
         </div>
+        {filteredProjects.length > 4 && <button className={`expand-button ${projectsExpanded ? "open" : ""}`} type="button" onClick={() => setProjectsExpanded((value) => !value)}><span>{projectsExpanded ? t.hideProjects : t.showAllProjects}</span><i>↓</i></button>}
       </section>
 
       <section className="brands-marquee" aria-label={t.brandsKicker}>
         <p>{t.brandsKicker}</p>
-        <div className="marquee-window"><div className="marquee-track">{[...brands, ...brands].map((brand, index) => <span key={`${brand}-${index}`}>{brand}<i>✦</i></span>)}</div></div>
+        <div className="marquee-window"><div className="marquee-track">{[...brands, ...brands].map((brand, index) => <span key={`${brand.name}-${index}`}><Image src={brand.logo} alt={brand.name} width={160} height={56} /><i>✦</i></span>)}</div></div>
       </section>
 
       <section id="map" className="section map-section">
@@ -400,12 +439,13 @@ export default function Home() {
         <div className="map-layout" data-reveal>
           <div className="map-shell"><ProjectMap projects={mapProjects} selectedId={selected.id} lang={lang} onSelect={setSelectedProject} /></div>
           <aside className="map-projects">
-            {mapProjects.map((project) => (
+            {visibleMapProjects.map((project) => (
               <button key={project.id} type="button" className={selected.id === project.id ? "active" : ""} onClick={() => setSelectedProject(project.id)}>
                 <i className={project.category}>{categoryLabels[lang][project.category].slice(0, 2)}</i>
                 <span><strong>{project.shortTitle[lang]}</strong><small>{project.district} · {project.year}</small></span><b>↗</b>
               </button>
             ))}
+            {mapProjects.length > 5 && <button className="map-expand" type="button" onClick={() => setMapExpanded((value) => !value)}><span>{mapExpanded ? t.hideMap : t.showAllMap}</span><b>{mapExpanded ? "↑" : "↓"}</b></button>}
           </aside>
         </div>
         <article className="selected-map-card" data-reveal>
@@ -418,13 +458,12 @@ export default function Home() {
 
       <section id="china" className="section china-section">
         <div className="china-visual" data-reveal>
-          <Image src="/media/china-furniture-concept.webp" alt={t.chinaTitle} fill sizes="(max-width: 900px) 100vw, 55vw" />
-          <small>{t.concept}</small>
+          <Image src="/media/china-furniture-photo.webp" alt={t.chinaTitle} fill sizes="(max-width: 900px) 100vw, 55vw" />
         </div>
         <div className="china-copy" data-reveal>
           <p className="eyebrow">{t.chinaKicker}</p><h2>{t.chinaTitle}</h2><p>{t.chinaText}</p>
           <div className="china-steps">{t.chinaSteps.map(([number, title, text]) => <article key={number}><span>{number}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
-          <a className="button button-primary" href="#contact">{t.chinaCta}<span>→</span></a>
+          <Link className="button button-primary" href="/china-furniture">{t.chinaCta}<span>→</span></Link>
         </div>
       </section>
 
@@ -451,20 +490,19 @@ export default function Home() {
         <div className="section-heading" data-reveal>
           <div><p className="eyebrow">{t.developersKicker}</p><h2>{t.developersTitle}</h2></div><p>{t.developersText}</p>
         </div>
-        <div className="developers-grid" data-reveal>{developers.map((developer, index) => <div key={developer}><span>{String(index + 1).padStart(2, "0")}</span><strong>{developer}</strong></div>)}</div>
+        <div className="developers-grid" data-reveal>{developers.map((developer, index) => <div key={developer.name} className={developer.invert ? "invert-logo" : ""}><span>{String(index + 1).padStart(2, "0")}</span>{developer.logo ? <Image src={developer.logo} alt={developer.name} width={180} height={64} /> : <strong>{developer.name}</strong>}</div>)}</div>
       </section>
 
       <section id="calculator" className="section calculator-section">
         <div className="calculator-copy" data-reveal><p className="eyebrow">{t.calculatorKicker}</p><h2>{t.calculatorTitle}</h2><p>{t.calculatorText}</p></div>
         <div className="calculator-card" data-reveal>
-          <div className="calculator-tabs">{(["renovation", "furniture", "china"] as CalculatorType[]).map((type) => <button type="button" key={type} className={calculatorType === type ? "active" : ""} onClick={() => setCalculatorType(type)}>{t.calcTabs[type]}</button>)}</div>
+          <div className="calculator-tabs">{(["renovation", "furniture"] as CalculatorType[]).map((type) => <button type="button" key={type} className={calculatorType === type ? "active" : ""} onClick={() => setCalculatorType(type)}>{t.calcTabs[type]}</button>)}</div>
           <div className="calculator-controls">
             {calculatorType === "renovation" && <>
               <label><span>{t.area}<b>{area} m²</b></span><input type="range" min="30" max="600" step="10" value={area} onChange={(event) => setArea(Number(event.target.value))} /></label>
               <fieldset><legend>{t.level}</legend><div>{(["cosmetic", "standard", "premium"] as const).map((level) => <button key={level} className={renovationLevel === level ? "active" : ""} type="button" onClick={() => setRenovationLevel(level)}>{t.levels[level]}</button>)}</div></fieldset>
             </>}
             {calculatorType === "furniture" && <label><span>{t.meters}<b>{furnitureMeters} m</b></span><input type="range" min="2" max="60" step="1" value={furnitureMeters} onChange={(event) => setFurnitureMeters(Number(event.target.value))} /></label>}
-            {calculatorType === "china" && <label><span>{t.rooms}<b>{rooms}</b></span><input type="range" min="1" max="12" step="1" value={rooms} onChange={(event) => setRooms(Number(event.target.value))} /></label>}
           </div>
           <div className="estimate-box"><span>{t.estimate}</span><strong>AED {formatAed(estimate[0], lang)} — {formatAed(estimate[1], lang)}</strong><p>{t.estimateNote}</p><button className="button button-primary" type="button" onClick={contactEstimate}>{t.calcCta}<span>↗</span></button></div>
         </div>
@@ -494,6 +532,24 @@ export default function Home() {
           <button className="button button-primary form-submit" type="submit">{t.submit}<span>↗</span></button>
         </form>
       </section>
+
+      {projectModal && <div className="project-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setProjectModal(null); }}>
+        <article className="project-modal" role="dialog" aria-modal="true" aria-label={projectModal.title[lang]}>
+          <button className="project-modal-close" type="button" onClick={() => setProjectModal(null)} aria-label={t.close}>×</button>
+          <div className="project-modal-visual">
+            {modalImage ? <Image src={modalImage} alt={projectModal.title[lang]} fill sizes="(max-width: 800px) 100vw, 68vw" /> : <ProjectVisual project={projectModal} lang={lang} />}
+            <span className={`status-badge ${projectModal.status}`}>{t[projectModal.status]}</span>
+          </div>
+          {projectModal.images.length > 1 && <div className="project-modal-thumbs">{projectModal.images.map((image, index) => <button key={image} type="button" className={modalImage === image ? "active" : ""} onClick={() => setModalImage(image)}><Image src={image} alt={`${projectModal.title[lang]} ${index + 1}`} fill sizes="90px" /></button>)}</div>}
+          <div className="project-modal-info">
+            <div><p className="eyebrow">{t.modalDetails} · {categoryLabels[lang][projectModal.category]} · {projectModal.year}</p><h2>{projectModal.title[lang]}</h2><p>{projectModal.summary[lang]}</p></div>
+            <dl><div><dt>{lang === "ru" ? "Площадь" : "Area"}</dt><dd>{projectModal.area[lang]}</dd></div><div><dt>{lang === "ru" ? "Срок" : "Duration"}</dt><dd>{projectModal.duration[lang]}</dd></div><div><dt>{lang === "ru" ? "География" : "Location"}</dt><dd>{projectModal.district}</dd></div></dl>
+            <div className="project-modal-scope"><strong>{lang === "ru" ? "Состав работ" : "Scope of work"}</strong><ul>{projectModal.scope.map((item) => <li key={item.en}>{item[lang]}</li>)}</ul></div>
+            <div className="project-modal-team"><strong>{lang === "ru" ? "Участники" : "Team"}</strong><div>{team.filter((member) => projectModal.teamIds.includes(member.id)).map((member) => <a href={`#team-${member.id}`} key={member.id} onClick={() => setProjectModal(null)}>{member.name[lang]}</a>)}</div></div>
+            <Link className="button button-primary" href={`/projects/${projectModal.id}`}>{t.fullPage}<span>↗</span></Link>
+          </div>
+        </article>
+      </div>}
 
       <footer><a className="logo footer-logo" href="#top"><span>SPACE</span><span>BURO</span></a><p>Dubai, United Arab Emirates</p><div><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">Telegram</a><a href="https://www.instagram.com/space.buro.ae/" target="_blank" rel="noreferrer">Instagram</a></div><small>© {new Date().getFullYear()} Space Buro</small></footer>
     </main>

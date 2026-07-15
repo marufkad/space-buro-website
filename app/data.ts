@@ -198,8 +198,8 @@ export const projectLocations: ProjectLocation[] = [
     },
     area: { ru: "Для квартир, вилл и бизнеса", en: "Homes, villas and commercial" },
     duration: { ru: "По заказу", en: "Order based" },
-    cover: "/media/china-furniture-concept.webp",
-    images: ["/media/china-furniture-concept.webp"],
+    cover: "/media/china-furniture-photo.webp",
+    images: ["/media/china-furniture-photo.webp"],
     teamIds: ["maruf", "serdar"],
     scope: [
       { ru: "Подбор и сравнение фабрик", en: "Factory sourcing and comparison" },
@@ -227,6 +227,38 @@ export const team = [
   { id: "serdar", name: { ru: "Сердар Пиркулиев", en: "Serdar Pirkuliev" }, role: { ru: "Координатор проектов", en: "Project Coordinator" }, image: "/media/team-serdar.webp", experience: { ru: "Координация работ, снабжение и контроль комплектации объектов.", en: "Site coordination, procurement and material control." }, projects: ["fujairah-trade-centre", "al-furjan-villa", "port-de-la-mer", "china-furniture-sourcing"] },
 ];
 
-export const brands = ["EGGER", "BLUM", "HETTICH", "HÄFELE", "REHAU", "MAPEI", "KNAUF", "JOTUN", "SIKA", "SCHNEIDER", "GROHE", "VILLEROY & BOCH"];
+export const brands = [
+  { name: "EGGER", logo: "/logos/brands/egger.svg" },
+  { name: "Blum", logo: "/logos/brands/blum.svg" },
+  { name: "Hettich", logo: "/logos/brands/hettich.svg" },
+  { name: "Häfele", logo: "/logos/brands/hafele.svg" },
+  { name: "REHAU", logo: "/logos/brands/rehau.svg" },
+  { name: "Mapei", logo: "/logos/brands/mapei.svg" },
+  { name: "Knauf", logo: "/logos/brands/knauf.svg" },
+  { name: "Jotun", logo: "/logos/brands/jotun.svg" },
+  { name: "Schneider Electric", logo: "/logos/brands/schneider-electric.svg" },
+  { name: "Grohe", logo: "/logos/brands/grohe.svg" },
+  { name: "Villeroy & Boch", logo: "/logos/brands/villeroy-boch.svg" },
+  { name: "Duravit", logo: "/logos/brands/duravit.svg" },
+  { name: "Teka", logo: "/logos/brands/teka.svg" },
+  { name: "Geberit", logo: "/logos/brands/geberit.svg" },
+  { name: "Kohler", logo: "/logos/brands/kohler.svg" },
+  { name: "Roca", logo: "/logos/brands/roca.svg" },
+  { name: "Siemens", logo: "/logos/brands/siemens.svg" },
+  { name: "Saint-Gobain", logo: "/logos/brands/saint-gobain.svg" },
+];
 
-export const developers = ["EMAAR", "NAKHEEL", "MERAAS", "DAMAC", "SOBHA", "DUBAI PROPERTIES", "ELLINGTON", "AZIZI", "BINGHATTI", "DANUBE", "WASL", "SELECT GROUP"];
+export const developers: Array<{ name: string; logo?: string; invert?: boolean }> = [
+  { name: "EMAAR", logo: "/logos/developers/emaar.svg" },
+  { name: "NAKHEEL", logo: "/logos/developers/nakheel.svg" },
+  { name: "MERAAS", logo: "/logos/developers/meraas.svg" },
+  { name: "DAMAC", logo: "/logos/developers/damac.svg" },
+  { name: "SOBHA", logo: "/logos/developers/sobha.svg", invert: true },
+  { name: "DUBAI PROPERTIES", logo: "/logos/developers/dubai-properties.svg" },
+  { name: "ELLINGTON", logo: "/logos/developers/ellington.png" },
+  { name: "AZIZI", logo: "/logos/developers/azizi.svg" },
+  { name: "BINGHATTI", logo: "/logos/developers/binghatti.svg" },
+  { name: "DANUBE", logo: "/logos/developers/danube.svg" },
+  { name: "WASL", logo: "/logos/developers/wasl.png", invert: true },
+  { name: "SELECT GROUP", logo: "/logos/developers/select-group.svg" },
+];
