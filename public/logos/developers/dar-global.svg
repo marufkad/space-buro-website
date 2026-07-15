@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 122" role="img" aria-labelledby="title">
+  <title id="title">Dar Global</title>
+  <g fill="#171717">
+    <text x="36" y="69" font-family="Georgia, 'Times New Roman', serif" font-size="69" letter-spacing="4">DAR</text>
+    <g transform="translate(246 13)" fill="none" stroke="#171717" stroke-width="3">
+      <circle cx="47" cy="39" r="34"/>
+      <path d="M15 39h64M47 5c-12 10-18 21-18 34s6 24 18 34M47 5c12 10 18 21 18 34s-6 24-18 34M19 24h56M19 54h56"/>
+      <path d="m47 22 4 11 12 1-9 7 3 12-10-7-10 7 3-12-9-7 12-1Z" fill="#171717" stroke="none"/>
+    </g>
+    <text x="117" y="108" font-family="Arial, sans-serif" font-size="23" letter-spacing="12">GLOBAL</text>
+  </g>
+</svg>

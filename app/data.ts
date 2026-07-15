@@ -222,9 +222,9 @@ export const stages = [
 ];
 
 export const team = [
-  { id: "maruf", name: { ru: "Маруф Кодиров", en: "Maruf Kodirov" }, role: { ru: "Основатель · Архитектор", en: "Founder · Architect" }, image: "/media/team-maruf.webp", experience: { ru: "Архитектура, строительство, fit-out и мебель на заказ.", en: "Architecture, construction, fit-out and bespoke furniture." }, projects: ["fujairah-trade-centre", "dubai-creek-harbour", "al-furjan-villa", "china-furniture-sourcing"] },
-  { id: "quvvat", name: { ru: "Кувват Худайяров", en: "Quvvat Khudayyarov" }, role: { ru: "Главный инженер", en: "Lead Engineer" }, image: "/media/team-quvvat.webp", experience: { ru: "Электрика, HVAC, электромеханика и технический контроль.", en: "Electrical, HVAC, electromechanical works and supervision." }, projects: ["fujairah-trade-centre", "dubai-hills-acacia", "al-barari-villa", "port-de-la-mer"] },
-  { id: "serdar", name: { ru: "Сердар Пиркулиев", en: "Serdar Pirkuliev" }, role: { ru: "Координатор проектов", en: "Project Coordinator" }, image: "/media/team-serdar.webp", experience: { ru: "Координация работ, снабжение и контроль комплектации объектов.", en: "Site coordination, procurement and material control." }, projects: ["fujairah-trade-centre", "al-furjan-villa", "port-de-la-mer", "china-furniture-sourcing"] },
+  { id: "maruf", name: { ru: "Маруф Кодиров", en: "Maruf Kodirov" }, role: { ru: "Основатель · Архитектор", en: "Founder · Architect" }, image: "/media/team-maruf.webp", experience: { ru: "Более 5 лет работает в архитектуре, строительстве вилл, fit-out и ремонте помещений, развивает направление мебели на заказ. Выпускник Белорусского национального технического университета по специальности «Архитектура». Отвечает за концепцию, планировку и целостность реализации проекта.", en: "Over five years of experience across architecture, villa construction, fit-out, renovation and bespoke furniture. A graduate of the Belarusian National Technical University in Architecture, Maruf leads concepts, planning and the overall integrity of project delivery." } },
+  { id: "quvvat", name: { ru: "Кувват Худайяров", en: "Quvvat Khudayyarov" }, role: { ru: "Главный инженер", en: "Lead Engineer" }, image: "/media/team-quvvat.webp", experience: { ru: "Более 8 лет занимается системами кондиционирования, электромонтажными и электромеханическими работами. Контролирует инженерные решения, качество монтажа и технический надзор на строительных объектах.", en: "More than eight years of experience in air-conditioning, electrical and electromechanical systems. Quvvat oversees engineering decisions, installation quality and technical supervision across construction sites." } },
+  { id: "serdar", name: { ru: "Сердар Пиркулиев", en: "Serdar Pirkuliev" }, role: { ru: "Координатор проектов", en: "Project Coordinator" }, image: "/media/team-serdar.webp", experience: { ru: "Более 12 лет работает в строительстве и архитектуре, включая практику в Дубае в области fit-out, ремонта и мебели на заказ. Выпускник Харьковского национального университета городского хозяйства по специальности «Строительство». Координирует площадку, снабжение и сроки.", en: "More than twelve years in construction and architecture, including Dubai experience in fit-out, renovation and bespoke furniture. A Construction graduate of O. M. Beketov National University, Serdar coordinates site activity, procurement and schedules." } },
 ];
 
 export const brands = [
@@ -252,11 +252,11 @@ export const developers: Array<{ id: string; name: string; logo?: string; invert
   { id: "meraas", name: "MERAAS", logo: "/logos/developers/meraas.svg" },
   { id: "damac", name: "DAMAC", logo: "/logos/developers/damac.svg" },
   { id: "sobha", name: "SOBHA", logo: "/logos/developers/sobha.svg" },
-  { id: "dubai-properties", name: "DUBAI PROPERTIES", logo: "/logos/developers/dubai-properties.png" },
-  { id: "omniyat", name: "OMNIYAT", logo: "/logos/developers/omniyat.svg", invert: true },
+  { id: "dubai-properties", name: "DUBAI PROPERTIES", logo: "/logos/developers/dubai-properties-v2.png" },
+  { id: "arada", name: "ARADA", logo: "/logos/developers/arada.svg" },
   { id: "azizi", name: "AZIZI", logo: "/logos/developers/azizi.png" },
   { id: "binghatti", name: "BINGHATTI", logo: "/logos/developers/binghatti.svg", invert: true },
   { id: "danube", name: "DANUBE PROPERTIES", logo: "/logos/developers/danube.png" },
-  { id: "dubai-south", name: "DUBAI SOUTH", logo: "/logos/developers/dubai-south.png" },
-  { id: "majid-al-futtaim", name: "MAJID AL FUTTAIM", logo: "/logos/developers/majid-al-futtaim.svg" },
+  { id: "dar-global", name: "DAR GLOBAL", logo: "/logos/developers/dar-global.svg" },
+  { id: "aldar", name: "ALDAR", logo: "/logos/developers/aldar.png" },
 ];

@@ -20,11 +20,9 @@ const ProjectMap = dynamic(() => import("./ProjectMap"), {
   loading: () => <div className="map-loading">Loading project map…</div>,
 });
 
-type Filter = "all" | ProjectCategory;
 type MapFilter = "all" | "renovation" | "furniture" | "residential" | "commercial" | "china";
 type CalculatorType = "renovation" | "furniture";
 
-const filterOrder: Filter[] = ["all", "fitout", "furniture", "china", "commercial"];
 const mapFilterOrder: MapFilter[] = ["all", "renovation", "furniture", "residential", "commercial", "china"];
 
 function matchesMapFilter(project: ProjectLocation, filter: MapFilter) {
@@ -81,8 +79,7 @@ const ui = {
     projectsKicker: "Библиотека объектов",
     projectsTitle: "Проекты связаны с картой, файлами и командой",
     projectsText: "Фильтры действительно меняют подборку. Откройте карточку, чтобы увидеть факты, фотографии, состав работ и участников.",
-    filters: { all: "Все", fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческие" },
-    mapFilters: { all: "Все", renovation: "Реновация", furniture: "Мебель", residential: "Жилая", commercial: "Коммерция", china: "Мебель из Китая" },
+    mapFilters: { all: "Все", renovation: "Реновация", furniture: "Мебель", residential: "Жильё", commercial: "Коммерция", china: "Мебель из Китая" },
     noPhotos: "Фотографии готовятся",
     openProject: "Открыть объект",
     showAllProjects: "Показать все объекты",
@@ -95,7 +92,7 @@ const ui = {
     completed: "Завершён",
     progress: "В работе",
     service: "Услуга",
-    brandsKicker: "Материалы и комплектующие, с которыми работаем",
+    brandsKicker: "Бренды, с которыми мы работаем",
     mapKicker: "География проектов",
     mapTitle: "Выберите категорию, затем объект на карте ОАЭ",
     mapText: "Иконка показывает тип объекта. Точный номер квартиры или виллы не публикуется.",
@@ -159,7 +156,6 @@ const ui = {
     projectsKicker: "Project library",
     projectsTitle: "Projects connected to maps, files and people",
     projectsText: "The filters update the collection. Open any card for facts, photography, scope and the team involved.",
-    filters: { all: "All", fitout: "Fit-out", furniture: "Furniture", china: "Furniture from China", commercial: "Commercial" },
     mapFilters: { all: "All", renovation: "Renovation", furniture: "Furniture", residential: "Residential", commercial: "Commercial", china: "Furniture from China" },
     noPhotos: "Photography in preparation",
     openProject: "Open project",
@@ -173,7 +169,7 @@ const ui = {
     completed: "Completed",
     progress: "In progress",
     service: "Service",
-    brandsKicker: "Materials and components we work with",
+    brandsKicker: "Brands we work with",
     mapKicker: "Project geography",
     mapTitle: "Choose a category, then select a UAE project",
     mapText: "Each icon identifies the project type. Exact unit and villa numbers remain private.",
@@ -259,7 +255,7 @@ export default function Home() {
   const [lang, setLang] = useState<Lang>("ru");
   const [menuOpen, setMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
-  const [projectFilter, setProjectFilter] = useState<Filter>("all");
+  const [projectFilter, setProjectFilter] = useState<MapFilter>("all");
   const [projectsExpanded, setProjectsExpanded] = useState(false);
   const [mapFilter, setMapFilter] = useState<MapFilter>("all");
   const [fitMapProjects, setFitMapProjects] = useState(true);
@@ -288,7 +284,7 @@ export default function Home() {
   }, []);
 
   const filteredProjects = useMemo(
-    () => projectLocations.filter((project) => projectFilter === "all" || project.category === projectFilter),
+    () => projectLocations.filter((project) => matchesMapFilter(project, projectFilter)),
     [projectFilter],
   );
   const mapProjects = useMemo(
@@ -313,7 +309,7 @@ export default function Home() {
     return () => { document.body.style.overflow = previous; window.removeEventListener("keydown", handleEscape); };
   }, [projectModal]);
 
-  function chooseProjectFilter(value: Filter) {
+  function chooseProjectFilter(value: MapFilter) {
     setProjectFilter(value);
     setProjectsExpanded(false);
   }
@@ -419,9 +415,9 @@ export default function Home() {
           <div><p className="eyebrow">{t.projectsKicker}</p><h2>{t.projectsTitle}</h2></div><p>{t.projectsText}</p>
         </div>
         <div className="filter-bar" data-reveal>
-          {filterOrder.map((key) => (
+          {mapFilterOrder.map((key) => (
             <button key={key} type="button" className={projectFilter === key ? "active" : ""} onClick={() => chooseProjectFilter(key)}>
-              {t.filters[key]}<sup>{projectLocations.filter((project) => key === "all" || project.category === key).length}</sup>
+              {t.mapFilters[key]}<sup>{projectLocations.filter((project) => matchesMapFilter(project, key)).length}</sup>
             </button>
           ))}
         </div>
@@ -530,10 +526,13 @@ export default function Home() {
           {team.map((member, index) => (
             <article id={`team-${member.id}`} className={`team-card team-card-${member.id}`} key={member.id} data-reveal style={{ transitionDelay: `${index * 70}ms` }}>
               <div className="team-photo"><Image src={member.image} alt={member.name[lang]} fill sizes="(max-width: 720px) 100vw, 33vw" /><span>{String(index + 1).padStart(2, "0")}</span></div>
-              <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span><small>{t.participation}</small><div>{member.projects.map((projectId) => { const project = projectLocations.find((item) => item.id === projectId); return project ? <Link key={projectId} href={`/projects/${projectId}`}>{project.shortTitle[lang]}</Link> : null; })}</div></div>
+              <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span></div>
             </article>
           ))}
         </div>
+        <figure className="team-group-photo" data-reveal>
+          <Image src="/media/team-group.webp" alt={lang === "ru" ? "Команда Space Buro" : "Space Buro team"} width={1920} height={1280} sizes="(max-width: 900px) 100vw, 90vw" />
+        </figure>
       </section>
 
       <section id="contact" className="section contact-section">
@@ -565,7 +564,7 @@ export default function Home() {
         </article>
       </div>}
 
-      <footer><a className="logo footer-logo" href="#top"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} /></a><p>Dubai, United Arab Emirates</p><div><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">Telegram</a><a href="https://www.instagram.com/space.buro.ae/" target="_blank" rel="noreferrer">Instagram</a></div><small>© {new Date().getFullYear()} Space Buro</small></footer>
+      <footer><a className="logo footer-logo" href="#top"><Image src="/space-buro-footer-logo.png" alt="Space Buro" width={661} height={415} /></a><p>Dubai, United Arab Emirates</p><div><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">Telegram</a><a href="https://www.instagram.com/space.buro.ae/" target="_blank" rel="noreferrer">Instagram</a></div><small>© {new Date().getFullYear()} Space Buro</small></footer>
     </main>
   );
 }

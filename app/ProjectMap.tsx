@@ -66,8 +66,8 @@ export default function ProjectMap({ projects, selectedId, lang, fitAll, onSelec
       attributionControl
     >
       <TileLayer
-        attribution='Tiles &copy; <a href="https://www.esri.com/">Esri</a>'
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; CARTO'
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
       <MapController project={selected} projects={projects} fitAll={fitAll} />
       {projects.map((project) => {
