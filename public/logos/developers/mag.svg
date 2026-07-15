@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 112" role="img" aria-labelledby="title">
+  <title id="title">MAG Property Development</title>
+  <g fill="none" stroke="#171713" stroke-width="6" stroke-linecap="round">
+    <path d="M16 48c21-30 55-30 76 0-21 30-55 30-76 0Z"/>
+    <path d="M31 48c13-16 33-16 46 0-13 16-33 16-46 0Z"/>
+  </g>
+  <circle cx="54" cy="48" r="8" fill="#b66d42"/>
+  <text x="112" y="63" fill="#171713" font-family="Arial, Helvetica, sans-serif" font-size="55" font-weight="800" letter-spacing="2">MAG</text>
+  <text x="113" y="87" fill="#171713" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="600" letter-spacing="2.8">PROPERTY DEVELOPMENT</text>
+</svg>

@@ -13,6 +13,7 @@ import {
   type Lang,
   type ProjectCategory,
   type ProjectLocation,
+  type ProjectMapType,
 } from "./data";
 
 const ProjectMap = dynamic(() => import("./ProjectMap"), {
@@ -22,6 +23,8 @@ const ProjectMap = dynamic(() => import("./ProjectMap"), {
 
 type MapFilter = "all" | "renovation" | "furniture" | "residential" | "commercial" | "china";
 type CalculatorType = "renovation" | "furniture";
+type PropertyType = "apartment" | "villa" | "commercial";
+type FurnitureLevel = "standard" | "premium";
 
 const mapFilterOrder: MapFilter[] = ["all", "renovation", "furniture", "residential", "commercial", "china"];
 
@@ -60,7 +63,7 @@ const heroSlides = [
 
 const ui = {
   ru: {
-    nav: [["Объекты", "#projects"], ["Карта", "#map"], ["Китай", "#china"], ["Этапы", "#process"], ["Калькулятор", "#calculator"], ["Команда", "#team"]],
+    nav: [["Почему мы", "#why"], ["Объекты", "#projects"], ["Карта", "#map"], ["Китай", "#china"], ["Этапы", "#process"], ["Калькулятор", "#calculator"], ["Команда", "#team"]],
     heroPrimary: "Смотреть объекты",
     heroSecondary: "Рассчитать проект",
     slide: "Слайд",
@@ -116,9 +119,15 @@ const ui = {
     calculatorText: "Это диапазон для планирования, не коммерческое предложение. Точная смета появляется после замера и согласования состава работ.",
     calcTabs: { renovation: "Ремонт", furniture: "Мебель" },
     area: "Площадь помещения",
+    propertyType: "Тип объекта",
+    propertyTypes: { apartment: "Квартира", villa: "Вилла", commercial: "Офис / коммерция" },
     level: "Уровень ремонта",
     levels: { cosmetic: "Косметический", standard: "Полный", premium: "Премиальный" },
     meters: "Погонные метры мебели",
+    furnitureLevel: "Класс материалов",
+    furnitureLevels: { standard: "Практичный", premium: "Премиальный" },
+    includeVat: "Добавить VAT 5%",
+    timeline: "Ориентировочный срок",
     estimate: "Ориентировочный диапазон",
     estimateNote: "Без учёта VAT, согласований и индивидуальных позиций. Финальная цена зависит от объекта и спецификации.",
     calcCta: "Уточнить расчёт",
@@ -137,7 +146,7 @@ const ui = {
     projectTypes: ["Ремонт квартиры", "Ремонт виллы", "Офис / магазин", "Мебель на заказ", "Мебель из Китая"],
   },
   en: {
-    nav: [["Projects", "#projects"], ["Map", "#map"], ["China", "#china"], ["Process", "#process"], ["Calculator", "#calculator"], ["Team", "#team"]],
+    nav: [["Why us", "#why"], ["Projects", "#projects"], ["Map", "#map"], ["China", "#china"], ["Process", "#process"], ["Calculator", "#calculator"], ["Team", "#team"]],
     heroPrimary: "Explore projects",
     heroSecondary: "Estimate a project",
     slide: "Slide",
@@ -193,9 +202,15 @@ const ui = {
     calculatorText: "This is a budget guide, not a quotation. An accurate estimate follows a site survey and confirmed scope.",
     calcTabs: { renovation: "Renovation", furniture: "Furniture" },
     area: "Property area",
+    propertyType: "Property type",
+    propertyTypes: { apartment: "Apartment", villa: "Villa", commercial: "Office / commercial" },
     level: "Renovation level",
     levels: { cosmetic: "Cosmetic", standard: "Full", premium: "Premium" },
     meters: "Linear metres of furniture",
+    furnitureLevel: "Material class",
+    furnitureLevels: { standard: "Practical", premium: "Premium" },
+    includeVat: "Include 5% VAT",
+    timeline: "Indicative timeline",
     estimate: "Indicative range",
     estimateNote: "VAT, approvals and individual items are excluded. Final pricing depends on the site and specification.",
     calcCta: "Refine estimate",
@@ -234,6 +249,15 @@ function SocialIcon({ name }: { name: "whatsapp" | "telegram" }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 11.6a8.4 8.4 0 0 1-12.5 7.3L3 20.2l1.3-4.7a8.4 8.4 0 1 1 16.1-3.9Z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M8.1 7.7c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.8 1.9c.1.3 0 .5-.2.7l-.6.7c-.2.2-.1.4 0 .6.5 1 1.3 1.8 2.3 2.3.3.2.5.2.7 0l.8-1c.2-.2.4-.3.7-.2l1.9.9c.3.1.4.3.4.5 0 .3-.1 1.3-.7 1.8-.6.5-1.4.8-2.4.5-1-.3-2.3-.8-3.8-2.1-1.2-1.1-2.1-2.5-2.4-3.5-.4-1.1-.1-2.4.3-3.1Z" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/></svg>;
 }
 
+function MapTypeIcon({ type }: { type: ProjectMapType }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  if (type === "renovation") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="M7 9h12v6H7V9Zm12 3h4v5m0 0h-3v9" /><path {...common} d="m9 23 5-5 4 4-5 5H9v-4Z" /></svg>;
+  if (type === "furniture") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="M8 15h16v11H8V15Zm3 0V9h10v6M11 26v3m10-3v3M16 9v6" /></svg>;
+  if (type === "residential") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="m5 15 11-9 11 9v12H5V15Zm8 12v-8h6v8" /></svg>;
+  if (type === "commercial") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="M7 5h18v23H7V5Zm5 5h2m4 0h2m-8 5h2m4 0h2m-8 5h2m4 0h2m-7 8v-4h6v4" /></svg>;
+  return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="m6 11 10-5 10 5-10 5-10-5Zm0 0v11l10 5 10-5V11M16 16v11" /><path {...common} d="M10 8.5 20 14m-8-7 10 5" /></svg>;
+}
+
 function ProjectVisual({ project, lang, priority = false }: { project: ProjectLocation; lang: Lang; priority?: boolean }) {
   if (project.cover) {
     return <Image src={project.cover} alt={project.title[lang]} fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw" priority={priority} />;
@@ -265,8 +289,11 @@ export default function Home() {
   const [activeStage, setActiveStage] = useState(0);
   const [calculatorType, setCalculatorType] = useState<CalculatorType>("renovation");
   const [area, setArea] = useState(100);
+  const [propertyType, setPropertyType] = useState<PropertyType>("apartment");
   const [renovationLevel, setRenovationLevel] = useState<"cosmetic" | "standard" | "premium">("standard");
   const [furnitureMeters, setFurnitureMeters] = useState(12);
+  const [furnitureLevel, setFurnitureLevel] = useState<FurnitureLevel>("standard");
+  const [includeVat, setIncludeVat] = useState(false);
   const t = ui[lang];
 
   useEffect(() => {
@@ -295,10 +322,27 @@ export default function Home() {
   const selected = mapProjects.find((project) => project.id === selectedProject) ?? mapProjects[0];
 
   const estimate = useMemo(() => {
-    if (calculatorType === "furniture") return [furnitureMeters * 1800, furnitureMeters * 3300];
+    const vatFactor = includeVat ? 1.05 : 1;
+    if (calculatorType === "furniture") {
+      const materialFactor = furnitureLevel === "premium" ? 1.35 : 1;
+      return [furnitureMeters * 1800 * materialFactor * vatFactor, furnitureMeters * 3300 * materialFactor * vatFactor];
+    }
     const rates = { cosmetic: [350, 550], standard: [1105, 1625], premium: [1950, 2990] } as const;
-    return [area * rates[renovationLevel][0], area * rates[renovationLevel][1]];
-  }, [area, calculatorType, furnitureMeters, renovationLevel]);
+    const propertyFactor = { apartment: 1, villa: 1.12, commercial: 1.08 }[propertyType];
+    return [area * rates[renovationLevel][0] * propertyFactor * vatFactor, area * rates[renovationLevel][1] * propertyFactor * vatFactor];
+  }, [area, calculatorType, furnitureLevel, furnitureMeters, includeVat, propertyType, renovationLevel]);
+
+  const estimateTimeline = useMemo(() => {
+    if (calculatorType === "furniture") {
+      const weeks = furnitureLevel === "premium" ? [8, 13] : [5, 9];
+      return lang === "ru" ? `${weeks[0]}–${weeks[1]} недель` : `${weeks[0]}–${weeks[1]} weeks`;
+    }
+    const base = { cosmetic: [4, 8], standard: [8, 14], premium: [12, 20] }[renovationLevel];
+    const areaAdjustment = Math.max(0, Math.ceil((area - 150) / 120));
+    return lang === "ru"
+      ? `${base[0] + areaAdjustment}–${base[1] + areaAdjustment} недель`
+      : `${base[0] + areaAdjustment}–${base[1] + areaAdjustment} weeks`;
+  }, [area, calculatorType, furnitureLevel, lang, renovationLevel]);
 
   useEffect(() => {
     if (!projectModal) return;
@@ -347,9 +391,12 @@ export default function Home() {
   }
 
   function contactEstimate() {
+    const configuration = calculatorType === "renovation"
+      ? `${t.propertyTypes[propertyType]}, ${t.levels[renovationLevel]}, ${area} m²`
+      : `${t.furnitureLevels[furnitureLevel]}, ${furnitureMeters} m`;
     const message = lang === "ru"
-      ? `Здравствуйте! Хочу уточнить предварительный расчёт: ${t.calcTabs[calculatorType]}, AED ${formatAed(estimate[0], lang)}–${formatAed(estimate[1], lang)}.`
-      : `Hello! I would like to refine this preliminary estimate: ${t.calcTabs[calculatorType]}, AED ${formatAed(estimate[0], lang)}–${formatAed(estimate[1], lang)}.`;
+      ? `Здравствуйте! Хочу уточнить предварительный расчёт: ${t.calcTabs[calculatorType]}, ${configuration}, AED ${formatAed(estimate[0], lang)}–${formatAed(estimate[1], lang)}, срок ${estimateTimeline}${includeVat ? ", с VAT 5%" : ", без VAT"}.`
+      : `Hello! I would like to refine this preliminary estimate: ${t.calcTabs[calculatorType]}, ${configuration}, AED ${formatAed(estimate[0], lang)}–${formatAed(estimate[1], lang)}, timeline ${estimateTimeline}${includeVat ? ", including 5% VAT" : ", excluding VAT"}.`;
     window.open(`https://wa.me/971523569697?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
   }
 
@@ -397,7 +444,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section advantages-section">
+      <section id="why" className="section advantages-section">
         <div className="section-heading" data-reveal>
           <div><p className="eyebrow">{t.advantagesKicker}</p><h2>{t.advantagesTitle}</h2></div>
         </div>
@@ -452,7 +499,7 @@ export default function Home() {
           <aside className="map-projects">
             {mapProjects.map((project) => (
               <button key={project.id} type="button" className={selected.id === project.id ? "active" : ""} onClick={() => selectMapProject(project.id)}>
-                <i className={project.category}>{categoryLabels[lang][project.category].slice(0, 2)}</i>
+                <i className={project.mapType}><MapTypeIcon type={project.mapType} /></i>
                 <span><strong>{project.shortTitle[lang]}</strong><small>{project.district} · {project.year}</small></span><b>↗</b>
               </button>
             ))}
@@ -510,11 +557,16 @@ export default function Home() {
           <div className="calculator-controls">
             {calculatorType === "renovation" && <>
               <label><span>{t.area}<b>{area} m²</b></span><input type="range" min="30" max="600" step="10" value={area} onChange={(event) => setArea(Number(event.target.value))} /></label>
+              <fieldset><legend>{t.propertyType}</legend><div>{(["apartment", "villa", "commercial"] as PropertyType[]).map((type) => <button key={type} className={propertyType === type ? "active" : ""} type="button" onClick={() => setPropertyType(type)}>{t.propertyTypes[type]}</button>)}</div></fieldset>
               <fieldset><legend>{t.level}</legend><div>{(["cosmetic", "standard", "premium"] as const).map((level) => <button key={level} className={renovationLevel === level ? "active" : ""} type="button" onClick={() => setRenovationLevel(level)}>{t.levels[level]}</button>)}</div></fieldset>
             </>}
-            {calculatorType === "furniture" && <label><span>{t.meters}<b>{furnitureMeters} m</b></span><input type="range" min="2" max="60" step="1" value={furnitureMeters} onChange={(event) => setFurnitureMeters(Number(event.target.value))} /></label>}
+            {calculatorType === "furniture" && <>
+              <label><span>{t.meters}<b>{furnitureMeters} m</b></span><input type="range" min="2" max="60" step="1" value={furnitureMeters} onChange={(event) => setFurnitureMeters(Number(event.target.value))} /></label>
+              <fieldset><legend>{t.furnitureLevel}</legend><div className="two-options">{(["standard", "premium"] as FurnitureLevel[]).map((level) => <button key={level} className={furnitureLevel === level ? "active" : ""} type="button" onClick={() => setFurnitureLevel(level)}>{t.furnitureLevels[level]}</button>)}</div></fieldset>
+            </>}
+            <label className="vat-toggle"><input type="checkbox" checked={includeVat} onChange={(event) => setIncludeVat(event.target.checked)} /><span>{t.includeVat}</span></label>
           </div>
-          <div className="estimate-box"><span>{t.estimate}</span><strong>AED {formatAed(estimate[0], lang)} — {formatAed(estimate[1], lang)}</strong><p>{t.estimateNote}</p><button className="button button-primary" type="button" onClick={contactEstimate}>{t.calcCta}<span>↗</span></button></div>
+          <div className="estimate-box"><span>{t.estimate}</span><strong>AED {formatAed(estimate[0], lang)} — {formatAed(estimate[1], lang)}</strong><div className="estimate-timeline"><span>{t.timeline}</span><b>{estimateTimeline}</b></div><p>{t.estimateNote}</p><button className="button button-primary" type="button" onClick={contactEstimate}>{t.calcCta}<span>↗</span></button></div>
         </div>
       </section>
 
@@ -526,13 +578,16 @@ export default function Home() {
           {team.map((member, index) => (
             <article id={`team-${member.id}`} className={`team-card team-card-${member.id}`} key={member.id} data-reveal style={{ transitionDelay: `${index * 70}ms` }}>
               <div className="team-photo"><Image src={member.image} alt={member.name[lang]} fill sizes="(max-width: 720px) 100vw, 33vw" /><span>{String(index + 1).padStart(2, "0")}</span></div>
-              <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span></div>
+              <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span>{member.id !== "maruf" && <><small>{t.participation}</small><div>{projectLocations.filter((project) => project.teamIds.includes(member.id)).map((project) => <Link href={`/projects/${project.id}`} key={project.id}>{project.shortTitle[lang]}</Link>)}</div></>}</div>
             </article>
           ))}
         </div>
         <figure className="team-group-photo" data-reveal>
-          <Image src="/media/team-group.webp" alt={lang === "ru" ? "Команда Space Buro" : "Space Buro team"} width={1920} height={1280} sizes="(max-width: 900px) 100vw, 90vw" />
+          <Image src="/media/team-group.webp" alt={lang === "ru" ? "Команда Space Buro" : "Space Buro team"} fill sizes="(max-width: 900px) 100vw, 90vw" />
         </figure>
+        <div className="team-video" data-reveal>
+          <iframe src="https://www.youtube-nocookie.com/embed/fynhXsxRglU?rel=0&amp;modestbranding=1&amp;playsinline=1" title={lang === "ru" ? "Видео о команде Space Buro" : "Space Buro team video"} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+        </div>
       </section>
 
       <section id="contact" className="section contact-section">
@@ -564,7 +619,7 @@ export default function Home() {
         </article>
       </div>}
 
-      <footer><a className="logo footer-logo" href="#top"><Image src="/space-buro-footer-logo.png" alt="Space Buro" width={661} height={415} /></a><p>Dubai, United Arab Emirates</p><div><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">Telegram</a><a href="https://www.instagram.com/space.buro.ae/" target="_blank" rel="noreferrer">Instagram</a></div><small>© {new Date().getFullYear()} Space Buro</small></footer>
+      <footer><a className="logo footer-logo" href="#top"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} /></a><div className="footer-meta"><p>Dubai, United Arab Emirates</p><small>© {new Date().getFullYear()} Space Buro</small></div><div className="footer-links"><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">Telegram</a><a href="https://www.instagram.com/space.buro.ae/" target="_blank" rel="noreferrer">Instagram</a></div></footer>
     </main>
   );
 }

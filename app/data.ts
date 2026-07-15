@@ -1,6 +1,7 @@
 export type Lang = "ru" | "en";
 export type Localized = { ru: string; en: string };
 export type ProjectCategory = "fitout" | "furniture" | "china" | "commercial";
+export type ProjectMapType = "renovation" | "furniture" | "residential" | "commercial" | "china";
 
 export type ProjectLocation = {
   id: string;
@@ -8,6 +9,7 @@ export type ProjectLocation = {
   shortTitle: Localized;
   district: string;
   category: ProjectCategory;
+  mapType: ProjectMapType;
   status: "completed" | "progress" | "service";
   year: string;
   lat: number;
@@ -36,6 +38,7 @@ export const projectLocations: ProjectLocation[] = [
     shortTitle: { ru: "Офис Fujairah Trade Centre", en: "Fujairah Trade Centre Office" },
     district: "Fujairah",
     category: "commercial",
+    mapType: "commercial",
     status: "completed",
     year: "2026",
     lat: 25.1288,
@@ -63,6 +66,7 @@ export const projectLocations: ProjectLocation[] = [
     shortTitle: { ru: "Квартира Creek Harbour", en: "Creek Harbour Apartment" },
     district: "Dubai Creek Harbour",
     category: "furniture",
+    mapType: "residential",
     status: "completed",
     year: "2026",
     lat: 25.1973,
@@ -88,6 +92,7 @@ export const projectLocations: ProjectLocation[] = [
     shortTitle: { ru: "Мебель для виллы Al Furjan", en: "Al Furjan Villa Furniture" },
     district: "Al Furjan",
     category: "furniture",
+    mapType: "furniture",
     status: "completed",
     year: "2026",
     lat: 25.0288,
@@ -113,6 +118,7 @@ export const projectLocations: ProjectLocation[] = [
     shortTitle: { ru: "Встроенная мебель Al Barari", en: "Al Barari Built-in Furniture" },
     district: "Al Barari",
     category: "furniture",
+    mapType: "furniture",
     status: "completed",
     year: "2026",
     lat: 25.0981,
@@ -138,6 +144,7 @@ export const projectLocations: ProjectLocation[] = [
     shortTitle: { ru: "Ремонт виллы Dubai Hills", en: "Dubai Hills Villa Fit-out" },
     district: "Dubai Hills",
     category: "fitout",
+    mapType: "renovation",
     status: "progress",
     year: "2026",
     lat: 25.1137,
@@ -163,6 +170,7 @@ export const projectLocations: ProjectLocation[] = [
     shortTitle: { ru: "Квартира Port de La Mer", en: "Port de La Mer Apartment" },
     district: "Port de La Mer",
     category: "fitout",
+    mapType: "residential",
     status: "progress",
     year: "2026",
     lat: 25.2383,
@@ -188,6 +196,7 @@ export const projectLocations: ProjectLocation[] = [
     shortTitle: { ru: "Мебель из Китая", en: "Furniture from China" },
     district: "Dubai · Foshan",
     category: "china",
+    mapType: "china",
     status: "service",
     year: "2026",
     lat: 25.2048,
@@ -253,10 +262,10 @@ export const developers: Array<{ id: string; name: string; logo?: string; invert
   { id: "damac", name: "DAMAC", logo: "/logos/developers/damac.svg" },
   { id: "sobha", name: "SOBHA", logo: "/logos/developers/sobha.svg" },
   { id: "dubai-properties", name: "DUBAI PROPERTIES", logo: "/logos/developers/dubai-properties-v2.png" },
-  { id: "arada", name: "ARADA", logo: "/logos/developers/arada.svg" },
+  { id: "deyaar", name: "DEYAAR", logo: "/logos/developers/deyaar.svg" },
   { id: "azizi", name: "AZIZI", logo: "/logos/developers/azizi.png" },
   { id: "binghatti", name: "BINGHATTI", logo: "/logos/developers/binghatti.svg", invert: true },
   { id: "danube", name: "DANUBE PROPERTIES", logo: "/logos/developers/danube.png" },
-  { id: "dar-global", name: "DAR GLOBAL", logo: "/logos/developers/dar-global.svg" },
-  { id: "aldar", name: "ALDAR", logo: "/logos/developers/aldar.png" },
+  { id: "mag", name: "MAG PROPERTY DEVELOPMENT", logo: "/logos/developers/mag.svg" },
+  { id: "imtiaz", name: "IMTIAZ DEVELOPMENTS", logo: "/logos/developers/imtiaz.svg" },
 ];

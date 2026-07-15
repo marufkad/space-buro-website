@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 104" role="img" aria-labelledby="title">
+  <title id="title">Deyaar</title>
+  <g fill="#171713">
+    <rect x="7" y="17" width="13" height="13"/><rect x="27" y="17" width="13" height="13"/><rect x="47" y="17" width="13" height="13"/>
+    <rect x="7" y="37" width="13" height="13"/><rect x="27" y="37" width="13" height="13"/><rect x="47" y="37" width="13" height="13"/>
+    <rect x="7" y="57" width="13" height="13"/><rect x="27" y="57" width="13" height="13"/><rect x="47" y="57" width="13" height="13"/>
+    <path d="M78 17h65v7H78z" opacity=".25"/>
+    <text x="78" y="69" font-family="Arial, Helvetica, sans-serif" font-size="49" font-weight="700" letter-spacing="3">DEYAAR</text>
+    <text x="80" y="91" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="600" letter-spacing="4">DEVELOPMENT</text>
+  </g>
+</svg>
