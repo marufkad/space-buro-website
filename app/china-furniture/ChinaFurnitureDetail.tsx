@@ -7,7 +7,7 @@ import type { Lang } from "../data";
 
 const copy = {
   ru: {
-    back: "Вернуться на сайт", kicker: "Dubai · Foshan", title: "Мебель из Китая — управляемая комплектация, а не случайная закупка",
+    back: "Вернуться на сайт", kicker: "Дубай · Гуанчжоу · Фошань · Чэнду", title: "Мебель из Китая — управляемая комплектация, а не случайная закупка",
     intro: "Собираем ведомость, сравниваем фабрики и контролируем путь заказа до доставки в ОАЭ. Услуга подходит для квартир, вилл, офисов и коммерческих пространств.",
     cta: "Отправить задачу", stepsTitle: "Как проходит заказ", termsTitle: "Условия и ориентировочные сроки",
     steps: [
@@ -30,7 +30,7 @@ const copy = {
     note: "Сроки приведены для планирования и не являются офертой. Финальные условия зависят от фабрики, объёма, кастомизации и способа доставки.",
   },
   en: {
-    back: "Back to website", kicker: "Dubai · Foshan", title: "Furniture from China — controlled furnishing, not random purchasing",
+    back: "Back to website", kicker: "Dubai · Guangzhou · Foshan · Chengdu", title: "Furniture from China — controlled furnishing, not random purchasing",
     intro: "We build the schedule, compare factories and control the order through UAE delivery. Suitable for apartments, villas, offices and commercial spaces.",
     cta: "Send your brief", stepsTitle: "How the order works", termsTitle: "Terms and planning timelines",
     steps: [
@@ -59,7 +59,7 @@ export default function ChinaFurnitureDetail() {
   const t = copy[lang];
 
   return <main className="china-detail-page">
-    <header className="detail-header"><Link className="logo" href="/"><span>SPACE</span><span>BURO</span></Link><Link href="/#china">← {t.back}</Link><div><button type="button" onClick={() => setLang(lang === "ru" ? "en" : "ru")}>{lang === "ru" ? "EN" : "RU"}</button><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WA</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">TG</a></div></header>
+    <header className="detail-header"><Link className="logo" href="/"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></Link><Link href="/#china">← {t.back}</Link><div><button type="button" onClick={() => setLang(lang === "ru" ? "en" : "ru")}>{lang === "ru" ? "EN" : "RU"}</button><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WA</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">TG</a></div></header>
     <section className="china-detail-hero"><div><p className="eyebrow">{t.kicker}</p><h1>{t.title}</h1><p>{t.intro}</p><a className="button button-primary" href="https://wa.me/971523569697" target="_blank" rel="noreferrer">{t.cta}<span>↗</span></a></div><figure><Image src="/media/china-furniture-photo.webp" alt={t.title} fill sizes="(max-width: 900px) 100vw, 55vw" priority /><figcaption>Photo: Collov Home Design / Unsplash</figcaption></figure></section>
     <section className="china-detail-process"><div className="detail-section-title"><p className="eyebrow">01—08</p><h2>{t.stepsTitle}</h2></div><div>{t.steps.map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></section>
     <section className="china-detail-terms"><div><p className="eyebrow">Planning</p><h2>{t.termsTitle}</h2><p>{t.note}</p></div><div>{t.terms.map(([time, text]) => <article key={time}><strong>{time}</strong><p>{text}</p></article>)}</div></section>

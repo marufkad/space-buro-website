@@ -246,17 +246,17 @@ export const brands = [
   { name: "Saint-Gobain", logo: "/logos/brands/saint-gobain.svg" },
 ];
 
-export const developers: Array<{ name: string; logo?: string; invert?: boolean }> = [
-  { name: "EMAAR", logo: "/logos/developers/emaar.svg" },
-  { name: "NAKHEEL", logo: "/logos/developers/nakheel.svg", invert: true },
-  { name: "MERAAS", logo: "/logos/developers/meraas.svg" },
-  { name: "DAMAC", logo: "/logos/developers/damac.svg" },
-  { name: "SOBHA", logo: "/logos/developers/sobha.svg" },
-  { name: "DUBAI PROPERTIES", logo: "/logos/developers/dubai-properties.svg" },
-  { name: "ELLINGTON", logo: "/logos/developers/ellington.png" },
-  { name: "AZIZI", logo: "/logos/developers/azizi.svg" },
-  { name: "BINGHATTI", logo: "/logos/developers/binghatti.svg", invert: true },
-  { name: "DANUBE", logo: "/logos/developers/danube.svg" },
-  { name: "WASL", logo: "/logos/developers/wasl.png" },
-  { name: "SELECT GROUP", logo: "/logos/developers/select-group.svg" },
+export const developers: Array<{ id: string; name: string; logo?: string; invert?: boolean }> = [
+  { id: "emaar", name: "EMAAR", logo: "/logos/developers/emaar.svg" },
+  { id: "nakheel", name: "NAKHEEL", logo: "/logos/developers/nakheel.svg", invert: true },
+  { id: "meraas", name: "MERAAS", logo: "/logos/developers/meraas.svg" },
+  { id: "damac", name: "DAMAC", logo: "/logos/developers/damac.svg" },
+  { id: "sobha", name: "SOBHA", logo: "/logos/developers/sobha.svg" },
+  { id: "dubai-properties", name: "DUBAI PROPERTIES", logo: "/logos/developers/dubai-properties.png" },
+  { id: "omniyat", name: "OMNIYAT", logo: "/logos/developers/omniyat.svg", invert: true },
+  { id: "azizi", name: "AZIZI", logo: "/logos/developers/azizi.png" },
+  { id: "binghatti", name: "BINGHATTI", logo: "/logos/developers/binghatti.svg", invert: true },
+  { id: "danube", name: "DANUBE PROPERTIES", logo: "/logos/developers/danube.png" },
+  { id: "dubai-south", name: "DUBAI SOUTH", logo: "/logos/developers/dubai-south.png" },
+  { id: "majid-al-futtaim", name: "MAJID AL FUTTAIM", logo: "/logos/developers/majid-al-futtaim.svg" },
 ];

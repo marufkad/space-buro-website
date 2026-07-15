@@ -21,9 +21,18 @@ const ProjectMap = dynamic(() => import("./ProjectMap"), {
 });
 
 type Filter = "all" | ProjectCategory;
+type MapFilter = "all" | "renovation" | "furniture" | "residential" | "commercial" | "china";
 type CalculatorType = "renovation" | "furniture";
 
 const filterOrder: Filter[] = ["all", "fitout", "furniture", "china", "commercial"];
+const mapFilterOrder: MapFilter[] = ["all", "renovation", "furniture", "residential", "commercial", "china"];
+
+function matchesMapFilter(project: ProjectLocation, filter: MapFilter) {
+  if (filter === "all") return true;
+  if (filter === "renovation") return project.category === "fitout" || project.category === "commercial";
+  if (filter === "residential") return project.category === "fitout" || project.category === "furniture";
+  return project.category === filter;
+}
 
 const categoryLabels: Record<Lang, Record<ProjectCategory, string>> = {
   ru: { fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческие" },
@@ -60,19 +69,20 @@ const ui = {
     advantagesKicker: "Почему Space Buro",
     advantagesTitle: "Снимаем риски, которые обычно остаются между подрядчиками",
     advantages: [
-      ["10+", "Лет практического опыта", "Опыт ключевых специалистов в ремонте, инженерии, строительстве и мебели на заказ."],
-      ["RU / EN", "Коммуникация без барьеров", "Ведём проект на русском или английском и переводим технические решения на понятный язык."],
-      ["01", "Собственное производство мебели", "Ремонт и корпусная мебель синхронизированы по чертежам и срокам."],
-      ["02", "Русскоязычная команда", "Обсуждаем сложные технические вопросы без потери смысла; работаем также на английском."],
-      ["03", "Согласования и NOC", "Координируем building management, необходимые разрешения и доступ на объект."],
-      ["04", "Прозрачная смета", "Разделяем работы, материалы и изменения, чтобы бюджет оставался управляемым."],
-      ["05", "Еженедельный фотоотчёт", "Показываем прогресс, следующие работы и вопросы, требующие решения."],
-      ["06", "Гарантия и aftercare", "Закрываем замечания после передачи и остаёмся на связи по гарантии."],
+      ["01", "", "10+", " лет практического опыта", "Опыт ключевых специалистов в ремонте, инженерии, строительстве и мебели на заказ."],
+      ["02", "", "RU / EN", " — коммуникация без барьеров", "Ведём проект на русском или английском и переводим технические решения на понятный язык."],
+      ["03", "Собственное производство ", "мебели", "", "Ремонт и корпусная мебель синхронизированы по чертежам и срокам."],
+      ["04", "", "Русскоязычная", " команда", "Обсуждаем сложные технические вопросы без потери смысла; работаем также на английском."],
+      ["05", "", "Быстрое", " согласование и NOC", "Координируем building management, необходимые разрешения и доступ на объект."],
+      ["06", "", "Прозрачная", " смета", "Разделяем работы, материалы и изменения, чтобы бюджет оставался управляемым."],
+      ["07", "Еженедельный ", "фотоотчёт", "", "Показываем прогресс, следующие работы и вопросы, требующие решения."],
+      ["08", "", "Гарантия", " и aftercare", "Закрываем замечания после передачи и остаёмся на связи по гарантии."],
     ],
     projectsKicker: "Библиотека объектов",
     projectsTitle: "Проекты связаны с картой, файлами и командой",
     projectsText: "Фильтры действительно меняют подборку. Откройте карточку, чтобы увидеть факты, фотографии, состав работ и участников.",
     filters: { all: "Все", fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческие" },
+    mapFilters: { all: "Все", renovation: "Реновация", furniture: "Мебель", residential: "Жилая", commercial: "Коммерция", china: "Мебель из Китая" },
     noPhotos: "Фотографии готовятся",
     openProject: "Открыть объект",
     showAllProjects: "Показать все объекты",
@@ -90,7 +100,7 @@ const ui = {
     mapTitle: "Выберите категорию, затем объект на карте ОАЭ",
     mapText: "Иконка показывает тип объекта. Точный номер квартиры или виллы не публикуется.",
     mapOpen: "Страница объекта",
-    chinaKicker: "Dubai · Foshan",
+    chinaKicker: "Дубай · Гуанчжоу · Фошань · Чэнду",
     chinaTitle: "Заказ мебели из Китая",
     chinaText: "Мы превращаем поездку по шоурумам и фабрикам в управляемый процесс: от ведомости мебели до доставки и установки в ОАЭ.",
     chinaSteps: [["01", "Комплектация", "Собираем ведомость, размеры, стиль и бюджет."], ["02", "Фабрики и образцы", "Сравниваем предложения и проверяем материалы."], ["03", "Контроль", "Сверяем производство с утверждённой спецификацией."], ["04", "Логистика", "Консолидируем, доставляем и координируем монтаж."]],
@@ -137,19 +147,20 @@ const ui = {
     advantagesKicker: "Why Space Buro",
     advantagesTitle: "We remove the risks that usually sit between contractors",
     advantages: [
-      ["10+", "Years of practical experience", "Key specialists bring hands-on experience in fit-out, engineering, construction and bespoke furniture."],
-      ["RU / EN", "Clear communication", "We run the project in Russian or English and explain technical decisions in plain language."],
-      ["01", "In-house furniture production", "Fit-out and joinery are coordinated through shared drawings and schedules."],
-      ["02", "Russian-speaking team", "Technical decisions remain clear; all project communication is also available in English."],
-      ["03", "Approvals and NOCs", "We coordinate building management, permits and site access requirements."],
-      ["04", "Transparent estimates", "Works, materials and variations are separated so the budget stays manageable."],
-      ["05", "Weekly photo reports", "See progress, next activities and decisions that require your attention."],
-      ["06", "Warranty and aftercare", "We close snags after handover and remain available throughout the warranty."],
+      ["01", "", "10+", " years of practical experience", "Key specialists bring hands-on experience in fit-out, engineering, construction and bespoke furniture."],
+      ["02", "", "RU / EN", " communication without barriers", "We run the project in Russian or English and explain technical decisions in plain language."],
+      ["03", "In-house ", "furniture", " production", "Fit-out and joinery are coordinated through shared drawings and schedules."],
+      ["04", "", "Russian-speaking", " team", "Technical decisions remain clear; all project communication is also available in English."],
+      ["05", "", "Fast", " approvals and NOCs", "We coordinate building management, permits and site access requirements."],
+      ["06", "", "Transparent", " estimates", "Works, materials and variations are separated so the budget stays manageable."],
+      ["07", "Weekly ", "photo reports", "", "See progress, next activities and decisions that require your attention."],
+      ["08", "", "Warranty", " and aftercare", "We close snags after handover and remain available throughout the warranty."],
     ],
     projectsKicker: "Project library",
     projectsTitle: "Projects connected to maps, files and people",
     projectsText: "The filters update the collection. Open any card for facts, photography, scope and the team involved.",
     filters: { all: "All", fitout: "Fit-out", furniture: "Furniture", china: "Furniture from China", commercial: "Commercial" },
+    mapFilters: { all: "All", renovation: "Renovation", furniture: "Furniture", residential: "Residential", commercial: "Commercial", china: "Furniture from China" },
     noPhotos: "Photography in preparation",
     openProject: "Open project",
     showAllProjects: "Show all projects",
@@ -167,7 +178,7 @@ const ui = {
     mapTitle: "Choose a category, then select a UAE project",
     mapText: "Each icon identifies the project type. Exact unit and villa numbers remain private.",
     mapOpen: "Project page",
-    chinaKicker: "Dubai · Foshan",
+    chinaKicker: "Dubai · Guangzhou · Foshan · Chengdu",
     chinaTitle: "Furniture from China",
     chinaText: "We turn showroom and factory sourcing into a controlled process, from the furniture schedule to UAE delivery and installation.",
     chinaSteps: [["01", "Schedule", "We define items, dimensions, style and budget."], ["02", "Factories and samples", "We compare offers and verify materials."], ["03", "Quality control", "Production is checked against the approved specification."], ["04", "Logistics", "We consolidate, deliver and coordinate installation."]],
@@ -250,7 +261,8 @@ export default function Home() {
   const [heroSlide, setHeroSlide] = useState(0);
   const [projectFilter, setProjectFilter] = useState<Filter>("all");
   const [projectsExpanded, setProjectsExpanded] = useState(false);
-  const [mapFilter, setMapFilter] = useState<Filter>("all");
+  const [mapFilter, setMapFilter] = useState<MapFilter>("all");
+  const [fitMapProjects, setFitMapProjects] = useState(true);
   const [selectedProject, setSelectedProject] = useState(projectLocations[0].id);
   const [projectModal, setProjectModal] = useState<ProjectLocation | null>(null);
   const [modalImage, setModalImage] = useState<string | null>(null);
@@ -280,7 +292,7 @@ export default function Home() {
     [projectFilter],
   );
   const mapProjects = useMemo(
-    () => projectLocations.filter((project) => mapFilter === "all" || project.category === mapFilter),
+    () => projectLocations.filter((project) => matchesMapFilter(project, mapFilter)),
     [mapFilter],
   );
   const visibleProjects = projectsExpanded ? filteredProjects : filteredProjects.slice(0, 4);
@@ -306,10 +318,16 @@ export default function Home() {
     setProjectsExpanded(false);
   }
 
-  function chooseMapFilter(value: Filter) {
+  function chooseMapFilter(value: MapFilter) {
     setMapFilter(value);
-    const first = projectLocations.find((project) => value === "all" || project.category === value);
+    setFitMapProjects(true);
+    const first = projectLocations.find((project) => matchesMapFilter(project, value));
     if (first) setSelectedProject(first.id);
+  }
+
+  function selectMapProject(id: string) {
+    setFitMapProjects(false);
+    setSelectedProject(id);
   }
 
   function openProject(project: ProjectLocation) {
@@ -342,7 +360,7 @@ export default function Home() {
   return (
     <main id="top">
       <header className="site-header">
-        <a className="logo" href="#top" aria-label="Space Buro home"><span>SPACE</span><span>BURO</span></a>
+        <a className="logo" href="#top" aria-label="Space Buro home"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></a>
         <nav className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Main navigation">
           {t.nav.map(([label, href]) => <a key={href} href={href} onClick={() => setMenuOpen(false)}>{label}</a>)}
         </nav>
@@ -388,9 +406,9 @@ export default function Home() {
           <div><p className="eyebrow">{t.advantagesKicker}</p><h2>{t.advantagesTitle}</h2></div>
         </div>
         <div className="advantages-grid">
-          {t.advantages.map(([number, title, text], index) => (
-            <article className={index < 2 ? "advantage-highlight" : ""} key={number} data-reveal style={{ transitionDelay: `${index * 45}ms` }}>
-              <span>{number}</span><h3>{title}</h3><p>{text}</p>
+          {t.advantages.map(([number, before, accent, after, text], index) => (
+            <article key={number} data-reveal style={{ transitionDelay: `${index * 45}ms` }}>
+              <span>{number}</span><h3>{before}<em>{accent}</em>{after}</h3><p>{text}</p>
             </article>
           ))}
         </div>
@@ -423,7 +441,7 @@ export default function Home() {
 
       <section className="brands-marquee" aria-label={t.brandsKicker}>
         <p>{t.brandsKicker}</p>
-        <div className="marquee-window"><div className="marquee-track">{[...brands, ...brands].map((brand, index) => <span key={`${brand.name}-${index}`}><Image src={brand.logo} alt={brand.name} width={160} height={56} /><i>✦</i></span>)}</div></div>
+        <div className="marquee-window"><div className="marquee-track">{[...brands, ...brands].map((brand, index) => <span data-brand={brand.name} key={`${brand.name}-${index}`}><Image src={brand.logo} alt={brand.name} width={176} height={58} /><i>✦</i></span>)}</div></div>
       </section>
 
       <section id="map" className="section map-section">
@@ -431,13 +449,13 @@ export default function Home() {
           <div><p className="eyebrow">{t.mapKicker}</p><h2>{t.mapTitle}</h2></div><p>{t.mapText}</p>
         </div>
         <div className="filter-bar map-filters" data-reveal>
-          {filterOrder.map((key) => <button key={key} className={mapFilter === key ? "active" : ""} type="button" onClick={() => chooseMapFilter(key)}>{t.filters[key]}</button>)}
+          {mapFilterOrder.map((key) => <button key={key} className={mapFilter === key ? "active" : ""} type="button" onClick={() => chooseMapFilter(key)}>{t.mapFilters[key]}<sup>{projectLocations.filter((project) => matchesMapFilter(project, key)).length}</sup></button>)}
         </div>
         <div className="map-layout" data-reveal>
-          <div className="map-shell"><ProjectMap projects={mapProjects} selectedId={selected.id} lang={lang} onSelect={setSelectedProject} /></div>
+          <div className="map-shell"><ProjectMap projects={mapProjects} selectedId={selected.id} lang={lang} fitAll={fitMapProjects} onSelect={selectMapProject} /></div>
           <aside className="map-projects">
             {mapProjects.map((project) => (
-              <button key={project.id} type="button" className={selected.id === project.id ? "active" : ""} onClick={() => setSelectedProject(project.id)}>
+              <button key={project.id} type="button" className={selected.id === project.id ? "active" : ""} onClick={() => selectMapProject(project.id)}>
                 <i className={project.category}>{categoryLabels[lang][project.category].slice(0, 2)}</i>
                 <span><strong>{project.shortTitle[lang]}</strong><small>{project.district} · {project.year}</small></span><b>↗</b>
               </button>
@@ -457,6 +475,7 @@ export default function Home() {
           <Image src="/media/china-furniture-photo.webp" alt={t.chinaTitle} fill sizes="(max-width: 900px) 100vw, 55vw" />
         </div>
         <div className="china-copy" data-reveal>
+          <span className="china-signature" aria-hidden="true">中国家具采购</span>
           <p className="eyebrow">{t.chinaKicker}</p><h2>{t.chinaTitle}</h2><p>{t.chinaText}</p>
           <div className="china-steps">{t.chinaSteps.map(([number, title, text]) => <article key={number}><span>{number}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
           <Link className="button button-primary" href="/china-furniture">{t.chinaCta}<span>→</span></Link>
@@ -485,7 +504,7 @@ export default function Home() {
         <div className="section-heading" data-reveal>
           <div><p className="eyebrow">{t.developersKicker}</p><h2>{t.developersTitle}</h2></div><p>{t.developersText}</p>
         </div>
-        <div className="developers-grid" data-reveal>{developers.map((developer, index) => <div key={developer.name} className={developer.invert ? "invert-logo" : ""}><span>{String(index + 1).padStart(2, "0")}</span>{developer.logo ? <span className="developer-logo"><Image src={developer.logo} alt={developer.name} fill sizes="(max-width: 620px) 42vw, 210px" /></span> : <strong>{developer.name}</strong>}</div>)}</div>
+        <div className="developers-grid" data-reveal>{developers.map((developer, index) => <div key={developer.name} className={`${developer.invert ? "invert-logo " : ""}developer-${developer.id}`}><span>{String(index + 1).padStart(2, "0")}</span>{developer.logo ? <span className="developer-logo"><Image src={developer.logo} alt={developer.name} fill sizes="(max-width: 620px) 42vw, 210px" /></span> : <strong>{developer.name}</strong>}</div>)}</div>
       </section>
 
       <section id="calculator" className="section calculator-section">
@@ -509,7 +528,7 @@ export default function Home() {
         </div>
         <div className="team-grid">
           {team.map((member, index) => (
-            <article id={`team-${member.id}`} className="team-card" key={member.id} data-reveal style={{ transitionDelay: `${index * 70}ms` }}>
+            <article id={`team-${member.id}`} className={`team-card team-card-${member.id}`} key={member.id} data-reveal style={{ transitionDelay: `${index * 70}ms` }}>
               <div className="team-photo"><Image src={member.image} alt={member.name[lang]} fill sizes="(max-width: 720px) 100vw, 33vw" /><span>{String(index + 1).padStart(2, "0")}</span></div>
               <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span><small>{t.participation}</small><div>{member.projects.map((projectId) => { const project = projectLocations.find((item) => item.id === projectId); return project ? <Link key={projectId} href={`/projects/${projectId}`}>{project.shortTitle[lang]}</Link> : null; })}</div></div>
             </article>
@@ -546,7 +565,7 @@ export default function Home() {
         </article>
       </div>}
 
-      <footer><a className="logo footer-logo" href="#top"><span>SPACE</span><span>BURO</span></a><p>Dubai, United Arab Emirates</p><div><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">Telegram</a><a href="https://www.instagram.com/space.buro.ae/" target="_blank" rel="noreferrer">Instagram</a></div><small>© {new Date().getFullYear()} Space Buro</small></footer>
+      <footer><a className="logo footer-logo" href="#top"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} /></a><p>Dubai, United Arab Emirates</p><div><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">Telegram</a><a href="https://www.instagram.com/space.buro.ae/" target="_blank" rel="noreferrer">Instagram</a></div><small>© {new Date().getFullYear()} Space Buro</small></footer>
     </main>
   );
 }

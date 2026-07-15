@@ -36,7 +36,7 @@ export default function ProjectDetail({ project }: { project: ProjectLocation })
   return (
     <main className="project-detail-page">
       <header className="detail-header">
-        <Link className="logo" href="/"><span>SPACE</span><span>BURO</span></Link>
+        <Link className="logo" href="/"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></Link>
         <Link href="/#projects">← {t.back}</Link>
         <div><button type="button" onClick={() => setLang(lang === "ru" ? "en" : "ru")}>{lang === "ru" ? "EN" : "RU"}</button><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WA</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">TG</a></div>
       </header>

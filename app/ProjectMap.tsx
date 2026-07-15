@@ -1,6 +1,6 @@
 "use client";
 
-import { divIcon } from "leaflet";
+import { divIcon, latLngBounds } from "leaflet";
 import { Marker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
 import { useEffect } from "react";
 import type { Lang, ProjectLocation } from "./data";
@@ -9,6 +9,7 @@ type Props = {
   projects: ProjectLocation[];
   selectedId: string;
   lang: Lang;
+  fitAll: boolean;
   onSelect: (id: string) => void;
 };
 
@@ -19,7 +20,7 @@ const markerLabels = {
   commercial: "C",
 } as const;
 
-function MapController({ project }: { project: ProjectLocation }) {
+function MapController({ project, projects, fitAll }: { project: ProjectLocation; projects: ProjectLocation[]; fitAll: boolean }) {
   const map = useMap();
 
   useEffect(() => {
@@ -36,17 +37,22 @@ function MapController({ project }: { project: ProjectLocation }) {
   }, [map]);
 
   useEffect(() => {
+    if (fitAll && projects.length > 1) {
+      const bounds = latLngBounds(projects.map((item) => [item.lat, item.lng] as [number, number]));
+      map.fitBounds(bounds, { animate: true, duration: 0.8, maxZoom: 11, padding: [48, 48] });
+      return;
+    }
     map.flyTo(
       [project.lat, project.lng],
       project.id === "fujairah-trade-centre" ? 10 : 12,
       { duration: 0.8 },
     );
-  }, [map, project]);
+  }, [fitAll, map, project, projects]);
 
   return null;
 }
 
-export default function ProjectMap({ projects, selectedId, lang, onSelect }: Props) {
+export default function ProjectMap({ projects, selectedId, lang, fitAll, onSelect }: Props) {
   const selected = projects.find((project) => project.id === selectedId) ?? projects[0];
 
   if (!selected) return null;
@@ -60,10 +66,10 @@ export default function ProjectMap({ projects, selectedId, lang, onSelect }: Pro
       attributionControl
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; CARTO'
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        attribution='Tiles &copy; <a href="https://www.esri.com/">Esri</a>'
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
       />
-      <MapController project={selected} />
+      <MapController project={selected} projects={projects} fitAll={fitAll} />
       {projects.map((project) => {
         const active = project.id === selected.id;
         const icon = divIcon({
