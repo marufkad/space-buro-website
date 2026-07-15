@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 56" role="img" aria-label="Legrand">
+  <g fill="#161616">
+    <path d="M1 4h10v27h12v10H1V4Z"/>
+    <path d="M38 41H28V14H16V4h22v37Z"/>
+    <path d="M13 1h3v14h-3zM24 30h3v14h-3z"/>
+  </g>
+  <text x="50" y="41" fill="#ed1c24" font-family="Arial, Helvetica, sans-serif" font-size="39" font-weight="700" letter-spacing="-1.7">legrand</text>
+</svg>

@@ -251,7 +251,6 @@ export default function Home() {
   const [projectFilter, setProjectFilter] = useState<Filter>("all");
   const [projectsExpanded, setProjectsExpanded] = useState(false);
   const [mapFilter, setMapFilter] = useState<Filter>("all");
-  const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedProject, setSelectedProject] = useState(projectLocations[0].id);
   const [projectModal, setProjectModal] = useState<ProjectLocation | null>(null);
   const [modalImage, setModalImage] = useState<string | null>(null);
@@ -285,7 +284,6 @@ export default function Home() {
     [mapFilter],
   );
   const visibleProjects = projectsExpanded ? filteredProjects : filteredProjects.slice(0, 4);
-  const visibleMapProjects = mapExpanded ? mapProjects : mapProjects.slice(0, 5);
   const selected = mapProjects.find((project) => project.id === selectedProject) ?? mapProjects[0];
 
   const estimate = useMemo(() => {
@@ -310,7 +308,6 @@ export default function Home() {
 
   function chooseMapFilter(value: Filter) {
     setMapFilter(value);
-    setMapExpanded(false);
     const first = projectLocations.find((project) => value === "all" || project.category === value);
     if (first) setSelectedProject(first.id);
   }
@@ -392,7 +389,7 @@ export default function Home() {
         </div>
         <div className="advantages-grid">
           {t.advantages.map(([number, title, text], index) => (
-            <article key={number} data-reveal style={{ transitionDelay: `${index * 45}ms` }}>
+            <article className={index < 2 ? "advantage-highlight" : ""} key={number} data-reveal style={{ transitionDelay: `${index * 45}ms` }}>
               <span>{number}</span><h3>{title}</h3><p>{text}</p>
             </article>
           ))}
@@ -412,7 +409,7 @@ export default function Home() {
         </div>
         <div className="projects-grid">
           {visibleProjects.map((project, index) => (
-            <button className="project-card" type="button" onClick={() => openProject(project)} key={project.id} data-reveal style={{ transitionDelay: `${index * 55}ms` }}>
+            <button className="project-card" type="button" onClick={() => openProject(project)} key={project.id}>
               <div className="project-card-image"><ProjectVisual project={project} lang={lang} priority={index < 2} /><span className={`status-badge ${project.status}`}>{t[project.status]}</span></div>
               <div className="project-card-copy">
                 <p>{categoryLabels[lang][project.category]} · {project.year}</p>
@@ -439,13 +436,12 @@ export default function Home() {
         <div className="map-layout" data-reveal>
           <div className="map-shell"><ProjectMap projects={mapProjects} selectedId={selected.id} lang={lang} onSelect={setSelectedProject} /></div>
           <aside className="map-projects">
-            {visibleMapProjects.map((project) => (
+            {mapProjects.map((project) => (
               <button key={project.id} type="button" className={selected.id === project.id ? "active" : ""} onClick={() => setSelectedProject(project.id)}>
                 <i className={project.category}>{categoryLabels[lang][project.category].slice(0, 2)}</i>
                 <span><strong>{project.shortTitle[lang]}</strong><small>{project.district} · {project.year}</small></span><b>↗</b>
               </button>
             ))}
-            {mapProjects.length > 5 && <button className="map-expand" type="button" onClick={() => setMapExpanded((value) => !value)}><span>{mapExpanded ? t.hideMap : t.showAllMap}</span><b>{mapExpanded ? "↑" : "↓"}</b></button>}
           </aside>
         </div>
         <article className="selected-map-card" data-reveal>
@@ -475,7 +471,6 @@ export default function Home() {
           {stages.map((stage, index) => (
             <button key={stage.number} type="button" className={activeStage === index ? "active" : ""} onMouseEnter={() => setActiveStage(index)} onFocus={() => setActiveStage(index)} onClick={() => setActiveStage(index)}>
               <span>{stage.number}</span><strong>{stage.title[lang]}</strong>
-              <aside className="stage-peek"><StageIcon name={stage.icon} /><small>{t.result}</small><b>{stage.result[lang]}</b></aside>
             </button>
           ))}
         </div>
@@ -490,7 +485,7 @@ export default function Home() {
         <div className="section-heading" data-reveal>
           <div><p className="eyebrow">{t.developersKicker}</p><h2>{t.developersTitle}</h2></div><p>{t.developersText}</p>
         </div>
-        <div className="developers-grid" data-reveal>{developers.map((developer, index) => <div key={developer.name} className={developer.invert ? "invert-logo" : ""}><span>{String(index + 1).padStart(2, "0")}</span>{developer.logo ? <Image src={developer.logo} alt={developer.name} width={180} height={64} /> : <strong>{developer.name}</strong>}</div>)}</div>
+        <div className="developers-grid" data-reveal>{developers.map((developer, index) => <div key={developer.name} className={developer.invert ? "invert-logo" : ""}><span>{String(index + 1).padStart(2, "0")}</span>{developer.logo ? <span className="developer-logo"><Image src={developer.logo} alt={developer.name} fill sizes="(max-width: 620px) 42vw, 210px" /></span> : <strong>{developer.name}</strong>}</div>)}</div>
       </section>
 
       <section id="calculator" className="section calculator-section">
