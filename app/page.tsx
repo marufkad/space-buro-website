@@ -1,131 +1,153 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import { FormEvent, PointerEvent, useEffect, useMemo, useRef, useState } from "react";
+import { fujairahImages, projectLocations, stages, team, type Lang } from "./data";
 
-type Lang = "ru" | "en";
+const ProjectMap = dynamic(() => import("./ProjectMap"), {
+  ssr: false,
+  loading: () => <div className="map-loading">Loading project map…</div>,
+});
 
-const copy = {
+const ui = {
   ru: {
-    nav: ["Услуги", "Проекты", "Этапы", "О компании", "Контакты"],
-    heroEyebrow: "Ремонт · Fit-out · Мебель",
-    heroTitle: "Пространство, которое создаётся у вас на глазах",
-    heroText: "Ремонт и мебель на заказ в Дубае — от чертежей и согласований до полностью готового интерьера.",
-    heroPrimary: "Запустить трансформацию",
+    nav: [
+      ["Объекты", "#projects"],
+      ["Карта", "#map"],
+      ["Этапы", "#process"],
+      ["Команда", "#team"],
+      ["Контакты", "#contact"],
+    ],
+    heroKicker: "Ремонт · Fit-out · Мебель",
+    heroTitle: "Строим интерьер как точную систему",
+    heroText: "Одна команда отвечает за дизайн, согласования, ремонт и мебель на заказ в Дубае и по ОАЭ.",
+    heroPrimary: "Посмотреть объекты",
     heroSecondary: "Обсудить проект",
-    scroll: "Прокрутите, чтобы построить интерьер",
-    stages: ["Пустое помещение", "Инженерные работы", "Отделка", "Мебель", "Готовый интерьер"],
-    servicesKicker: "Единый процесс",
-    servicesTitle: "Берём ответственность за весь интерьер",
-    servicesText: "Одна команда ведёт проект от первого замера до финальной приёмки — без разрыва между ремонтом и мебелью.",
-    services: [
-      ["Ремонт и fit-out", "Квартиры, виллы, офисы, рестораны и коммерческие пространства под ключ."],
-      ["Мебель на заказ", "Кухни, гардеробные, стеновые панели и встроенная мебель на собственном производстве."],
-      ["Дизайн и чертежи", "Планировки, рабочая документация, мебельные чертежи и подбор материалов."],
-      ["Согласования", "Координация с building management, NOC, permits и технической документацией."],
+    scroll: "Прокрутите — помещение будет построено",
+    stats: [
+      ["10+", "лет опыта команды"],
+      ["330 м²", "площадь featured-проекта"],
+      ["01", "ответственная команда"],
+      ["UAE", "география объектов"],
     ],
-    workKicker: "Избранный проект",
-    workTitle: "Office fit-out — Fujairah Trade Centre",
-    workText: "Полный цикл работ для офиса площадью 330 м²: инженерия, потолки, отделка, встроенная мебель и финальная комплектация.",
-    workMeta: ["Fujairah", "330 м²", "3 месяца"],
-    workCta: "Смотреть проект",
-    processKicker: "Как мы работаем",
-    processTitle: "Понятный маршрут от идеи до сдачи",
-    process: [
-      ["01", "Консультация", "Обсуждаем задачи, стиль, бюджет и сроки."],
-      ["02", "Замеры", "Фиксируем особенности объекта и инженерных систем."],
-      ["03", "Смета и договор", "Согласовываем объём, материалы, стоимость и график."],
-      ["04", "Реализация", "Организуем работы и производство мебели параллельно."],
-      ["05", "Контроль", "Проверяем качество и показываем прогресс на каждом этапе."],
-      ["06", "Передача", "Финальная приёмка, документы и гарантия по договору."],
-    ],
-    aboutKicker: "Space Buro",
-    aboutTitle: "Люди, которые отвечают за результат",
-    aboutText: "Архитекторы, инженеры, мебельщики и мастера работают как одна команда в Дубае. Основные работы выполняем сами, специализированные задачи ведём под нашим контролем.",
-    principles: ["Собственное мебельное производство", "Одна команда для ремонта и мебели", "Прозрачная смета и график", "Гарантия фиксируется в договоре"],
-    contactKicker: "Начать проект",
-    contactTitle: "Расскажите, что вы хотите изменить",
-    contactText: "Оставьте короткую информацию — мы подготовим вопросы и свяжемся с вами в WhatsApp.",
+    libraryKicker: "Библиотека объектов",
+    libraryTitle: "Проекты с фактами, файлами и географией",
+    libraryText: "Не просто красивые кадры: площадь, сроки, объём работ, команда, фотографии и публичные документы собраны в карточке каждого объекта.",
+    filters: { all: "Все", fitout: "Fit-out", furniture: "Мебель", commercial: "Коммерческие" },
+    featured: "Опубликованный case study",
+    scope: "Инженерия · Отделка · Мебель",
+    galleryHint: "Нажмите на фотографию, чтобы открыть крупнее",
+    filesTitle: "Файлы объекта",
+    filePublic: "Публичный PDF-паспорт",
+    fileGallery: "Оптимизированная галерея",
+    filePrivate: "Рабочие чертежи и сметы",
+    download: "Скачать",
+    ready: "4 WebP · 230 KB",
+    locked: "Только сотрудникам",
+    mapKicker: "География проектов",
+    mapTitle: "Объекты на карте ОАЭ",
+    mapText: "Выберите точку, чтобы увидеть тип проекта, статус и краткое описание. Точный номер квартиры или виллы публично не показывается.",
+    completed: "Завершён",
+    progress: "В работе",
+    caseReady: "Case study опубликован",
+    caseSoon: "Материалы готовятся",
+    processKicker: "Этапы работы",
+    processTitle: "Каждый этап заканчивается понятным результатом",
+    processText: "Вы всегда знаете, что происходит сейчас, какой документ или работа должны быть готовы и что начинается дальше.",
+    teamKicker: "Команда",
+    teamTitle: "Люди и объекты, за которые они отвечают",
+    teamText: "Карточка специалиста показывает роль, экспертизу и проекты, в которых он участвовал.",
+    projectsLabel: "Участие в проектах",
+    teamBannerTitle: "Архитекторы, инженеры и мастера работают как одна команда",
+    teamBannerText: "Основные fit-out и мебельные работы выполняем своими силами, специализированные задачи ведём под единым контролем.",
+    contactKicker: "Новый проект",
+    contactTitle: "Расскажите, что нужно изменить",
+    contactText: "Ответим на ключевые вопросы, предложим следующий шаг и подготовим список данных для расчёта.",
     name: "Ваше имя",
     phone: "Номер телефона",
     type: "Тип проекта",
-    types: ["Квартира", "Вилла", "Офис", "Ресторан / магазин", "Мебель на заказ", "Другое"],
     message: "Коротко о задаче",
-    send: "Обсудить в WhatsApp",
-    direct: "Или свяжитесь напрямую",
-    legal: "SPACE BURO TECHNICAL SERVICES L.L.C-FZ · Dubai, UAE",
+    submit: "Обсудить в WhatsApp",
+    projectTypes: ["Квартира", "Вилла", "Офис", "Ресторан / магазин", "Мебель на заказ", "Другое"],
   },
   en: {
-    nav: ["Services", "Projects", "Process", "About", "Contacts"],
-    heroEyebrow: "Renovation · Fit-out · Furniture",
-    heroTitle: "A space that takes shape before your eyes",
-    heroText: "Interior renovation and custom furniture in Dubai — from drawings and approvals to a fully finished space.",
-    heroPrimary: "Start the transformation",
-    heroSecondary: "Discuss your project",
+    nav: [
+      ["Projects", "#projects"],
+      ["Map", "#map"],
+      ["Process", "#process"],
+      ["Team", "#team"],
+      ["Contact", "#contact"],
+    ],
+    heroKicker: "Renovation · Fit-out · Furniture",
+    heroTitle: "We build interiors as precise systems",
+    heroText: "One team handles design, approvals, fit-out and bespoke furniture across Dubai and the UAE.",
+    heroPrimary: "Explore projects",
+    heroSecondary: "Discuss a project",
     scroll: "Scroll to build the interior",
-    stages: ["Empty space", "Engineering", "Finishes", "Furniture", "Completed interior"],
-    servicesKicker: "One seamless process",
-    servicesTitle: "One team responsible for the entire interior",
-    servicesText: "We guide every project from the first site measurement to final handover — connecting fit-out and furniture in one workflow.",
-    services: [
-      ["Renovation & fit-out", "Turnkey apartments, villas, offices, restaurants and commercial interiors."],
-      ["Custom furniture", "Kitchens, wardrobes, wall panels and built-in furniture made in-house."],
-      ["Design & drawings", "Layouts, working documentation, joinery drawings and material selection."],
-      ["Approvals", "Coordination with building management, NOCs, permits and technical documents."],
-    ],
-    workKicker: "Featured project",
-    workTitle: "Office fit-out — Fujairah Trade Centre",
-    workText: "A complete 330 m² office delivery: MEP, ceilings, finishes, custom joinery and final completion.",
-    workMeta: ["Fujairah", "330 m²", "3 months"],
-    workCta: "View project",
+    stats: [["10+", "years of team experience"], ["330 m²", "featured project area"], ["01", "accountable team"], ["UAE", "project geography"]],
+    libraryKicker: "Project library",
+    libraryTitle: "Projects with facts, files and geography",
+    libraryText: "More than a gallery: area, timing, scope, team, photography and public documents are collected in each project card.",
+    filters: { all: "All", fitout: "Fit-out", furniture: "Furniture", commercial: "Commercial" },
+    featured: "Published case study",
+    scope: "MEP · Finishes · Furniture",
+    galleryHint: "Select an image to view it full screen",
+    filesTitle: "Project files",
+    filePublic: "Public PDF case study",
+    fileGallery: "Optimised image gallery",
+    filePrivate: "Technical drawings & estimates",
+    download: "Download",
+    ready: "4 WebP · 230 KB",
+    locked: "Employees only",
+    mapKicker: "Project geography",
+    mapTitle: "Projects across the UAE",
+    mapText: "Select a marker to see the project type, status and short description. Exact unit or villa numbers remain private.",
+    completed: "Completed",
+    progress: "In progress",
+    caseReady: "Case study published",
+    caseSoon: "Materials in preparation",
     processKicker: "Our process",
-    processTitle: "A clear route from idea to handover",
-    process: [
-      ["01", "Consultation", "We align on goals, style, budget and timeline."],
-      ["02", "Site survey", "We document the space and existing engineering systems."],
-      ["03", "Quote & contract", "Scope, materials, cost and schedule are agreed in advance."],
-      ["04", "Delivery", "Site works and furniture production move forward together."],
-      ["05", "Quality control", "We inspect the work and share progress at each stage."],
-      ["06", "Handover", "Final inspection, documentation and contractual warranty."],
-    ],
-    aboutKicker: "Space Buro",
-    aboutTitle: "The people responsible for the result",
-    aboutText: "Architects, engineers, joiners and craftsmen work as one Dubai-based team. Core work is delivered in-house, with specialist packages managed under our control.",
-    principles: ["In-house furniture production", "One team for fit-out and furniture", "Transparent quote and schedule", "Warranty set out in the contract"],
+    processTitle: "Every stage ends with a clear deliverable",
+    processText: "You always know what is happening, which document or work should be ready, and what starts next.",
+    teamKicker: "Team",
+    teamTitle: "The people accountable for each project",
+    teamText: "Each specialist profile shows their role, expertise and project participation.",
+    projectsLabel: "Project participation",
+    teamBannerTitle: "Architects, engineers and craftsmen work as one team",
+    teamBannerText: "Core fit-out and furniture works are delivered in-house, with specialist scopes under unified control.",
     contactKicker: "Start a project",
-    contactTitle: "Tell us what you want to transform",
-    contactText: "Share a few details and we will follow up with the right questions on WhatsApp.",
+    contactTitle: "Tell us what you want to change",
+    contactText: "We will answer the key questions, suggest the next step and prepare a checklist for your estimate.",
     name: "Your name",
     phone: "Phone number",
     type: "Project type",
-    types: ["Apartment", "Villa", "Office", "Restaurant / retail", "Custom furniture", "Other"],
-    message: "A short project note",
-    send: "Discuss on WhatsApp",
-    direct: "Or contact us directly",
-    legal: "SPACE BURO TECHNICAL SERVICES L.L.C-FZ · Dubai, UAE",
+    message: "Project summary",
+    submit: "Discuss on WhatsApp",
+    projectTypes: ["Apartment", "Villa", "Office", "Restaurant / retail", "Bespoke furniture", "Other"],
   },
 } as const;
 
-const projectImages = [
-  "https://www.space-buro.ae/wp-content/uploads/2026/04/DSC_9123-5-3.png",
-  "https://www.space-buro.ae/wp-content/uploads/2026/04/DSC_9123-5-2.png",
-  "https://www.space-buro.ae/wp-content/uploads/2026/04/DSC_9123-5-1.png",
-  "https://www.space-buro.ae/wp-content/uploads/2026/04/DSC_9123-5.png",
-];
+const heroStages = ["Empty shell", "Engineering", "Finishes", "Furniture", "Completed interior"];
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("ru");
-  const [menuOpen, setMenuOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
+  const [filter, setFilter] = useState<"all" | "fitout" | "furniture" | "commercial">("all");
+  const [selectedProject, setSelectedProject] = useState(projectLocations[0].id);
+  const [activeStage, setActiveStage] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
-  const t = copy[lang];
+  const t = ui[lang];
 
   useEffect(() => {
     const update = () => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const distance = Math.max(1, rect.height - window.innerHeight);
-      setProgress(Math.min(1, Math.max(0, -rect.top / distance)));
+      const hero = heroRef.current;
+      if (!hero) return;
+      const distance = Math.max(hero.offsetHeight - window.innerHeight, 1);
+      setProgress(Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / distance)));
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -136,181 +158,227 @@ export default function Home() {
     };
   }, []);
 
-  const stageIndex = Math.min(t.stages.length - 1, Math.floor(progress * t.stages.length));
-  const reveal = Math.min(100, Math.max(0, (progress - 0.06) * 112));
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
+      { threshold: 0.13 },
+    );
+    document.querySelectorAll("[data-reveal]").forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
 
-  const schema = useMemo(
-    () => ({
-      "@context": "https://schema.org",
-      "@type": "HomeAndConstructionBusiness",
-      name: "Space Buro Technical Services L.L.C-FZ",
-      url: "https://www.space-buro.ae/",
-      telephone: "+971523569697",
-      email: "support@space-buro.ae",
-      areaServed: "Dubai, UAE",
-      sameAs: ["https://www.instagram.com/space.buro"],
-    }),
-    [],
+  const filteredProjects = useMemo(
+    () => projectLocations.filter((project) => filter === "all" || project.category === filter),
+    [filter],
   );
+  const selected = projectLocations.find((project) => project.id === selectedProject) ?? projectLocations[0];
+  const reveal = Math.min(100, progress * 122);
+  const heroStage = Math.min(heroStages.length - 1, Math.floor(progress * heroStages.length));
 
-  function handlePointer(event: React.PointerEvent<HTMLDivElement>) {
+  function chooseFilter(value: typeof filter) {
+    setFilter(value);
+    const first = projectLocations.find((project) => value === "all" || project.category === value);
+    if (first) setSelectedProject(first.id);
+  }
+
+  function handlePointer(event: PointerEvent<HTMLElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    event.currentTarget.style.setProperty("--mx", x.toFixed(3));
-    event.currentTarget.style.setProperty("--my", y.toFixed(3));
+    event.currentTarget.style.setProperty("--mx", String((event.clientX - rect.left) / rect.width - 0.5));
+    event.currentTarget.style.setProperty("--my", String((event.clientY - rect.top) / rect.height - 0.5));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const text = lang === "ru"
-      ? `Здравствуйте! Меня зовут ${data.get("name")}. Телефон: ${data.get("phone")}. Тип проекта: ${data.get("type")}. ${data.get("message") || ""}`
-      : `Hello! My name is ${data.get("name")}. Phone: ${data.get("phone")}. Project type: ${data.get("type")}. ${data.get("message") || ""}`;
-    window.open(`https://wa.me/971523569697?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+    const message = lang === "ru"
+      ? `Здравствуйте! Меня зовут ${data.get("name")}. Тип проекта: ${data.get("type")}. Телефон: ${data.get("phone")}. ${data.get("message") || ""}`
+      : `Hello! My name is ${data.get("name")}. Project type: ${data.get("type")}. Phone: ${data.get("phone")}. ${data.get("message") || ""}`;
+    window.open(`https://wa.me/971523569697?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
   }
 
   return (
-    <main>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-
+    <main onPointerMove={handlePointer}>
       <section ref={heroRef} className="hero-scroll" aria-label={t.heroTitle}>
-        <div className="hero-sticky" onPointerMove={handlePointer}>
-          <div
-            className="hero-wire"
-            aria-hidden="true"
-            style={{ opacity: 0.72 - progress * 0.62 }}
-          >
-            <span className="wire wall-a" />
-            <span className="wire wall-b" />
-            <span className="wire floor-a" />
-            <span className="wire floor-b" />
-            <span className="wire ceiling-a" />
-            <span className="wire window-a" />
+        <div className="hero-sticky">
+          <div className="hero-wire" aria-hidden="true" style={{ opacity: 0.72 - progress * 0.62 }}>
+            <span className="wire wall-a" /><span className="wire wall-b" /><span className="wire floor-a" />
+            <span className="wire floor-b" /><span className="wire ceiling-a" /><span className="wire window-a" />
           </div>
-          <div
-            className="hero-room"
-            aria-hidden="true"
-            style={{ clipPath: `inset(0 0 0 ${100 - reveal}%)` }}
-          />
+          <div className="hero-room" aria-hidden="true" style={{ clipPath: `inset(0 0 0 ${100 - reveal}%)` }} />
           <div className="hero-shade" aria-hidden="true" />
 
           <header className="site-header">
-            <a className="logo" href="#top" aria-label="Space Buro — home">
-              <span>SPACE</span><span>BURO</span>
-            </a>
-            <nav className={menuOpen ? "main-nav open" : "main-nav"} aria-label={lang === "ru" ? "Основная навигация" : "Main navigation"}>
-              {t.nav.map((item, index) => (
-                <a key={item} href={`#${["services", "projects", "process", "about", "contact"][index]}`} onClick={() => setMenuOpen(false)}>{item}</a>
-              ))}
+            <a className="logo" href="#top" aria-label="Space Buro home"><span>SPACE</span><span>BURO</span></a>
+            <nav className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Main navigation">
+              {t.nav.map(([label, href]) => <a key={href} href={href} onClick={() => setMenuOpen(false)}>{label}</a>)}
             </nav>
             <div className="header-actions">
               <button className="language" type="button" onClick={() => setLang(lang === "ru" ? "en" : "ru")} aria-label="Switch language">
                 <span className={lang === "ru" ? "active" : ""}>RU</span><i>/</i><span className={lang === "en" ? "active" : ""}>EN</span>
               </button>
               <a className="header-contact" href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp ↗</a>
-              <button className="menu-button" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => setMenuOpen(!menuOpen)}>
-                <span /><span />
-              </button>
+              <button className="menu-button" type="button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Open menu"><span /><span /></button>
             </div>
           </header>
 
           <div id="top" className="hero-copy">
-            <p className="eyebrow">{t.heroEyebrow}</p>
+            <p className="eyebrow">{t.heroKicker}</p>
             <h1>{t.heroTitle}</h1>
             <p className="hero-description">{t.heroText}</p>
             <div className="hero-ctas">
-              <a className="button button-primary" href="#transformation">{t.heroPrimary}<span>↘</span></a>
+              <a className="button button-primary" href="#projects">{t.heroPrimary}<span>↘</span></a>
               <a className="button button-ghost" href="#contact">{t.heroSecondary}<span>↗</span></a>
             </div>
           </div>
 
-          <div className="materials" aria-label={lang === "ru" ? "Материалы проекта" : "Project materials"}>
-            <div className="material-token travertine"><span /><small>{lang === "ru" ? "Травертин" : "Travertine"}</small></div>
-            <div className="material-token walnut"><span /><small>{lang === "ru" ? "Орех" : "Walnut"}</small></div>
-            <div className="material-token bronze"><span /><small>{lang === "ru" ? "Бронза" : "Bronze"}</small></div>
+          <div className="materials" aria-label="Material palette">
+            <div className="material-token travertine"><span /><small>Travertine</small></div>
+            <div className="material-token walnut"><span /><small>Walnut</small></div>
+            <div className="material-token bronze"><span /><small>Bronze</small></div>
           </div>
 
-          <div id="transformation" className="scroll-status">
-            <div className="scroll-copy"><span className="mouse-shape" aria-hidden="true" /><p>{t.scroll}</p><strong>{t.stages[stageIndex]}</strong></div>
+          <div className="scroll-status">
+            <div className="scroll-copy"><span className="mouse-shape" aria-hidden="true" /><p>{t.scroll}</p><strong>{heroStages[heroStage]}</strong></div>
             <div className="progress-track"><span style={{ width: `${progress * 100}%` }} /></div>
-            <output aria-live="polite">{String(Math.round(progress * 100)).padStart(2, "0")}%</output>
+            <output>{String(Math.round(progress * 100)).padStart(2, "0")}%</output>
           </div>
         </div>
       </section>
 
-      <section id="services" className="section services-section">
-        <div className="section-intro">
-          <p className="eyebrow">{t.servicesKicker}</p>
-          <h2>{t.servicesTitle}</h2>
-          <p>{t.servicesText}</p>
+      <section className="proof-strip" aria-label="Space Buro facts">
+        {t.stats.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
+      </section>
+
+      <section id="projects" className="section library-section">
+        <div className="section-heading" data-reveal>
+          <div><p className="eyebrow">{t.libraryKicker}</p><h2>{t.libraryTitle}</h2></div>
+          <p>{t.libraryText}</p>
         </div>
-        <div className="services-grid">
-          {t.services.map(([title, text], index) => (
-            <article key={title} className="service-card">
-              <span>0{index + 1}</span><h3>{title}</h3><p>{text}</p><i>↗</i>
-            </article>
+
+        <div className="library-toolbar" data-reveal>
+          {(Object.keys(t.filters) as Array<keyof typeof t.filters>).map((key) => (
+            <button key={key} type="button" className={filter === key ? "active" : ""} onClick={() => chooseFilter(key)}>
+              {t.filters[key]}<sup>{projectLocations.filter((item) => key === "all" || item.category === key).length}</sup>
+            </button>
           ))}
         </div>
+
+        <article className="featured-case" data-reveal>
+          <div className="case-gallery">
+            <button className="case-main-image" type="button" onClick={() => setLightbox(true)} aria-label="Open project image">
+              <Image src={fujairahImages[activeImage]} alt="Fujairah Trade Centre office fit-out" fill sizes="(max-width: 900px) 100vw, 62vw" priority={false} />
+              <span>{String(activeImage + 1).padStart(2, "0")} / {String(fujairahImages.length).padStart(2, "0")}</span>
+            </button>
+            <div className="case-thumbs">
+              {fujairahImages.map((image, index) => (
+                <button key={image} type="button" className={index === activeImage ? "active" : ""} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`}>
+                  <Image src={image} alt="" fill sizes="110px" />
+                </button>
+              ))}
+            </div>
+            <small>{t.galleryHint}</small>
+          </div>
+          <div className="case-copy">
+            <span className="case-badge">{t.featured}</span>
+            <h3>Office fit-out<br />Fujairah Trade Centre</h3>
+            <p>{projectLocations[0].summary[lang]}</p>
+            <dl><div><dt>Area</dt><dd>330 m²</dd></div><div><dt>Duration</dt><dd>3 months</dd></div><div><dt>Scope</dt><dd>{t.scope}</dd></div></dl>
+            <a className="text-link" href="#map">View on map <span>↘</span></a>
+          </div>
+        </article>
+
+        <div className="files-panel" data-reveal>
+          <div><p className="eyebrow">{t.filesTitle}</p><h3>Project documentation</h3></div>
+          <div className="file-row pending">
+            <span className="file-icon">PDF</span><span><strong>{t.filePublic}</strong><small>2 pages · 134 KB</small></span><b>Ready to publish</b>
+          </div>
+          <div className="file-row"><span className="file-icon">IMG</span><span><strong>{t.fileGallery}</strong><small>{t.ready}</small></span><b className="ready-dot">Ready</b></div>
+          <div className="file-row locked"><span className="file-icon">LOCK</span><span><strong>{t.filePrivate}</strong><small>{t.locked}</small></span><b>Private</b></div>
+        </div>
       </section>
 
-      <section id="projects" className="section project-section">
-        <div className="project-gallery">
-          <img src={projectImages[activeImage]} alt="Office fit-out at Fujairah Trade Centre by Space Buro" loading="lazy" width="2049" height="1365" />
-          <div className="project-thumbs" aria-label="Project gallery">
-            {projectImages.map((src, index) => (
-              <button key={src} type="button" className={activeImage === index ? "active" : ""} onClick={() => setActiveImage(index)} aria-label={`Show project image ${index + 1}`}>
-                <img src={src} alt="" loading="lazy" width="204" height="136" />
+      <section id="map" className="section map-section">
+        <div className="map-copy" data-reveal>
+          <p className="eyebrow">{t.mapKicker}</p><h2>{t.mapTitle}</h2><p>{t.mapText}</p>
+          <div className="map-project-list">
+            {filteredProjects.map((project) => (
+              <button key={project.id} type="button" className={selected.id === project.id ? "active" : ""} onClick={() => setSelectedProject(project.id)}>
+                <span className={`status-dot ${project.status}`} /><span><strong>{project.district}</strong><small>{project.title[lang]}</small></span><b>↗</b>
               </button>
             ))}
           </div>
         </div>
-        <div className="project-copy">
-          <p className="eyebrow">{t.workKicker}</p><h2>{t.workTitle}</h2><p>{t.workText}</p>
-          <ul>{t.workMeta.map((item) => <li key={item}>{item}</li>)}</ul>
-          <a className="text-link" href="#contact">{t.workCta}<span>↗</span></a>
+        <div className="map-shell" data-reveal>
+          <ProjectMap projects={filteredProjects} selectedId={selected.id} lang={lang} onSelect={setSelectedProject} />
+          <article className="map-card">
+            <span className={`project-status ${selected.status}`}>{selected.status === "completed" ? t.completed : t.progress}</span>
+            <h3>{selected.title[lang]}</h3><p>{selected.summary[lang]}</p>
+            <div><span>{selected.year}</span><span>{selected.published ? t.caseReady : t.caseSoon}</span></div>
+          </article>
         </div>
       </section>
 
       <section id="process" className="section process-section">
-        <div className="section-intro compact"><p className="eyebrow">{t.processKicker}</p><h2>{t.processTitle}</h2></div>
-        <div className="process-list">
-          {t.process.map(([number, title, text]) => (
-            <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>
-          ))}
+        <div className="section-heading" data-reveal><div><p className="eyebrow">{t.processKicker}</p><h2>{t.processTitle}</h2></div><p>{t.processText}</p></div>
+        <div className="process-workspace" data-reveal>
+          <div className="process-nav">
+            {stages.map((stage, index) => (
+              <button key={stage.number} type="button" className={activeStage === index ? "active" : ""} onMouseEnter={() => setActiveStage(index)} onFocus={() => setActiveStage(index)} onClick={() => setActiveStage(index)}>
+                <span>{stage.number}</span><strong>{stage.title[lang]}</strong><i>↗</i>
+              </button>
+            ))}
+          </div>
+          <article className="stage-detail" key={`${lang}-${activeStage}`}>
+            <div className="stage-visual" aria-hidden="true"><span>{stages[activeStage].number}</span><i /><b /></div>
+            <p className="eyebrow">Stage {stages[activeStage].number}</p>
+            <h3>{stages[activeStage].title[lang]}</h3>
+            <p>{stages[activeStage].text[lang]}</p>
+            <strong>{stages[activeStage].result[lang]}</strong>
+          </article>
         </div>
       </section>
 
-      <section id="about" className="section about-section">
-        <div className="about-image">
-          <img src="https://www.space-buro.ae/wp-content/uploads/2026/04/IMG_5204-1.png" alt="Space Buro team in Dubai" loading="lazy" width="2238" height="1332" />
-          <span>Dubai · UAE</span>
+      <section id="team" className="section team-section">
+        <div className="section-heading" data-reveal><div><p className="eyebrow">{t.teamKicker}</p><h2>{t.teamTitle}</h2></div><p>{t.teamText}</p></div>
+        <div className="team-grid">
+          {team.map((member, index) => (
+            <article className="team-card" key={member.id} data-reveal style={{ transitionDelay: `${index * 90}ms` }}>
+              <div className="team-photo"><Image src={member.image} alt={member.name[lang]} fill sizes="(max-width: 800px) 100vw, 33vw" /><span>0{index + 1}</span></div>
+              <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span><small>{t.projectsLabel}</small><ul>{member.projects.map((project) => <li key={project}>{project}</li>)}</ul></div>
+            </article>
+          ))}
         </div>
-        <div className="about-copy">
-          <p className="eyebrow">{t.aboutKicker}</p><h2>{t.aboutTitle}</h2><p>{t.aboutText}</p>
-          <ul>{t.principles.map((item, index) => <li key={item}><span>0{index + 1}</span>{item}</li>)}</ul>
+        <div className="team-banner" data-reveal>
+          <Image src="/media/team-group.webp" alt="Space Buro team in Dubai" fill sizes="100vw" />
+          <div><p className="eyebrow">SPACE BURO · DUBAI</p><h3>{t.teamBannerTitle}</h3><p>{t.teamBannerText}</p></div>
         </div>
       </section>
 
       <section id="contact" className="section contact-section">
-        <div className="contact-copy"><p className="eyebrow">{t.contactKicker}</p><h2>{t.contactTitle}</h2><p>{t.contactText}</p>
-          <div className="direct-contact"><span>{t.direct}</span><a href="tel:+971523569697">+971 52 356 9697</a><a href="mailto:support@space-buro.ae">support@space-buro.ae</a></div>
-        </div>
-        <form className="contact-form" onSubmit={handleSubmit}>
+        <div className="contact-copy" data-reveal><p className="eyebrow">{t.contactKicker}</p><h2>{t.contactTitle}</h2><p>{t.contactText}</p><div><a href="tel:+971523569697">+971 52 356 9697</a><a href="mailto:support@space-buro.ae">support@space-buro.ae</a></div></div>
+        <form className="contact-form" onSubmit={handleSubmit} data-reveal>
           <label><span>{t.name}</span><input name="name" autoComplete="name" required /></label>
           <label><span>{t.phone}</span><input name="phone" type="tel" autoComplete="tel" required pattern="[+0-9 ()-]{7,}" /></label>
-          <label><span>{t.type}</span><select name="type" required defaultValue=""><option value="" disabled>—</option>{t.types.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label><span>{t.type}</span><select name="type" required defaultValue=""><option value="" disabled>—</option>{t.projectTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
           <label className="wide"><span>{t.message}</span><textarea name="message" rows={3} /></label>
-          <button className="button button-primary form-submit" type="submit">{t.send}<span>↗</span></button>
+          <button className="button button-primary form-submit" type="submit">{t.submit}<span>↗</span></button>
         </form>
       </section>
 
       <footer>
-        <a className="logo footer-logo" href="#top" aria-label="Space Buro — home"><span>SPACE</span><span>BURO</span></a>
-        <p>{t.legal}</p>
-        <div><a href="https://www.instagram.com/space.buro" target="_blank" rel="noreferrer">Instagram ↗</a><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp ↗</a></div>
-        <small>© 2026 Space Buro</small>
+        <a className="logo footer-logo" href="#top" aria-label="Space Buro home"><span>SPACE</span><span>BURO</span></a>
+        <p>SPACE BURO TECHNICAL SERVICES L.L.C-FZ · Dubai, UAE</p>
+        <div><a href="https://www.instagram.com/space.buro" target="_blank" rel="noreferrer">Instagram ↗</a><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WhatsApp ↗</a></div><small>© 2026 Space Buro</small>
       </footer>
+
+      {lightbox && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Project gallery">
+          <button type="button" className="lightbox-close" onClick={() => setLightbox(false)} aria-label="Close">×</button>
+          <button type="button" className="lightbox-prev" onClick={() => setActiveImage((activeImage - 1 + fujairahImages.length) % fujairahImages.length)} aria-label="Previous">←</button>
+          <Image src={fujairahImages[activeImage]} alt="Fujairah Trade Centre project" fill sizes="100vw" />
+          <button type="button" className="lightbox-next" onClick={() => setActiveImage((activeImage + 1) % fujairahImages.length)} aria-label="Next">→</button>
+        </div>
+      )}
     </main>
   );
 }
