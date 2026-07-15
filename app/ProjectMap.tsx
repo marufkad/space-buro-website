@@ -76,9 +76,9 @@ export default function ProjectMap({ projects, selectedId, lang, fitAll, onSelec
         const icon = divIcon({
           className: "project-map-icon-wrap",
           html: `<span class="project-map-icon ${project.mapType}${active ? " active" : ""}">${markerIcons[project.mapType]}</span>`,
-          iconSize: active ? [44, 44] : [36, 36],
-          iconAnchor: active ? [22, 22] : [18, 18],
-          popupAnchor: [0, -22],
+          iconSize: active ? [44, 50] : [36, 42],
+          iconAnchor: active ? [22, 50] : [18, 42],
+          popupAnchor: [0, -46],
         });
 
         return (

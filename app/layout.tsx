@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: "Space Buro",
     locale: "ru_AE",
     type: "website",
-    images: [{ url: "/hero-room.webp", width: 1586, height: 992, alt: "Space Buro interior in Dubai" }],
+    images: [{ url: "/media/china-furniture-photo.webp", width: 1600, height: 1200, alt: "Space Buro interior in Dubai" }],
   },
   robots: { index: true, follow: true },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },

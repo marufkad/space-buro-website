@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 108" role="img" aria-labelledby="title">
+  <title id="title">Samana Developers</title>
+  <g fill="#171713">
+    <path d="M20 20h48v8H30v17h32v8H30v19h38v8H20V20Z" opacity=".18"/>
+    <text x="88" y="65" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="2">SAMANA</text>
+    <text x="91" y="88" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="600" letter-spacing="5">DEVELOPERS</text>
+  </g>
+</svg>

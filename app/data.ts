@@ -207,8 +207,8 @@ export const projectLocations: ProjectLocation[] = [
     },
     area: { ru: "Для квартир, вилл и бизнеса", en: "Homes, villas and commercial" },
     duration: { ru: "По заказу", en: "Order based" },
-    cover: "/media/china-furniture-photo.webp",
-    images: ["/media/china-furniture-photo.webp"],
+    cover: "/media/china-furniture-concept.webp",
+    images: ["/media/china-furniture-concept.webp"],
     teamIds: ["maruf", "serdar"],
     scope: [
       { ru: "Подбор и сравнение фабрик", en: "Factory sourcing and comparison" },
@@ -266,6 +266,6 @@ export const developers: Array<{ id: string; name: string; logo?: string; invert
   { id: "azizi", name: "AZIZI", logo: "/logos/developers/azizi.png" },
   { id: "binghatti", name: "BINGHATTI", logo: "/logos/developers/binghatti.svg", invert: true },
   { id: "danube", name: "DANUBE PROPERTIES", logo: "/logos/developers/danube.png" },
-  { id: "mag", name: "MAG PROPERTY DEVELOPMENT", logo: "/logos/developers/mag.svg" },
-  { id: "imtiaz", name: "IMTIAZ DEVELOPMENTS", logo: "/logos/developers/imtiaz.svg" },
+  { id: "nshama", name: "NSHAMA", logo: "/logos/developers/nshama.svg" },
+  { id: "samana", name: "SAMANA DEVELOPERS", logo: "/logos/developers/samana.svg" },
 ];

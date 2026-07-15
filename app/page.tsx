@@ -42,20 +42,20 @@ const categoryLabels: Record<Lang, Record<ProjectCategory, string>> = {
 
 const heroSlides = [
   {
-    image: "/hero-room.webp",
+    image: "/media/china-furniture-photo.webp",
     title: { ru: "Интерьер под ключ — от идеи до готового пространства", en: "Turnkey interiors — from idea to completed space" },
     text: { ru: "Дизайн, согласования, ремонт и мебель в одной ответственной команде.", en: "Design, approvals, fit-out and furniture under one accountable team." },
     tag: { ru: "Ремонт · Fit-out · Мебель", en: "Renovation · Fit-out · Furniture" },
   },
   {
-    image: "/media/project-fujairah-01.webp",
+    image: "/media/project-fujairah-04.webp",
     title: { ru: "Показываем не только кадры, но и факты проекта", en: "More than imagery: every project comes with facts" },
     text: { ru: "Площадь, сроки, состав работ, команда и география — в одной карточке объекта.", en: "Area, timing, scope, team and geography — connected in one project profile." },
     tag: { ru: "Библиотека объектов", en: "Project library" },
   },
   {
-    image: "/media/china-furniture-photo.webp",
-    title: { ru: "Мебель из Китая с контролем от фабрики до Дубая", en: "Furniture from China, controlled from factory to Dubai" },
+    image: "/media/china-furniture-concept.webp",
+    title: { ru: "Мебель из Китая с контролем и установкой — от фабрики до Дубая", en: "Furniture from China with control and installation — from factory to Dubai" },
     text: { ru: "Подбор фабрик, образцы, контроль качества, консолидация и доставка.", en: "Factory sourcing, samples, quality control, consolidation and delivery." },
     tag: { ru: "Dubai · Foshan", en: "Dubai · Foshan" },
   },
@@ -515,7 +515,7 @@ export default function Home() {
 
       <section id="china" className="section china-section">
         <div className="china-visual" data-reveal>
-          <Image src="/media/china-furniture-photo.webp" alt={t.chinaTitle} fill sizes="(max-width: 900px) 100vw, 55vw" />
+          <Image src="/media/china-furniture-concept.webp" alt={t.chinaTitle} fill sizes="(max-width: 900px) 100vw, 55vw" />
         </div>
         <div className="china-copy" data-reveal>
           <span className="china-signature" aria-hidden="true">中国家具采购</span>
