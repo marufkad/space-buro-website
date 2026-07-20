@@ -4,13 +4,13 @@ import { projectLocations } from "../../data";
 import ProjectDetail from "./ProjectDetail";
 
 export function generateStaticParams() {
-  return projectLocations.map((project) => ({ slug: project.id }));
+  return projectLocations.filter((project) => project.published).map((project) => ({ slug: project.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const project = projectLocations.find((item) => item.id === slug);
-  if (!project) return {};
+  if (!project?.published) return {};
   return {
     title: `${project.shortTitle.ru} | Space Buro`,
     description: project.summary.ru,
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = projectLocations.find((item) => item.id === slug);
-  if (!project) notFound();
+  if (!project?.published) notFound();
 
   return <ProjectDetail project={project} />;
 }

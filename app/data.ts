@@ -18,7 +18,10 @@ export type ProjectLocation = {
   area: Localized;
   duration: Localized;
   cover?: string;
+  coverImages?: string[];
   images: string[];
+  beforeImages?: string[];
+  materials?: string[];
   teamIds: string[];
   scope: Localized[];
   published: boolean;
@@ -29,7 +32,72 @@ export const fujairahImages = [
   "/media/project-fujairah-02.webp",
   "/media/project-fujairah-03.webp",
   "/media/project-fujairah-04.webp",
+  ...Array.from({ length: 12 }, (_, index) =>
+    `/media/projects/fujairah-office/gallery/${String(index + 1).padStart(2, "0")}-${[
+      "dsc-9137",
+      "dsc-9158",
+      "dsc-9163",
+      "dsc-9234",
+      "dsc-9283",
+      "dsc-9296",
+      "dsc-9303",
+      "dsc-9317",
+      "dsc-9391",
+      "dsc-9408",
+      "dsc-9460",
+      "dsc-9557",
+    ][index]}.webp`,
+  ),
 ];
+
+export const fujairahBeforeImages = Array.from(
+  { length: 4 },
+  (_, index) => `/media/projects/fujairah-office/before/${String(index + 1).padStart(2, "0")}-before.webp`,
+);
+
+export const seventhHeavenFinishedImages = Array.from(
+  { length: 10 },
+  (_, index) => `/media/projects/seventh-heaven/gallery/${String(index + 1).padStart(2, "0")}-finished.webp`,
+);
+
+export const seventhHeavenBeforeImages = Array.from(
+  { length: 4 },
+  (_, index) => `/media/projects/seventh-heaven/before/${String(index + 1).padStart(2, "0")}-before.webp`,
+);
+
+function createMapOnlyProject({
+  id,
+  title,
+  shortTitle,
+  district,
+  category,
+  mapType,
+  lat,
+  lng,
+}: Pick<ProjectLocation, "id" | "title" | "shortTitle" | "district" | "category" | "mapType" | "lat" | "lng">): ProjectLocation {
+  return {
+    id,
+    title,
+    shortTitle,
+    district,
+    category,
+    mapType,
+    status: "progress",
+    year: "2026",
+    lat,
+    lng,
+    summary: {
+      ru: "Локация проекта добавлена на карту. Фотографии и подробности объекта будут опубликованы следующим обновлением.",
+      en: "The project location is now on the map. Photography and project details will be published in the next update.",
+    },
+    area: { ru: "Данные готовятся", en: "Details coming soon" },
+    duration: { ru: "Данные готовятся", en: "Details coming soon" },
+    images: [],
+    teamIds: [],
+    scope: [],
+    published: false,
+  };
+}
 
 export const projectLocations: ProjectLocation[] = [
   {
@@ -49,8 +117,10 @@ export const projectLocations: ProjectLocation[] = [
     },
     area: { ru: "330 м²", en: "330 m²" },
     duration: { ru: "3 месяца", en: "3 months" },
-    cover: fujairahImages[0],
-    images: fujairahImages,
+    cover: fujairahImages[4],
+    coverImages: fujairahImages.slice(4),
+    images: [...fujairahImages, ...fujairahBeforeImages],
+    beforeImages: fujairahBeforeImages,
     teamIds: ["maruf", "quvvat", "serdar"],
     scope: [
       { ru: "Инженерные системы и электрика", en: "MEP systems and electrical works" },
@@ -61,12 +131,43 @@ export const projectLocations: ProjectLocation[] = [
     published: true,
   },
   {
+    id: "seventh-heaven-al-barari",
+    title: { ru: "Seventh Heaven, Al Barari", en: "Seventh Heaven, Al Barari" },
+    shortTitle: { ru: "Seventh Heaven, Al Barari", en: "Seventh Heaven, Al Barari" },
+    district: "Seventh Heaven · Al Barari",
+    category: "furniture",
+    mapType: "furniture",
+    status: "completed",
+    year: "2026",
+    lat: 25.099081,
+    lng: 55.316783,
+    summary: {
+      ru: "Полная мебелировка квартиры",
+      en: "Complete apartment furnishing.",
+    },
+    area: { ru: "80 м²", en: "80 m²" },
+    duration: { ru: "1 месяц", en: "1 month" },
+    cover: seventhHeavenFinishedImages[0],
+    coverImages: seventhHeavenFinishedImages,
+    images: [...seventhHeavenFinishedImages, ...seventhHeavenBeforeImages],
+    beforeImages: seventhHeavenBeforeImages,
+    materials: ["EGGER", "Blum"],
+    teamIds: ["maruf", "serdar"],
+    scope: [
+      { ru: "Проектирование мебели под индивидуальный дизайн", en: "Bespoke furniture design" },
+      { ru: "Изготовление и монтаж мебели", en: "Furniture production and installation" },
+      { ru: "Мебель для гостиной зоны и TV-unit", en: "Living area furniture and TV unit" },
+      { ru: "Мебель для спальни и санузла", en: "Bedroom and bathroom furniture" },
+    ],
+    published: true,
+  },
+  {
     id: "dubai-creek-harbour",
     title: { ru: "Apartment & furniture — Creek Harbour", en: "Apartment & furniture — Creek Harbour" },
     shortTitle: { ru: "Квартира Creek Harbour", en: "Creek Harbour Apartment" },
     district: "Dubai Creek Harbour",
     category: "furniture",
-    mapType: "residential",
+    mapType: "furniture",
     status: "completed",
     year: "2026",
     lat: 25.1973,
@@ -95,8 +196,8 @@ export const projectLocations: ProjectLocation[] = [
     mapType: "furniture",
     status: "completed",
     year: "2026",
-    lat: 25.0288,
-    lng: 55.1518,
+    lat: 25.02671,
+    lng: 55.14699,
     summary: {
       ru: "Комплекс встроенной мебели для виллы: кухни, гардеробные, TV-unit и спальни.",
       en: "A complete bespoke furniture package: kitchens, wardrobes, TV units and bedrooms.",
@@ -166,15 +267,15 @@ export const projectLocations: ProjectLocation[] = [
   },
   {
     id: "port-de-la-mer",
-    title: { ru: "Apartment renovation — Port de La Mer", en: "Apartment renovation — Port de La Mer" },
-    shortTitle: { ru: "Квартира Port de La Mer", en: "Port de La Mer Apartment" },
+    title: { ru: "Le Ciel Tower 1 — Port de La Mer", en: "Le Ciel Tower 1 — Port de La Mer" },
+    shortTitle: { ru: "Le Ciel Tower 1", en: "Le Ciel Tower 1" },
     district: "Port de La Mer",
     category: "fitout",
     mapType: "residential",
     status: "progress",
     year: "2026",
-    lat: 25.2383,
-    lng: 55.2531,
+    lat: 25.2355173,
+    lng: 55.2525428,
     summary: {
       ru: "Ремонт квартиры с согласованиями, инженерными изменениями и мебелью на заказ.",
       en: "Apartment renovation with approvals, MEP modifications and bespoke furniture.",
@@ -190,6 +291,96 @@ export const projectLocations: ProjectLocation[] = [
     ],
     published: true,
   },
+  createMapOnlyProject({
+    id: "damac-hills-2-kitchen",
+    title: { ru: "Kitchen — DAMAC Hills 2", en: "Kitchen — DAMAC Hills 2" },
+    shortTitle: { ru: "Кухня DAMAC Hills 2", en: "DAMAC Hills 2 Kitchen" },
+    district: "DAMAC Hills 2",
+    category: "furniture",
+    mapType: "furniture",
+    lat: 24.98758,
+    lng: 55.38479,
+  }),
+  createMapOnlyProject({
+    id: "azizi-riviera",
+    title: { ru: "Azizi Riviera", en: "Azizi Riviera" },
+    shortTitle: { ru: "Azizi Riviera", en: "Azizi Riviera" },
+    district: "Meydan · MBR City",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.1728605,
+    lng: 55.3055647,
+  }),
+  createMapOnlyProject({
+    id: "springs-10",
+    title: { ru: "Villa — Springs 10", en: "Villa — Springs 10" },
+    shortTitle: { ru: "Вилла Springs 10", en: "Springs 10 Villa" },
+    district: "The Springs 10",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.05778,
+    lng: 55.18112,
+  }),
+  createMapOnlyProject({
+    id: "harmony-1-tilal-al-ghaf",
+    title: { ru: "Villa — Harmony 1", en: "Villa — Harmony 1" },
+    shortTitle: { ru: "Вилла Harmony 1", en: "Harmony 1 Villa" },
+    district: "Tilal Al Ghaf",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.0229375,
+    lng: 55.2305781,
+  }),
+  createMapOnlyProject({
+    id: "bluewaters-residence-8",
+    title: { ru: "Bluewaters Residences — Building 8", en: "Bluewaters Residences — Building 8" },
+    shortTitle: { ru: "Bluewaters 8", en: "Bluewaters 8" },
+    district: "Bluewaters Island",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.0783625,
+    lng: 55.1223906,
+  }),
+  createMapOnlyProject({
+    id: "jumeirah-golf-estates-villa",
+    title: { ru: "Villa — Jumeirah Golf Estates", en: "Villa — Jumeirah Golf Estates" },
+    shortTitle: { ru: "Вилла Golf Estates", en: "Golf Estates Villa" },
+    district: "Jumeirah Golf Estates",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.0208974,
+    lng: 55.1995132,
+  }),
+  createMapOnlyProject({
+    id: "bayshore-1-creek-beach",
+    title: { ru: "Bayshore 1 — Creek Beach", en: "Bayshore 1 — Creek Beach" },
+    shortTitle: { ru: "Bayshore 1", en: "Bayshore 1" },
+    district: "Dubai Creek Beach",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.20133,
+    lng: 55.34859,
+  }),
+  createMapOnlyProject({
+    id: "sidra-1-dubai-hills",
+    title: { ru: "Villa — Sidra 1, Dubai Hills", en: "Villa — Sidra 1, Dubai Hills" },
+    shortTitle: { ru: "Вилла Sidra 1", en: "Sidra 1 Villa" },
+    district: "Dubai Hills Estate",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.09371,
+    lng: 55.24765,
+  }),
+  createMapOnlyProject({
+    id: "al-bateen-residences-jbr",
+    title: { ru: "Apartment renovation — Al Bateen Residences", en: "Apartment renovation — Al Bateen Residences" },
+    shortTitle: { ru: "Al Bateen Residences", en: "Al Bateen Residences" },
+    district: "JBR · Marsa Dubai",
+    category: "fitout",
+    mapType: "residential",
+    lat: 25.0728125,
+    lng: 55.1280625,
+  }),
   {
     id: "china-furniture-sourcing",
     title: { ru: "Мебель из Китая — Dubai / Foshan", en: "Furniture from China — Dubai / Foshan" },
@@ -220,14 +411,14 @@ export const projectLocations: ProjectLocation[] = [
 ];
 
 export const stages = [
-  { number: "01", icon: "brief", title: { ru: "Бриф", en: "Brief" }, text: { ru: "Обсуждаем задачи, стиль, бюджет, сроки и формат взаимодействия.", en: "We align goals, style, budget, timeline and communication." }, result: { ru: "Зафиксированный бриф", en: "Approved project brief" } },
-  { number: "02", icon: "measure", title: { ru: "Замеры", en: "Survey" }, text: { ru: "Проверяем размеры, инженерные системы и ограничения объекта.", en: "We verify dimensions, MEP systems and site constraints." }, result: { ru: "Обмерный план", en: "Measured survey" } },
-  { number: "03", icon: "design", title: { ru: "Концепция", en: "Concept" }, text: { ru: "Разрабатываем планировку, материалы, свет и мебельные решения.", en: "We develop layout, materials, lighting and furniture." }, result: { ru: "Утверждённая концепция", en: "Approved concept" } },
-  { number: "04", icon: "drawings", title: { ru: "Чертежи", en: "Drawings" }, text: { ru: "Готовим комплект рабочих и мебельных чертежей.", en: "We prepare construction and furniture drawings." }, result: { ru: "Рабочая документация", en: "Technical documentation" } },
-  { number: "05", icon: "permit", title: { ru: "Согласования", en: "Approvals" }, text: { ru: "Координируем NOC, building management, DDA и необходимые разрешения.", en: "We coordinate NOCs, building management, DDA and permits." }, result: { ru: "Разрешение на старт", en: "Permission to start" } },
-  { number: "06", icon: "build", title: { ru: "Реализация", en: "Fit-out" }, text: { ru: "Выполняем инженерные, строительные и отделочные работы.", en: "We deliver MEP, construction and finishing works." }, result: { ru: "Готовая отделка", en: "Completed fit-out" } },
-  { number: "07", icon: "furniture", title: { ru: "Мебель", en: "Furniture" }, text: { ru: "Производим мебель параллельно ремонту и устанавливаем по чертежам.", en: "Furniture is produced alongside fit-out and installed to drawings." }, result: { ru: "Собранный интерьер", en: "Installed interior" } },
-  { number: "08", icon: "handover", title: { ru: "Передача", en: "Handover" }, text: { ru: "Проверяем качество, закрываем замечания и передаём гарантию.", en: "We inspect, close snags and hand over the warranty." }, result: { ru: "Готовый объект", en: "Completed project" } },
+  { number: "01", icon: "brief", image: "/media/stages/01-brief.webp", title: { ru: "Бриф", en: "Brief" }, text: { ru: "Обсуждаем задачи, стиль, бюджет, сроки и формат взаимодействия.", en: "We align goals, style, budget, timeline and communication." }, result: { ru: "Зафиксированный бриф", en: "Approved project brief" } },
+  { number: "02", icon: "measure", image: "/media/stages/02-measurements.webp", title: { ru: "Замеры", en: "Survey" }, text: { ru: "Проверяем размеры, инженерные системы и ограничения объекта.", en: "We verify dimensions, MEP systems and site constraints." }, result: { ru: "Обмерный план", en: "Measured survey" } },
+  { number: "03", icon: "design", image: "/media/stages/03-concept.webp", title: { ru: "Концепция", en: "Concept" }, text: { ru: "Разрабатываем планировку, материалы, свет и мебельные решения.", en: "We develop layout, materials, lighting and furniture." }, result: { ru: "Утверждённая концепция", en: "Approved concept" } },
+  { number: "04", icon: "drawings", image: "/media/stages/04-drawings.webp", title: { ru: "Чертежи", en: "Drawings" }, text: { ru: "Готовим комплект рабочих и мебельных чертежей.", en: "We prepare construction and furniture drawings." }, result: { ru: "Рабочая документация", en: "Technical documentation" } },
+  { number: "05", icon: "permit", image: "/media/stages/05-approvals.webp", title: { ru: "Согласования", en: "Approvals" }, text: { ru: "Координируем NOC, building management, DDA и необходимые разрешения.", en: "We coordinate NOCs, building management, DDA and permits." }, result: { ru: "Разрешение на старт", en: "Permission to start" } },
+  { number: "06", icon: "build", image: "/media/stages/06-implementation.webp", title: { ru: "Реализация", en: "Fit-out" }, text: { ru: "Выполняем инженерные, строительные и отделочные работы.", en: "We deliver MEP, construction and finishing works." }, result: { ru: "Готовая отделка", en: "Completed fit-out" } },
+  { number: "07", icon: "furniture", image: "/media/stages/07-furniture.webp", title: { ru: "Мебель", en: "Furniture" }, text: { ru: "Производим мебель параллельно ремонту и устанавливаем по чертежам.", en: "Furniture is produced alongside fit-out and installed to drawings." }, result: { ru: "Собранный интерьер", en: "Installed interior" } },
+  { number: "08", icon: "handover", image: "/media/stages/08-handover.webp", title: { ru: "Передача", en: "Handover" }, text: { ru: "Проверяем качество, закрываем замечания и передаём гарантию.", en: "We inspect, close snags and hand over the warranty." }, result: { ru: "Готовый объект", en: "Completed project" } },
 ];
 
 export const team = [
@@ -255,7 +446,7 @@ export const brands = [
   { name: "Saint-Gobain", logo: "/logos/brands/saint-gobain.svg" },
 ];
 
-export const developers: Array<{ id: string; name: string; logo?: string; invert?: boolean }> = [
+export const developers: Array<{ id: string; name: string; label?: Localized; logo?: string; invert?: boolean }> = [
   { id: "emaar", name: "EMAAR", logo: "/logos/developers/emaar.svg" },
   { id: "nakheel", name: "NAKHEEL", logo: "/logos/developers/nakheel.svg", invert: true },
   { id: "meraas", name: "MERAAS", logo: "/logos/developers/meraas.svg" },
@@ -266,6 +457,6 @@ export const developers: Array<{ id: string; name: string; logo?: string; invert
   { id: "azizi", name: "AZIZI", logo: "/logos/developers/azizi.png" },
   { id: "binghatti", name: "BINGHATTI", logo: "/logos/developers/binghatti.svg", invert: true },
   { id: "danube", name: "DANUBE PROPERTIES", logo: "/logos/developers/danube.png" },
-  { id: "nshama", name: "NSHAMA", logo: "/logos/developers/nshama.svg" },
-  { id: "samana", name: "SAMANA DEVELOPERS", logo: "/logos/developers/samana.svg" },
+  { id: "omniyat", name: "OMNIYAT", logo: "/logos/developers/omniyat-brand.webp" },
+  { id: "others", name: "AND OTHERS", label: { ru: "И ДРУГИЕ", en: "AND OTHERS" } },
 ];

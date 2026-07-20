@@ -9,19 +9,19 @@ const labels: Record<Lang, {
   back: string; menu: string; facts: string; area: string; duration: string; year: string; location: string; scope: string;
   gallery: string; noGallery: string; before: string; beforeEmpty: string; people: string; peopleText: string; files: string;
   publicGallery: string; publicGalleryState: string; techFiles: string; techState: string; contact: string; next: string;
-  categories: Record<ProjectCategory, string>; concept: string;
+  categories: Record<ProjectCategory, string>; concept: string; materials: string;
 }> = {
   ru: {
     back: "Все проекты", menu: "Главная", facts: "Факты объекта", area: "Площадь", duration: "Срок", year: "Год", location: "География", scope: "Состав работ",
     gallery: "Фотографии объекта", noGallery: "Фотографии для этой карточки ещё готовятся. Структура страницы уже готова для загрузки изображений.", before: "До начала работ", beforeEmpty: "Фотографии состояния «до» пока не опубликованы. Их можно добавить сюда без изменения страницы.", people: "Кто участвовал", peopleText: "Нажмите на сотрудника, чтобы перейти к его профилю и другим объектам.", files: "Файлы объекта",
     publicGallery: "Оптимизированная WebP-галерея", publicGalleryState: "Доступна", techFiles: "Рабочие чертежи, сметы и акты", techState: "По запросу / сотрудникам", contact: "Обсудить похожий проект", next: "Следующий объект",
-    categories: { fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческий объект" }, concept: "Визуальная концепция услуги, не реализованный объект",
+    categories: { fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческий объект" }, concept: "Визуальная концепция услуги, не реализованный объект", materials: "Материалы и комплектующие",
   },
   en: {
     back: "All projects", menu: "Home", facts: "Project facts", area: "Area", duration: "Duration", year: "Year", location: "Location", scope: "Scope of work",
     gallery: "Project photography", noGallery: "Photography for this profile is still in preparation. The page is ready for images to be uploaded.", before: "Before work started", beforeEmpty: "Before photography has not been published yet. It can be added here without changing the page.", people: "People involved", peopleText: "Select a team member to see their profile and other project participation.", files: "Project files",
     publicGallery: "Optimised WebP gallery", publicGalleryState: "Available", techFiles: "Drawings, estimates and reports", techState: "On request / employees", contact: "Discuss a similar project", next: "Next project",
-    categories: { fitout: "Fit-out", furniture: "Furniture", china: "Furniture from China", commercial: "Commercial" }, concept: "Service concept visual, not a completed project",
+    categories: { fitout: "Fit-out", furniture: "Furniture", china: "Furniture from China", commercial: "Commercial" }, concept: "Service concept visual, not a completed project", materials: "Materials and hardware",
   },
 };
 
@@ -30,8 +30,9 @@ export default function ProjectDetail({ project }: { project: ProjectLocation })
   const [lightbox, setLightbox] = useState<string | null>(null);
   const t = labels[lang];
   const participants = team.filter((member) => project.teamIds.includes(member.id));
-  const currentIndex = projectLocations.findIndex((item) => item.id === project.id);
-  const nextProject = projectLocations[(currentIndex + 1) % projectLocations.length];
+  const publishedProjects = projectLocations.filter((item) => item.published);
+  const currentIndex = publishedProjects.findIndex((item) => item.id === project.id);
+  const nextProject = publishedProjects[(currentIndex + 1) % publishedProjects.length];
 
   return (
     <main className="project-detail-page">
@@ -60,7 +61,7 @@ export default function ProjectDetail({ project }: { project: ProjectLocation })
           <div><dt>{t.year}</dt><dd>{project.year}</dd></div>
           <div><dt>{t.location}</dt><dd>{project.district}</dd></div>
         </dl>
-        <div className="detail-scope"><h3>{t.scope}</h3><ol>{project.scope.map((item, index) => <li key={item.en}><span>{String(index + 1).padStart(2, "0")}</span>{item[lang]}</li>)}</ol></div>
+        <div className="detail-scope"><h3>{t.scope}</h3><ol>{project.scope.map((item, index) => <li key={item.en}><span>{String(index + 1).padStart(2, "0")}</span>{item[lang]}</li>)}</ol>{project.materials?.length ? <div className="detail-materials"><span>{t.materials}</span><div>{project.materials.map((material) => <strong key={material}>{material}</strong>)}</div></div> : null}</div>
       </section>
 
       <section className="detail-gallery">
@@ -69,8 +70,8 @@ export default function ProjectDetail({ project }: { project: ProjectLocation })
       </section>
 
       {project.category !== "china" && <section className="detail-before">
-        <div><p className="eyebrow">Before / После</p><h2>{t.before}</h2></div>
-        <article><span>+</span><p>{t.beforeEmpty}</p></article>
+        <div><p className="eyebrow">Before / После{project.beforeImages?.length ? ` · ${String(project.beforeImages.length).padStart(2, "0")}` : ""}</p><h2>{t.before}</h2></div>
+        {project.beforeImages?.length ? <div className="detail-before-grid">{project.beforeImages.map((image, index) => <button key={image} type="button" onClick={() => setLightbox(image)}><Image src={image} alt={`${project.title[lang]} — ${t.before} ${index + 1}`} fill sizes="(max-width: 620px) 100vw, 36vw" /><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div> : <article><span>+</span><p>{t.beforeEmpty}</p></article>}
       </section>}
 
       <section className="detail-team">

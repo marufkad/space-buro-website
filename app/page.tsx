@@ -8,13 +8,13 @@ import {
   brands,
   developers,
   projectLocations,
-  stages,
   team,
   type Lang,
   type ProjectCategory,
   type ProjectLocation,
   type ProjectMapType,
 } from "./data";
+import ProcessShowcase from "./ProcessShowcase";
 
 const ProjectMap = dynamic(() => import("./ProjectMap"), {
   ssr: false,
@@ -27,12 +27,11 @@ type PropertyType = "apartment" | "villa" | "commercial";
 type FurnitureLevel = "standard" | "premium";
 
 const mapFilterOrder: MapFilter[] = ["all", "renovation", "furniture", "residential", "commercial", "china"];
+const publishedProjects = projectLocations.filter((project) => project.published);
 
 function matchesMapFilter(project: ProjectLocation, filter: MapFilter) {
   if (filter === "all") return true;
-  if (filter === "renovation") return project.category === "fitout" || project.category === "commercial";
-  if (filter === "residential") return project.category === "fitout" || project.category === "furniture";
-  return project.category === filter;
+  return project.mapType === filter;
 }
 
 const categoryLabels: Record<Lang, Record<ProjectCategory, string>> = {
@@ -100,6 +99,7 @@ const ui = {
     mapTitle: "Выберите категорию, затем объект на карте ОАЭ",
     mapText: "Иконка показывает тип объекта. Точный номер квартиры или виллы не публикуется.",
     mapOpen: "Страница объекта",
+    mapPending: "Фотографии добавим скоро",
     chinaKicker: "Дубай · Гуанчжоу · Фошань · Чэнду",
     chinaTitle: "Заказ мебели из Китая",
     chinaText: "Мы превращаем поездку по шоурумам и фабрикам в управляемый процесс: от ведомости мебели до доставки и установки в ОАЭ.",
@@ -183,6 +183,7 @@ const ui = {
     mapTitle: "Choose a category, then select a UAE project",
     mapText: "Each icon identifies the project type. Exact unit and villa numbers remain private.",
     mapOpen: "Project page",
+    mapPending: "Photography coming soon",
     chinaKicker: "Dubai · Guangzhou · Foshan · Chengdu",
     chinaTitle: "Furniture from China",
     chinaText: "We turn showroom and factory sourcing into a controlled process, from the furniture schedule to UAE delivery and installation.",
@@ -230,18 +231,6 @@ const ui = {
   },
 } as const;
 
-function StageIcon({ name }: { name: string }) {
-  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
-  if (name === "measure") return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M8 34 34 8l6 6-26 26H8v-6Z M14 30l4 4m2-10 4 4m2-10 4 4" /></svg>;
-  if (name === "design") return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M10 38V12h28v26H10Zm0-9h13V12m0 17h15M29 29v9" /><circle {...common} cx="31" cy="20" r="4" /></svg>;
-  if (name === "drawings") return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M12 8h20l6 6v26H12V8Zm20 0v7h6M18 22h14M18 28h14M18 34h9" /></svg>;
-  if (name === "permit") return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M14 7h20v34H14V7Zm6 8h8m-8 7h8m-8 7 3 3 6-7" /></svg>;
-  if (name === "build") return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="m10 38 12-12m7-15 8 8-9 9-8-8 9-9ZM8 40l-1-6 5 5-4 1Zm23-12 9 9" /></svg>;
-  if (name === "furniture") return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M9 24h30v14H9V24Zm4 0v-8h22v8M14 38v4m20-4v4M20 16v8" /></svg>;
-  if (name === "handover") return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M8 25h13l5 5 14-14M11 25v12h26V21" /></svg>;
-  return <svg viewBox="0 0 48 48" aria-hidden="true"><path {...common} d="M10 14h28v24H10V14Zm8 0v-4h12v4M10 23h28M21 27h6" /></svg>;
-}
-
 function SocialIcon({ name }: { name: "whatsapp" | "telegram" }) {
   if (name === "telegram") {
     return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3 3.7 9.7c-1.2.5-1.2 1.2-.2 1.5l4.4 1.4 1.7 5.3c.2.7.1 1 .8 1 .5 0 .8-.2 1-.4l2.2-2.1 4.6 3.4c.8.5 1.5.2 1.7-.8L23 4.5C23.3 3.3 22.5 2.8 21 3Z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><path d="m8 12.6 10.7-6.7-8.4 8.4-.3 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
@@ -258,9 +247,16 @@ function MapTypeIcon({ type }: { type: ProjectMapType }) {
   return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="m6 11 10-5 10 5-10 5-10-5Zm0 0v11l10 5 10-5V11M16 16v11" /><path {...common} d="M10 8.5 20 14m-8-7 10 5" /></svg>;
 }
 
-function ProjectVisual({ project, lang, priority = false }: { project: ProjectLocation; lang: Lang; priority?: boolean }) {
-  if (project.cover) {
-    return <Image src={project.cover} alt={project.title[lang]} fill sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw" priority={priority} />;
+function ProjectVisual({ project, lang, priority = false, imageIndex = 0 }: { project: ProjectLocation; lang: Lang; priority?: boolean; imageIndex?: number }) {
+  const images = project.coverImages?.length
+    ? project.coverImages
+    : project.cover
+      ? [project.cover]
+      : project.images;
+  const image = images[imageIndex % Math.max(images.length, 1)];
+
+  if (image) {
+    return <Image key={image} className="project-card-photo" src={image} alt={project.title[lang]} fill sizes="(max-width: 720px) 50vw, (max-width: 1100px) 50vw, 25vw" priority={priority} />;
   }
   return (
     <div className={`project-placeholder ${project.category}`} aria-label={ui[lang].noPhotos}>
@@ -286,7 +282,7 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState(projectLocations[0].id);
   const [projectModal, setProjectModal] = useState<ProjectLocation | null>(null);
   const [modalImage, setModalImage] = useState<string | null>(null);
-  const [activeStage, setActiveStage] = useState(0);
+  const [cardPhotoStep, setCardPhotoStep] = useState(0);
   const [calculatorType, setCalculatorType] = useState<CalculatorType>("renovation");
   const [area, setArea] = useState(100);
   const [propertyType, setPropertyType] = useState<PropertyType>("apartment");
@@ -302,6 +298,12 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => setCardPhotoStep((current) => current + 1), 4800);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
       { threshold: 0.1 },
@@ -311,7 +313,7 @@ export default function Home() {
   }, []);
 
   const filteredProjects = useMemo(
-    () => projectLocations.filter((project) => matchesMapFilter(project, projectFilter)),
+    () => publishedProjects.filter((project) => matchesMapFilter(project, projectFilter)),
     [projectFilter],
   );
   const mapProjects = useMemo(
@@ -372,7 +374,7 @@ export default function Home() {
 
   function openProject(project: ProjectLocation) {
     setProjectModal(project);
-    setModalImage(project.images[0] ?? project.cover ?? null);
+    setModalImage(project.cover ?? project.images[0] ?? null);
   }
 
   function handleHeroPointer(event: PointerEvent<HTMLDivElement>) {
@@ -464,14 +466,14 @@ export default function Home() {
         <div className="filter-bar" data-reveal>
           {mapFilterOrder.map((key) => (
             <button key={key} type="button" className={projectFilter === key ? "active" : ""} onClick={() => chooseProjectFilter(key)}>
-              {t.mapFilters[key]}<sup>{projectLocations.filter((project) => matchesMapFilter(project, key)).length}</sup>
+              {t.mapFilters[key]}<sup>{publishedProjects.filter((project) => matchesMapFilter(project, key)).length}</sup>
             </button>
           ))}
         </div>
         <div className="projects-grid">
           {visibleProjects.map((project, index) => (
             <button className="project-card" type="button" onClick={() => openProject(project)} key={project.id}>
-              <div className="project-card-image"><ProjectVisual project={project} lang={lang} priority={index < 2} /><span className={`status-badge ${project.status}`}>{t[project.status]}</span></div>
+              <div className="project-card-image"><ProjectVisual project={project} lang={lang} priority={index < 2} imageIndex={cardPhotoStep + index} /><span className={`status-badge ${project.status}`}>{t[project.status]}</span></div>
               <div className="project-card-copy">
                 <p>{categoryLabels[lang][project.category]} · {project.year}</p>
                 <h3>{project.shortTitle[lang]}</h3>
@@ -507,9 +509,11 @@ export default function Home() {
         </div>
         <article className="selected-map-card" data-reveal>
           <span className={`status-badge ${selected.status}`}>{t[selected.status]}</span>
-          <div><p>{categoryLabels[lang][selected.category]} · {selected.area[lang]}</p><h3>{selected.title[lang]}</h3></div>
+          <div><p>{t.mapFilters[selected.mapType]} · {selected.area[lang]}</p><h3>{selected.title[lang]}</h3></div>
           <p>{selected.summary[lang]}</p>
-          <Link href={`/projects/${selected.id}`}>{t.mapOpen}<span>↗</span></Link>
+          {selected.published
+            ? <Link href={`/projects/${selected.id}`}>{t.mapOpen}<span>↗</span></Link>
+            : <span className="map-project-pending">{t.mapPending}</span>}
         </article>
       </section>
 
@@ -529,25 +533,17 @@ export default function Home() {
         <div className="section-heading" data-reveal>
           <div><p className="eyebrow">{t.processKicker}</p><h2>{t.processTitle}</h2></div><p>{t.processText}</p>
         </div>
-        <div className="stage-buttons" data-reveal>
-          {stages.map((stage, index) => (
-            <button key={stage.number} type="button" className={activeStage === index ? "active" : ""} onMouseEnter={() => setActiveStage(index)} onFocus={() => setActiveStage(index)} onClick={() => setActiveStage(index)}>
-              <span>{stage.number}</span><strong>{stage.title[lang]}</strong>
-            </button>
-          ))}
-        </div>
-        <article className="stage-detail" key={`${lang}-${activeStage}`} data-reveal>
-          <div className="stage-detail-icon"><StageIcon name={stages[activeStage].icon} /></div>
-          <div><p className="eyebrow">{t.stage} {stages[activeStage].number}</p><h3>{stages[activeStage].title[lang]}</h3><p>{stages[activeStage].text[lang]}</p></div>
-          <div className="stage-result"><span>{t.result}</span><strong>{stages[activeStage].result[lang]}</strong></div>
-        </article>
+        <ProcessShowcase lang={lang} stageLabel={t.stage} resultLabel={t.result} />
       </section>
 
       <section className="section developers-section">
         <div className="section-heading" data-reveal>
           <div><p className="eyebrow">{t.developersKicker}</p><h2>{t.developersTitle}</h2></div><p>{t.developersText}</p>
         </div>
-        <div className="developers-grid" data-reveal>{developers.map((developer, index) => <div key={developer.name} className={`${developer.invert ? "invert-logo " : ""}developer-${developer.id}`}><span>{String(index + 1).padStart(2, "0")}</span>{developer.logo ? <span className="developer-logo"><Image src={developer.logo} alt={developer.name} fill sizes="(max-width: 620px) 42vw, 210px" /></span> : <strong>{developer.name}</strong>}</div>)}</div>
+        <div className="developers-grid" data-reveal>{developers.map((developer, index) => {
+          const developerLabel = developer.label?.[lang] ?? developer.name;
+          return <div key={developer.name} className={`${developer.invert ? "invert-logo " : ""}developer-${developer.id}`}><span>{String(index + 1).padStart(2, "0")}</span>{developer.logo ? <span className="developer-logo"><Image src={developer.logo} alt={developerLabel} fill sizes="(max-width: 620px) 42vw, 210px" /></span> : <strong>{developerLabel}</strong>}</div>;
+        })}</div>
       </section>
 
       <section id="calculator" className="section calculator-section">
@@ -578,7 +574,7 @@ export default function Home() {
           {team.map((member, index) => (
             <article id={`team-${member.id}`} className={`team-card team-card-${member.id}`} key={member.id} data-reveal style={{ transitionDelay: `${index * 70}ms` }}>
               <div className="team-photo"><Image src={member.image} alt={member.name[lang]} fill sizes="(max-width: 720px) 100vw, 33vw" /><span>{String(index + 1).padStart(2, "0")}</span></div>
-              <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span>{member.id !== "maruf" && <><small>{t.participation}</small><div>{projectLocations.filter((project) => project.teamIds.includes(member.id)).map((project) => <Link href={`/projects/${project.id}`} key={project.id}>{project.shortTitle[lang]}</Link>)}</div></>}</div>
+              <div className="team-copy"><p>{member.role[lang]}</p><h3>{member.name[lang]}</h3><span>{member.experience[lang]}</span>{member.id !== "maruf" && <><small>{t.participation}</small><div>{publishedProjects.filter((project) => project.teamIds.includes(member.id)).map((project) => <Link href={`/projects/${project.id}`} key={project.id}>{project.shortTitle[lang]}</Link>)}</div></>}</div>
             </article>
           ))}
         </div>
@@ -613,6 +609,7 @@ export default function Home() {
             <div><p className="eyebrow">{t.modalDetails} · {categoryLabels[lang][projectModal.category]} · {projectModal.year}</p><h2>{projectModal.title[lang]}</h2><p>{projectModal.summary[lang]}</p></div>
             <dl><div><dt>{lang === "ru" ? "Площадь" : "Area"}</dt><dd>{projectModal.area[lang]}</dd></div><div><dt>{lang === "ru" ? "Срок" : "Duration"}</dt><dd>{projectModal.duration[lang]}</dd></div><div><dt>{lang === "ru" ? "География" : "Location"}</dt><dd>{projectModal.district}</dd></div></dl>
             <div className="project-modal-scope"><strong>{lang === "ru" ? "Состав работ" : "Scope of work"}</strong><ul>{projectModal.scope.map((item) => <li key={item.en}>{item[lang]}</li>)}</ul></div>
+            {projectModal.materials?.length ? <div className="project-modal-materials"><strong>{lang === "ru" ? "Материалы и комплектующие" : "Materials and hardware"}</strong><div>{projectModal.materials.map((material) => <span key={material}>{material}</span>)}</div></div> : null}
             <div className="project-modal-team"><strong>{lang === "ru" ? "Участники" : "Team"}</strong><div>{team.filter((member) => projectModal.teamIds.includes(member.id)).map((member) => <a href={`#team-${member.id}`} key={member.id} onClick={() => setProjectModal(null)}>{member.name[lang]}</a>)}</div></div>
             <Link className="button button-primary" href={`/projects/${projectModal.id}`}>{t.fullPage}<span>↗</span></Link>
           </div>
