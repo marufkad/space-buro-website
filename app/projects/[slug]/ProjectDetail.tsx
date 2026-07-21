@@ -9,19 +9,19 @@ const labels: Record<Lang, {
   back: string; menu: string; facts: string; area: string; duration: string; year: string; location: string; scope: string;
   gallery: string; noGallery: string; before: string; beforeEmpty: string; people: string; peopleText: string; files: string;
   publicGallery: string; publicGalleryState: string; techFiles: string; techState: string; contact: string; next: string;
-  categories: Record<ProjectCategory, string>; concept: string; materials: string;
+  categories: Record<ProjectCategory, string>; concept: string; materials: string; secondaryGallery: string;
 }> = {
   ru: {
     back: "Все проекты", menu: "Главная", facts: "Факты объекта", area: "Площадь", duration: "Срок", year: "Год", location: "География", scope: "Состав работ",
     gallery: "Фотографии объекта", noGallery: "Фотографии для этой карточки ещё готовятся. Структура страницы уже готова для загрузки изображений.", before: "До начала работ", beforeEmpty: "Фотографии состояния «до» пока не опубликованы. Их можно добавить сюда без изменения страницы.", people: "Кто участвовал", peopleText: "Нажмите на сотрудника, чтобы перейти к его профилю и другим объектам.", files: "Файлы объекта",
     publicGallery: "Оптимизированная WebP-галерея", publicGalleryState: "Доступна", techFiles: "Рабочие чертежи, сметы и акты", techState: "По запросу / сотрудникам", contact: "Обсудить похожий проект", next: "Следующий объект",
-    categories: { fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческий объект" }, concept: "Визуальная концепция услуги, не реализованный объект", materials: "Материалы и комплектующие",
+    categories: { renovation: "Реновация", furniture: "Мебель", residential: "Жильё", commercial: "Коммерция", architecture: "Архитектура", china: "Мебель из Китая" }, concept: "Визуальная концепция услуги, не реализованный объект", materials: "Материалы и комплектующие", secondaryGallery: "Дополнительная галерея",
   },
   en: {
     back: "All projects", menu: "Home", facts: "Project facts", area: "Area", duration: "Duration", year: "Year", location: "Location", scope: "Scope of work",
     gallery: "Project photography", noGallery: "Photography for this profile is still in preparation. The page is ready for images to be uploaded.", before: "Before work started", beforeEmpty: "Before photography has not been published yet. It can be added here without changing the page.", people: "People involved", peopleText: "Select a team member to see their profile and other project participation.", files: "Project files",
     publicGallery: "Optimised WebP gallery", publicGalleryState: "Available", techFiles: "Drawings, estimates and reports", techState: "On request / employees", contact: "Discuss a similar project", next: "Next project",
-    categories: { fitout: "Fit-out", furniture: "Furniture", china: "Furniture from China", commercial: "Commercial" }, concept: "Service concept visual, not a completed project", materials: "Materials and hardware",
+    categories: { renovation: "Renovation", furniture: "Furniture", residential: "Residential", commercial: "Commercial", architecture: "Architecture", china: "Furniture from China" }, concept: "Service concept visual, not a completed project", materials: "Materials and hardware", secondaryGallery: "Additional gallery",
   },
 };
 
@@ -44,12 +44,12 @@ export default function ProjectDetail({ project }: { project: ProjectLocation })
 
       <section className="detail-hero">
         <div className="detail-hero-copy">
-          <p className="eyebrow">{t.categories[project.category]} · {project.year}</p>
+          <p className="eyebrow">{project.categories.map((category) => t.categories[category]).join(" · ")} · {project.year}</p>
           <h1>{project.title[lang]}</h1>
           <p>{project.summary[lang]}</p>
         </div>
         <div className="detail-hero-image">
-          {project.cover ? <Image src={project.cover} alt={project.title[lang]} fill sizes="(max-width: 900px) 100vw, 58vw" priority /> : <div className={`project-placeholder ${project.category}`}><span>{project.district.slice(0, 2).toUpperCase()}</span><i /><small>{t.noGallery}</small></div>}
+          {project.cover ?? project.images[0] ? <Image src={project.cover ?? project.images[0]} alt={project.title[lang]} fill sizes="(max-width: 900px) 100vw, 58vw" priority /> : <div className={`project-placeholder ${project.category}`}><span>{project.district.slice(0, 2).toUpperCase()}</span><i /><small>{t.noGallery}</small></div>}
         </div>
       </section>
 
@@ -69,8 +69,8 @@ export default function ProjectDetail({ project }: { project: ProjectLocation })
         {project.images.length > 0 ? <div className="detail-gallery-grid">{project.images.map((image, index) => <button key={image} type="button" className={index === 0 ? "large" : ""} onClick={() => setLightbox(image)}><Image src={image} alt={`${project.title[lang]} — ${index + 1}`} fill sizes={index === 0 ? "100vw" : "50vw"} /><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div> : <div className="empty-gallery"><span>{project.district.slice(0, 2).toUpperCase()}</span><p>{t.noGallery}</p></div>}
       </section>
 
-      {project.category !== "china" && <section className="detail-before">
-        <div><p className="eyebrow">Before / После{project.beforeImages?.length ? ` · ${String(project.beforeImages.length).padStart(2, "0")}` : ""}</p><h2>{t.before}</h2></div>
+      {!project.categories.includes("china") && <section className="detail-before">
+        <div><p className="eyebrow">{t.secondaryGallery}{project.beforeImages?.length ? ` · ${String(project.beforeImages.length).padStart(2, "0")}` : ""}</p><h2>{project.beforeLabel?.[lang] ?? t.before}</h2></div>
         {project.beforeImages?.length ? <div className="detail-before-grid">{project.beforeImages.map((image, index) => <button key={image} type="button" onClick={() => setLightbox(image)}><Image src={image} alt={`${project.title[lang]} — ${t.before} ${index + 1}`} fill sizes="(max-width: 620px) 100vw, 36vw" /><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div> : <article><span>+</span><p>{t.beforeEmpty}</p></article>}
       </section>}
 

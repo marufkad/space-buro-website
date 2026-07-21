@@ -109,11 +109,16 @@ h1 { max-width: 760px; margin: 0; font-size: clamp(34px, 3vw, 48px); line-height
 
 .advantages-section { background: var(--white); }
 .advantages-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
-.advantages-grid article { min-height: 245px; padding: 30px; display: flex; flex-direction: column; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.advantages-grid article { min-height: 245px; padding: 30px; position: relative; z-index: 0; display: flex; flex-direction: column; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--white); transform-origin: center; transition: opacity .65s ease, transform .32s ease, box-shadow .32s ease; }
 .advantages-grid article > span { color: var(--accent); font-size: 16px; font-weight: 600; line-height: 1; }
-.advantages-grid h3 { max-width: 330px; margin: 34px 0 15px; font-size: 22px; line-height: 1.2; }
+.advantages-grid h3 { max-width: 330px; margin: 34px 0 15px; font-size: 22px; line-height: 1.2; transform-origin: left center; transition: transform .32s ease; }
 .advantages-grid h3 em { color: var(--accent-dark); font-style: normal; font-weight: 600; }
-.advantages-grid p { margin: auto 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+.advantages-grid p { margin: auto 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; transform-origin: left bottom; transition: transform .32s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .advantages-grid article.is-visible:hover { z-index: 2; transform: translateY(-8px) scale(1.045); box-shadow: 0 24px 55px rgba(50,44,36,.16); }
+  .advantages-grid article.is-visible:hover h3,
+  .advantages-grid article.is-visible:hover p { transform: scale(1.025); }
+}
 
 .projects-section { background: var(--paper); }
 .filter-bar { margin-bottom: 34px; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -136,9 +141,10 @@ h1 { max-width: 760px; margin: 0; font-size: clamp(34px, 3vw, 48px); line-height
 .project-placeholder::before, .project-placeholder::after { content: ""; position: absolute; border: 1px solid rgba(23,23,19,.15); transform: rotate(30deg); }
 .project-placeholder::before { width: 75%; height: 125%; }
 .project-placeholder::after { width: 45%; height: 85%; transform: rotate(-25deg); }
-.project-placeholder.fitout { background: linear-gradient(135deg, #ece6dd, #cfdbd7); }
+.project-placeholder.renovation { background: linear-gradient(135deg, #ece6dd, #cfdbd7); }
 .project-placeholder.furniture { background: linear-gradient(135deg, #eee2d5, #d3bfa8); }
 .project-placeholder.commercial { background: linear-gradient(135deg, #e6e8e7, #cbd6da); }
+.project-placeholder.architecture { background: linear-gradient(135deg, #ece8df, #c9d4d2); }
 .project-placeholder > span { z-index: 1; font-family: "Benzin", "Montserrat", Arial, sans-serif; font-size: 58px; color: rgba(23,23,19,.27); }
 .project-placeholder i { width: 130px; height: 130px; position: absolute; right: 10%; bottom: -30px; border: 1px solid rgba(23,23,19,.18); border-radius: 50%; }
 .project-placeholder small { position: absolute; z-index: 1; right: 14px; bottom: 14px; font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
@@ -193,6 +199,7 @@ h1 { max-width: 760px; margin: 0; font-size: clamp(34px, 3vw, 48px); line-height
 .project-map-icon.furniture { background: var(--sage); }
 .project-map-icon.china { background: #84627d; }
 .project-map-icon.commercial { background: var(--blue); }
+.project-map-icon.architecture { background: #5d7775; }
 .project-map-icon.residential { background: #b18a56; }
 .project-map-icon.active { width: 44px; height: 50px; outline: 5px solid rgba(182,109,66,.18); transform: rotate(-45deg) scale(1.06); }
 .project-map-icon.active svg { width: 26px; height: 26px; }
@@ -205,6 +212,7 @@ h1 { max-width: 760px; margin: 0; font-size: clamp(34px, 3vw, 48px); line-height
 .map-projects button > i.furniture { background: var(--sage); }
 .map-projects button > i.china { background: #84627d; }
 .map-projects button > i.commercial { background: var(--blue); }
+.map-projects button > i.architecture { background: #5d7775; }
 .map-projects button > i.residential { background: #b18a56; }
 .map-projects button > span { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 .map-projects strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
@@ -435,6 +443,9 @@ footer { min-height: 300px; padding: 50px clamp(24px, 5vw, 76px); display: grid;
   .advantages-grid article > span { grid-row: 1 / 3; align-self: start; font-size: 22px; line-height: 1.08; }
   .advantages-grid h3 { margin: 0; font-size: 17px; }
   .advantages-grid p { grid-column: 2; margin: 0; font-size: 11px; line-height: 1.5; }
+  .advantages-grid article.is-visible.is-mobile-active { z-index: 2; transform: scale(1.045); box-shadow: 0 18px 40px rgba(50,44,36,.14); }
+  .advantages-grid article.is-visible.is-mobile-active h3,
+  .advantages-grid article.is-visible.is-mobile-active p { transform: scale(1.025); }
   .filter-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
   .filter-bar::-webkit-scrollbar { display: none; }
   .filter-bar button { flex: 0 0 auto; }

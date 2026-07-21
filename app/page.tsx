@@ -21,42 +21,49 @@ const ProjectMap = dynamic(() => import("./ProjectMap"), {
   loading: () => <div className="map-loading">Loading project map…</div>,
 });
 
-type MapFilter = "all" | "renovation" | "furniture" | "residential" | "commercial" | "china";
+type MapFilter = "all" | ProjectCategory;
 type CalculatorType = "renovation" | "furniture";
 type PropertyType = "apartment" | "villa" | "commercial";
 type FurnitureLevel = "standard" | "premium";
 
-const mapFilterOrder: MapFilter[] = ["all", "renovation", "furniture", "residential", "commercial", "china"];
+const mapFilterOrder: MapFilter[] = ["all", "renovation", "furniture", "residential", "commercial", "architecture", "china"];
 const publishedProjects = projectLocations.filter((project) => project.published);
 
 function matchesMapFilter(project: ProjectLocation, filter: MapFilter) {
   if (filter === "all") return true;
-  return project.mapType === filter;
+  return project.categories.includes(filter);
 }
 
 const categoryLabels: Record<Lang, Record<ProjectCategory, string>> = {
-  ru: { fitout: "Fit-out", furniture: "Мебель", china: "Мебель из Китая", commercial: "Коммерческие" },
-  en: { fitout: "Fit-out", furniture: "Furniture", china: "Furniture from China", commercial: "Commercial" },
+  ru: { renovation: "Реновация", furniture: "Мебель", residential: "Жильё", commercial: "Коммерция", architecture: "Архитектура", china: "Мебель из Китая" },
+  en: { renovation: "Renovation", furniture: "Furniture", residential: "Residential", commercial: "Commercial", architecture: "Architecture", china: "Furniture from China" },
 };
+
+function projectCategoryText(project: ProjectLocation, lang: Lang) {
+  return project.categories.map((category) => categoryLabels[lang][category]).join(" · ");
+}
 
 const heroSlides = [
   {
-    image: "/media/china-furniture-photo.webp",
-    title: { ru: "Интерьер под ключ — от идеи до готового пространства", en: "Turnkey interiors — from idea to completed space" },
-    text: { ru: "Дизайн, согласования, ремонт и мебель в одной ответственной команде.", en: "Design, approvals, fit-out and furniture under one accountable team." },
-    tag: { ru: "Ремонт · Fit-out · Мебель", en: "Renovation · Fit-out · Furniture" },
+    image: "/media/projects/al-bateen-residence/gallery/01.webp",
+    title: { ru: "Al Bateen Residence 1 — полный fit-out в JBR", en: "Al Bateen Residence 1 — full fit-out in JBR" },
+    text: { ru: "120 м²: дизайн, согласования, новая инженерия, отделка и мебель на заказ.", en: "120 m² of design, approvals, new engineering systems, finishes and custom furniture." },
+    tag: { ru: "В работе · 2026", en: "In progress · 2026" },
+    coords: ["25.0728° N", "55.1281° E"],
   },
   {
     image: "/media/project-fujairah-04.webp",
     title: { ru: "Показываем не только кадры, но и факты проекта", en: "More than imagery: every project comes with facts" },
     text: { ru: "Площадь, сроки, состав работ, команда и география — в одной карточке объекта.", en: "Area, timing, scope, team and geography — connected in one project profile." },
     tag: { ru: "Библиотека объектов", en: "Project library" },
+    coords: ["25.1288° N", "56.3265° E"],
   },
   {
     image: "/media/china-furniture-concept.webp",
     title: { ru: "Мебель из Китая с контролем и установкой — от фабрики до Дубая", en: "Furniture from China with control and installation — from factory to Dubai" },
     text: { ru: "Подбор фабрик, образцы, контроль качества, консолидация и доставка.", en: "Factory sourcing, samples, quality control, consolidation and delivery." },
     tag: { ru: "Dubai · Foshan", en: "Dubai · Foshan" },
+    coords: ["25.2048° N", "55.2708° E"],
   },
 ] as const;
 
@@ -81,7 +88,7 @@ const ui = {
     projectsKicker: "Библиотека объектов",
     projectsTitle: "Проекты связаны с картой, файлами и командой",
     projectsText: "Фильтры действительно меняют подборку. Откройте карточку, чтобы увидеть факты, фотографии, состав работ и участников.",
-    mapFilters: { all: "Все", renovation: "Реновация", furniture: "Мебель", residential: "Жильё", commercial: "Коммерция", china: "Мебель из Китая" },
+    mapFilters: { all: "Все", renovation: "Реновация", furniture: "Мебель", residential: "Жильё", commercial: "Коммерция", architecture: "Архитектура", china: "Мебель из Китая" },
     noPhotos: "Фотографии готовятся",
     openProject: "Открыть объект",
     showAllProjects: "Показать все объекты",
@@ -165,7 +172,7 @@ const ui = {
     projectsKicker: "Project library",
     projectsTitle: "Projects connected to maps, files and people",
     projectsText: "The filters update the collection. Open any card for facts, photography, scope and the team involved.",
-    mapFilters: { all: "All", renovation: "Renovation", furniture: "Furniture", residential: "Residential", commercial: "Commercial", china: "Furniture from China" },
+    mapFilters: { all: "All", renovation: "Renovation", furniture: "Furniture", residential: "Residential", commercial: "Commercial", architecture: "Architecture", china: "Furniture from China" },
     noPhotos: "Photography in preparation",
     openProject: "Open project",
     showAllProjects: "Show all projects",
@@ -244,15 +251,18 @@ function MapTypeIcon({ type }: { type: ProjectMapType }) {
   if (type === "furniture") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="M8 15h16v11H8V15Zm3 0V9h10v6M11 26v3m10-3v3M16 9v6" /></svg>;
   if (type === "residential") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="m5 15 11-9 11 9v12H5V15Zm8 12v-8h6v8" /></svg>;
   if (type === "commercial") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="M7 5h18v23H7V5Zm5 5h2m4 0h2m-8 5h2m4 0h2m-8 5h2m4 0h2m-7 8v-4h6v4" /></svg>;
+  if (type === "architecture") return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="M5 26h22M8 26V12l8-6 8 6v14M12 26v-8h8v8M8 13h16M16 6v7" /></svg>;
   return <svg viewBox="0 0 32 32" aria-hidden="true"><path {...common} d="m6 11 10-5 10 5-10 5-10-5Zm0 0v11l10 5 10-5V11M16 16v11" /><path {...common} d="M10 8.5 20 14m-8-7 10 5" /></svg>;
 }
 
 function ProjectVisual({ project, lang, priority = false, imageIndex = 0 }: { project: ProjectLocation; lang: Lang; priority?: boolean; imageIndex?: number }) {
   const images = project.coverImages?.length
     ? project.coverImages
-    : project.cover
-      ? [project.cover]
-      : project.images;
+    : project.images.length
+      ? project.images
+      : project.cover
+        ? [project.cover]
+        : [];
   const image = images[imageIndex % Math.max(images.length, 1)];
 
   if (image) {
@@ -310,6 +320,53 @@ export default function Home() {
     );
     document.querySelectorAll("[data-reveal]").forEach((node) => observer.observe(node));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const mobile = window.matchMedia("(max-width: 620px)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const tiles = Array.from(document.querySelectorAll<HTMLElement>(".advantages-grid article"));
+    let frame = 0;
+
+    const clearActive = () => tiles.forEach((tile) => tile.classList.remove("is-mobile-active"));
+    const updateActive = () => {
+      frame = 0;
+      if (!mobile.matches || reducedMotion.matches) {
+        clearActive();
+        return;
+      }
+      const viewportCenter = window.innerHeight / 2;
+      let closest: HTMLElement | null = null;
+      let closestDistance = Number.POSITIVE_INFINITY;
+      for (const tile of tiles) {
+        const rect = tile.getBoundingClientRect();
+        if (rect.bottom <= 0 || rect.top >= window.innerHeight) continue;
+        const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+        if (distance < closestDistance) {
+          closest = tile;
+          closestDistance = distance;
+        }
+      }
+      clearActive();
+      closest?.classList.add("is-mobile-active");
+    };
+    const scheduleUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateActive);
+    };
+
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    mobile.addEventListener("change", scheduleUpdate);
+    reducedMotion.addEventListener("change", scheduleUpdate);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      mobile.removeEventListener("change", scheduleUpdate);
+      reducedMotion.removeEventListener("change", scheduleUpdate);
+      clearActive();
+    };
   }, []);
 
   const filteredProjects = useMemo(
@@ -374,7 +431,7 @@ export default function Home() {
 
   function openProject(project: ProjectLocation) {
     setProjectModal(project);
-    setModalImage(project.cover ?? project.images[0] ?? null);
+    setModalImage(project.coverImages?.[0] ?? project.images[0] ?? project.cover ?? null);
   }
 
   function handleHeroPointer(event: PointerEvent<HTMLDivElement>) {
@@ -442,7 +499,7 @@ export default function Home() {
               <Image src={slide.image} alt={slide.title[lang]} fill sizes="(max-width: 900px) 100vw, 58vw" priority={index === 0} />
             </div>
           ))}
-          <div className="hero-caption"><span>25.2048° N</span><span>55.2708° E</span></div>
+          <div className="hero-caption"><span>{heroSlides[heroSlide].coords[0]}</span><span>{heroSlides[heroSlide].coords[1]}</span></div>
         </div>
       </section>
 
@@ -475,7 +532,7 @@ export default function Home() {
             <button className="project-card" type="button" onClick={() => openProject(project)} key={project.id}>
               <div className="project-card-image"><ProjectVisual project={project} lang={lang} priority={index < 2} imageIndex={cardPhotoStep + index} /><span className={`status-badge ${project.status}`}>{t[project.status]}</span></div>
               <div className="project-card-copy">
-                <p>{categoryLabels[lang][project.category]} · {project.year}</p>
+                <p>{projectCategoryText(project, lang)} · {project.year}</p>
                 <h3>{project.shortTitle[lang]}</h3>
               </div>
             </button>
@@ -509,7 +566,7 @@ export default function Home() {
         </div>
         <article className="selected-map-card" data-reveal>
           <span className={`status-badge ${selected.status}`}>{t[selected.status]}</span>
-          <div><p>{t.mapFilters[selected.mapType]} · {selected.area[lang]}</p><h3>{selected.title[lang]}</h3></div>
+          <div><p>{projectCategoryText(selected, lang)} · {selected.area[lang]}</p><h3>{selected.title[lang]}</h3></div>
           <p>{selected.summary[lang]}</p>
           {selected.published
             ? <Link href={`/projects/${selected.id}`}>{t.mapOpen}<span>↗</span></Link>
@@ -606,7 +663,7 @@ export default function Home() {
           </div>
           {projectModal.images.length > 1 && <div className="project-modal-thumbs">{projectModal.images.map((image, index) => <button key={image} type="button" className={modalImage === image ? "active" : ""} onClick={() => setModalImage(image)}><Image src={image} alt={`${projectModal.title[lang]} ${index + 1}`} fill sizes="90px" /></button>)}</div>}
           <div className="project-modal-info">
-            <div><p className="eyebrow">{t.modalDetails} · {categoryLabels[lang][projectModal.category]} · {projectModal.year}</p><h2>{projectModal.title[lang]}</h2><p>{projectModal.summary[lang]}</p></div>
+            <div><p className="eyebrow">{t.modalDetails} · {projectCategoryText(projectModal, lang)} · {projectModal.year}</p><h2>{projectModal.title[lang]}</h2><p>{projectModal.summary[lang]}</p></div>
             <dl><div><dt>{lang === "ru" ? "Площадь" : "Area"}</dt><dd>{projectModal.area[lang]}</dd></div><div><dt>{lang === "ru" ? "Срок" : "Duration"}</dt><dd>{projectModal.duration[lang]}</dd></div><div><dt>{lang === "ru" ? "География" : "Location"}</dt><dd>{projectModal.district}</dd></div></dl>
             <div className="project-modal-scope"><strong>{lang === "ru" ? "Состав работ" : "Scope of work"}</strong><ul>{projectModal.scope.map((item) => <li key={item.en}>{item[lang]}</li>)}</ul></div>
             {projectModal.materials?.length ? <div className="project-modal-materials"><strong>{lang === "ru" ? "Материалы и комплектующие" : "Materials and hardware"}</strong><div>{projectModal.materials.map((material) => <span key={material}>{material}</span>)}</div></div> : null}

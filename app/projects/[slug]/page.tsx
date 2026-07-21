@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${project.shortTitle.ru} | Space Buro`,
     description: project.summary.ru,
-    openGraph: project.cover ? { images: [{ url: project.cover }] } : undefined,
+    openGraph: project.cover ?? project.images[0] ? { images: [{ url: project.cover ?? project.images[0] }] } : undefined,
   };
 }
 

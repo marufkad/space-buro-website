@@ -18,6 +18,7 @@ const markerIcons = {
   furniture: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 15h16v11H8V15Zm3 0V9h10v6M11 26v3m10-3v3M16 9v6"/></svg>',
   residential: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m5 15 11-9 11 9v12H5V15Zm8 12v-8h6v8"/></svg>',
   commercial: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 5h18v23H7V5Zm5 5h2m4 0h2m-8 5h2m4 0h2m-8 5h2m4 0h2m-7 8v-4h6v4"/></svg>',
+  architecture: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 26h22M8 26V12l8-6 8 6v14M12 26v-8h8v8M8 13h16M16 6v7"/></svg>',
   china: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m6 11 10-5 10 5-10 5-10-5Zm0 0v11l10 5 10-5V11M16 16v11"/><path d="M10 8.5 20 14m-8-7 10 5"/></svg>',
 } as const;
 
