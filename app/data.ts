@@ -1,3 +1,4 @@
+import mediaAliases from "./media-aliases.json";
 export type Lang = "ru" | "en";
 export type Localized = { ru: string; en: string };
 export type ProjectCategory = "renovation" | "furniture" | "residential" | "commercial" | "china" | "architecture";
@@ -116,7 +117,7 @@ function createMapOnlyProject({
   };
 }
 
-export const projectLocations: ProjectLocation[] = [
+const rawProjectLocations: ProjectLocation[] = [
   {
     id: "fujairah-trade-centre",
     title: { ru: "Office fit-out — Fujairah Trade Centre", en: "Office fit-out — Fujairah Trade Centre" },
@@ -142,8 +143,8 @@ export const projectLocations: ProjectLocation[] = [
     teamIds: ["maruf", "quvvat", "serdar"],
     scope: [
       { ru: "Инженерные системы и электрика", en: "MEP systems and electrical works" },
-      { ru: "Потолки, покраска и microcement", en: "Ceilings, painting and microcement" },
-      { ru: "Четыре санузла и три utility-помещения", en: "Four washrooms and three utility rooms" },
+      { ru: "Потолки, покраска и микроцемент", en: "Ceilings, painting and microcement" },
+      { ru: "Четыре санузла и три хозяйственных помещения", en: "Four washrooms and three utility rooms" },
       { ru: "Кухня, панели и мебель из Egger", en: "Kitchen, wall panels and Egger furniture" },
     ],
     published: true,
@@ -175,7 +176,7 @@ export const projectLocations: ProjectLocation[] = [
     scope: [
       { ru: "Проектирование мебели под индивидуальный дизайн", en: "Bespoke furniture design" },
       { ru: "Изготовление и монтаж мебели", en: "Furniture production and installation" },
-      { ru: "Мебель для гостиной зоны и TV-unit", en: "Living area furniture and TV unit" },
+      { ru: "Мебель для гостиной и ТВ-зоны", en: "Living area furniture and TV unit" },
       { ru: "Мебель для спальни и санузла", en: "Bedroom and bathroom furniture" },
     ],
     published: true,
@@ -371,7 +372,7 @@ export const projectLocations: ProjectLocation[] = [
       { ru: "Дизайн, документация и визуализация", en: "Design, documentation and visualisation" },
       { ru: "Согласования и сертификация", en: "Approvals and certifications" },
       { ru: "Полный комплекс инженерных и отделочных работ", en: "Complete engineering and finishing works" },
-      { ru: "Новые системы электрики, сантехники и HVAC", en: "Entirely new electrical, plumbing and HVAC systems" },
+      { ru: "Новые системы электрики, сантехники и кондиционирования", en: "Entirely new electrical, plumbing and HVAC systems" },
       { ru: "Мебель на заказ с производством в Китае", en: "Custom furniture sourced from China" },
     ],
     published: true,
@@ -434,7 +435,7 @@ export const projectLocations: ProjectLocation[] = [
     scope: [
       { ru: "Архитектурное проектирование здания и кровли", en: "Architectural and roof design" },
       { ru: "Конструктивные и металлокаркасные расчёты", en: "Structural and metal-frame calculations" },
-      { ru: "Изготовление и монтаж металлокаркаса кровли и перекрытий", en: "Fabrication and execution of roof framing and structural overlaps" },
+      { ru: "Изготовление и монтаж металлокаркаса кровли и перекрытий", en: "Fabrication and installation of roof and floor framing" },
       { ru: "Облицовка металлом и нержавеющей сталью золотого оттенка", en: "Gold-tone stainless-steel and metal cladding" },
     ],
     published: true,
@@ -499,12 +500,20 @@ export const projectLocations: ProjectLocation[] = [
   },
 ];
 
+const resolveMedia = (path: string) => (mediaAliases as Record<string,string>)[path] ?? path;
+export const projectLocations: ProjectLocation[] = rawProjectLocations.map(project => {
+  const images = project.images.map(resolveMedia);
+  const beforeImages = project.beforeImages?.map(resolveMedia);
+  const covers = (project.coverImages ?? images).map(resolveMedia).filter(image => !beforeImages?.includes(image));
+  return { ...project, images, beforeImages, cover: project.cover ? resolveMedia(project.cover) : undefined, coverImages: covers.length ? covers.slice(0,3) : images.slice(0,1), published: project.published && (images.length > 0 || project.status === "service") };
+});
+
 export const stages = [
   { number: "01", icon: "brief", image: "/media/stages/01-brief.webp", title: { ru: "Бриф", en: "Brief" }, text: { ru: "Обсуждаем задачи, стиль, бюджет, сроки и формат взаимодействия.", en: "We align goals, style, budget, timeline and communication." }, result: { ru: "Зафиксированный бриф", en: "Approved project brief" } },
   { number: "02", icon: "measure", image: "/media/stages/02-measurements.webp", title: { ru: "Замеры", en: "Survey" }, text: { ru: "Проверяем размеры, инженерные системы и ограничения объекта.", en: "We verify dimensions, MEP systems and site constraints." }, result: { ru: "Обмерный план", en: "Measured survey" } },
   { number: "03", icon: "design", image: "/media/stages/03-concept.webp", title: { ru: "Концепция", en: "Concept" }, text: { ru: "Разрабатываем планировку, материалы, свет и мебельные решения.", en: "We develop layout, materials, lighting and furniture." }, result: { ru: "Утверждённая концепция", en: "Approved concept" } },
   { number: "04", icon: "drawings", image: "/media/stages/04-drawings.webp", title: { ru: "Чертежи", en: "Drawings" }, text: { ru: "Готовим комплект рабочих и мебельных чертежей.", en: "We prepare construction and furniture drawings." }, result: { ru: "Рабочая документация", en: "Technical documentation" } },
-  { number: "05", icon: "permit", image: "/media/stages/05-approvals.webp", title: { ru: "Согласования", en: "Approvals" }, text: { ru: "Координируем NOC, building management, DDA и необходимые разрешения.", en: "We coordinate NOCs, building management, DDA and permits." }, result: { ru: "Разрешение на старт", en: "Permission to start" } },
+  { number: "05", icon: "permit", image: "/media/stages/05-approvals.webp", title: { ru: "Согласования", en: "Approvals" }, text: { ru: "Согласуем работы с управляющей компанией и оформляем необходимые разрешения на ремонт.", en: "We coordinate NOCs, building management, DDA and permits." }, result: { ru: "Разрешение на старт", en: "Permission to start" } },
   { number: "06", icon: "build", image: "/media/stages/06-implementation.webp", title: { ru: "Реализация", en: "Fit-out" }, text: { ru: "Выполняем инженерные, строительные и отделочные работы.", en: "We deliver MEP, construction and finishing works." }, result: { ru: "Готовая отделка", en: "Completed fit-out" } },
   { number: "07", icon: "furniture", image: "/media/stages/07-furniture.webp", title: { ru: "Мебель", en: "Furniture" }, text: { ru: "Производим мебель параллельно ремонту и устанавливаем по чертежам.", en: "Furniture is produced alongside fit-out and installed to drawings." }, result: { ru: "Собранный интерьер", en: "Installed interior" } },
   { number: "08", icon: "handover", image: "/media/stages/08-handover.webp", title: { ru: "Передача", en: "Handover" }, text: { ru: "Проверяем качество, закрываем замечания и передаём гарантию.", en: "We inspect, close snags and hand over the warranty." }, result: { ru: "Готовый объект", en: "Completed project" } },

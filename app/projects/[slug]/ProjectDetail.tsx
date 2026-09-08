@@ -2,95 +2,92 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { projectLocations, team, type Lang, type ProjectCategory, type ProjectLocation } from "../../data";
+import { pathFor, projectPath, whatsapp } from "../../site";
+import { projectBriefs } from "../../caseStudies";
+import { useDialog } from "../../useInteraction";
 
-const labels: Record<Lang, {
-  back: string; menu: string; facts: string; area: string; duration: string; year: string; location: string; scope: string;
-  gallery: string; noGallery: string; before: string; beforeEmpty: string; people: string; peopleText: string; files: string;
-  publicGallery: string; publicGalleryState: string; techFiles: string; techState: string; contact: string; next: string;
-  categories: Record<ProjectCategory, string>; concept: string; materials: string; secondaryGallery: string;
-}> = {
-  ru: {
-    back: "Все проекты", menu: "Главная", facts: "Факты объекта", area: "Площадь", duration: "Срок", year: "Год", location: "География", scope: "Состав работ",
-    gallery: "Фотографии объекта", noGallery: "Фотографии для этой карточки ещё готовятся. Структура страницы уже готова для загрузки изображений.", before: "До начала работ", beforeEmpty: "Фотографии состояния «до» пока не опубликованы. Их можно добавить сюда без изменения страницы.", people: "Кто участвовал", peopleText: "Нажмите на сотрудника, чтобы перейти к его профилю и другим объектам.", files: "Файлы объекта",
-    publicGallery: "Оптимизированная WebP-галерея", publicGalleryState: "Доступна", techFiles: "Рабочие чертежи, сметы и акты", techState: "По запросу / сотрудникам", contact: "Обсудить похожий проект", next: "Следующий объект",
-    categories: { renovation: "Реновация", furniture: "Мебель", residential: "Жильё", commercial: "Коммерция", architecture: "Архитектура", china: "Мебель из Китая" }, concept: "Визуальная концепция услуги, не реализованный объект", materials: "Материалы и комплектующие", secondaryGallery: "Дополнительная галерея",
-  },
-  en: {
-    back: "All projects", menu: "Home", facts: "Project facts", area: "Area", duration: "Duration", year: "Year", location: "Location", scope: "Scope of work",
-    gallery: "Project photography", noGallery: "Photography for this profile is still in preparation. The page is ready for images to be uploaded.", before: "Before work started", beforeEmpty: "Before photography has not been published yet. It can be added here without changing the page.", people: "People involved", peopleText: "Select a team member to see their profile and other project participation.", files: "Project files",
-    publicGallery: "Optimised WebP gallery", publicGalleryState: "Available", techFiles: "Drawings, estimates and reports", techState: "On request / employees", contact: "Discuss a similar project", next: "Next project",
-    categories: { renovation: "Renovation", furniture: "Furniture", residential: "Residential", commercial: "Commercial", architecture: "Architecture", china: "Furniture from China" }, concept: "Service concept visual, not a completed project", materials: "Materials and hardware", secondaryGallery: "Additional gallery",
-  },
+const categories: Record<Lang, Record<ProjectCategory,string>> = {
+  ru: {renovation:"Реновация",furniture:"Мебель",residential:"Жильё",commercial:"Коммерция",architecture:"Архитектура",china:"Мебель из Китая"},
+  en: {renovation:"Renovation",furniture:"Furniture",residential:"Residential",commercial:"Commercial",architecture:"Architecture",china:"Furniture from China"},
 };
 
-export default function ProjectDetail({ project }: { project: ProjectLocation }) {
-  const [lang, setLang] = useState<Lang>("ru");
+export default function ProjectDetail({ project, lang }: { project: ProjectLocation; lang: Lang }) {
+  const ru = lang === "ru";
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const t = labels[lang];
-  const participants = team.filter((member) => project.teamIds.includes(member.id));
-  const publishedProjects = projectLocations.filter((item) => item.published);
-  const currentIndex = publishedProjects.findIndex((item) => item.id === project.id);
-  const nextProject = publishedProjects[(currentIndex + 1) % publishedProjects.length];
+  const [expanded, setExpanded] = useState(false);
+  const before = useMemo(() => project.beforeImages ?? [], [project.beforeImages]);
+  const primary = useMemo(() => project.images.filter(image => !before.includes(image)), [project.images,before]);
+  const design = project.id === "al-bateen-residences-jbr" || project.id === "elemental-day-surgery-clinic";
+  const primaryLabel = design ? (ru ? "Визуализация" : "Design visualisation") : (ru ? "Результат" : "Completed work");
+  const beforeLabel = project.beforeLabel?.[lang] ?? (ru ? "До ремонта" : "Before renovation");
+  const [gallery, setGallery] = useState(primary.length ? "primary" : "before");
+  const photos = useMemo(() => gallery === "primary" ? primary : gallery === "before" ? before : [...primary, ...before], [gallery,primary,before]);
+  const caption = (image: string) => before.includes(image) ? beforeLabel : primaryLabel;
+  const visiblePhotos = expanded ? photos : photos.slice(0,12);
+  const close = useCallback(() => setLightbox(null), []);
+  const dialogRef = useDialog(Boolean(lightbox), close);
+  const participants = team.filter(member => project.teamIds.includes(member.id));
+  const published = projectLocations.filter(p => p.published && p.status !== "service");
+  const next = published[(published.findIndex(p => p.id === project.id) + 1) % published.length];
+  const contact = whatsapp(ru ? `Здравствуйте! Мне интересен проект ${project.shortTitle.ru}. Хочу обсудить похожие работы для своего объекта.` : `Hello! I am interested in ${project.shortTitle.en}. I would like to discuss similar work for my property.`);
+  const progress = project.status === "progress";
+  const status = progress ? (ru ? "В процессе" : "In progress") : (ru ? "Завершён" : "Completed");
+  const cover = project.cover ?? project.images[0];
+  useEffect(() => {
+    if (!lightbox) return;
+    const move = (event: KeyboardEvent) => {
+      if (!["ArrowLeft","ArrowRight"].includes(event.key)) return;
+      event.preventDefault();
+      const index = photos.indexOf(lightbox);
+      setLightbox(photos[(index + (event.key === "ArrowRight" ? 1 : -1) + photos.length) % photos.length]);
+    };
+    window.addEventListener("keydown", move);
+    return () => window.removeEventListener("keydown", move);
+  }, [lightbox, photos]);
 
-  return (
-    <main className="project-detail-page">
-      <header className="detail-header">
-        <Link className="logo" href="/"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></Link>
-        <Link href="/#projects">← {t.back}</Link>
-        <div><button type="button" onClick={() => setLang(lang === "ru" ? "en" : "ru")}>{lang === "ru" ? "EN" : "RU"}</button><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WA</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">TG</a></div>
-      </header>
-
-      <section className="detail-hero">
-        <div className="detail-hero-copy">
-          <p className="eyebrow">{project.categories.map((category) => t.categories[category]).join(" · ")} · {project.year}</p>
-          <h1>{project.title[lang]}</h1>
-          <p>{project.summary[lang]}</p>
-        </div>
-        <div className="detail-hero-image">
-          {project.cover ?? project.images[0] ? <Image src={project.cover ?? project.images[0]} alt={project.title[lang]} fill sizes="(max-width: 900px) 100vw, 58vw" priority /> : <div className={`project-placeholder ${project.category}`}><span>{project.district.slice(0, 2).toUpperCase()}</span><i /><small>{t.noGallery}</small></div>}
-        </div>
-      </section>
-
-      <section className="detail-facts">
-        <div><p className="eyebrow">{t.facts}</p><h2>{project.shortTitle[lang]}</h2></div>
-        <dl>
-          <div><dt>{t.area}</dt><dd>{project.area[lang]}</dd></div>
-          <div><dt>{t.duration}</dt><dd>{project.duration[lang]}</dd></div>
-          <div><dt>{t.year}</dt><dd>{project.year}</dd></div>
-          <div><dt>{t.location}</dt><dd>{project.district}</dd></div>
-        </dl>
-        <div className="detail-scope"><h3>{t.scope}</h3><ol>{project.scope.map((item, index) => <li key={item.en}><span>{String(index + 1).padStart(2, "0")}</span>{item[lang]}</li>)}</ol>{project.materials?.length ? <div className="detail-materials"><span>{t.materials}</span><div>{project.materials.map((material) => <strong key={material}>{material}</strong>)}</div></div> : null}</div>
-      </section>
-
-      <section className="detail-gallery">
-        <div className="detail-section-title"><p className="eyebrow">{String(project.images.length).padStart(2, "0")} images</p><h2>{t.gallery}</h2></div>
-        {project.images.length > 0 ? <div className="detail-gallery-grid">{project.images.map((image, index) => <button key={image} type="button" className={index === 0 ? "large" : ""} onClick={() => setLightbox(image)}><Image src={image} alt={`${project.title[lang]} — ${index + 1}`} fill sizes={index === 0 ? "100vw" : "50vw"} /><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div> : <div className="empty-gallery"><span>{project.district.slice(0, 2).toUpperCase()}</span><p>{t.noGallery}</p></div>}
-      </section>
-
-      {!project.categories.includes("china") && <section className="detail-before">
-        <div><p className="eyebrow">{t.secondaryGallery}{project.beforeImages?.length ? ` · ${String(project.beforeImages.length).padStart(2, "0")}` : ""}</p><h2>{project.beforeLabel?.[lang] ?? t.before}</h2></div>
-        {project.beforeImages?.length ? <div className="detail-before-grid">{project.beforeImages.map((image, index) => <button key={image} type="button" onClick={() => setLightbox(image)}><Image src={image} alt={`${project.title[lang]} — ${t.before} ${index + 1}`} fill sizes="(max-width: 620px) 100vw, 36vw" /><span>{String(index + 1).padStart(2, "0")}</span></button>)}</div> : <article><span>+</span><p>{t.beforeEmpty}</p></article>}
-      </section>}
-
-      <section className="detail-team">
-        <div className="detail-section-title"><p className="eyebrow">Space Buro team</p><h2>{t.people}</h2><p>{t.peopleText}</p></div>
-        <div>{participants.map((member) => <Link href={`/#team-${member.id}`} key={member.id}><div><Image src={member.image} alt={member.name[lang]} fill sizes="160px" /></div><span><strong>{member.name[lang]}</strong><small>{member.role[lang]}</small></span><b>↗</b></Link>)}</div>
-      </section>
-
-      <section className="detail-files">
-        <div><p className="eyebrow">Documentation</p><h2>{t.files}</h2></div>
-        <article><span>IMG</span><div><strong>{t.publicGallery}</strong><small>{project.images.length} WebP</small></div><b>{project.images.length ? t.publicGalleryState : "—"}</b></article>
-        <article><span>LOCK</span><div><strong>{t.techFiles}</strong><small>{t.techState}</small></div><b>Private</b></article>
-      </section>
-
-      <section className="detail-next">
-        <a className="button button-primary" href="https://wa.me/971523569697" target="_blank" rel="noreferrer">{t.contact}<span>↗</span></a>
-        <Link href={`/projects/${nextProject.id}`}><span>{t.next}</span><strong>{nextProject.shortTitle[lang]}</strong><b>→</b></Link>
-      </section>
-
-      {lightbox && <div className="detail-lightbox" role="dialog" aria-modal="true"><button type="button" onClick={() => setLightbox(null)}>×</button><Image src={lightbox} alt={project.title[lang]} fill sizes="100vw" /></div>}
-    </main>
-  );
+  return <main id="content" className="project-detail-page">
+    <header className="detail-header">
+      <Link className="logo" href={pathFor(lang)}><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></Link>
+      <Link href={`${pathFor(lang)}#projects`}>← {ru ? "Все проекты" : "All projects"}</Link>
+      <div><Link href={projectPath(ru?"en":"ru",project)} hrefLang={ru?"en":"ru"}>{ru?"EN":"RU"}</Link><a href={contact} target="_blank" rel="noreferrer" aria-label="WhatsApp">WA</a></div>
+    </header>
+    <section className="detail-hero">
+      <div className="detail-hero-copy">
+        <nav className="breadcrumbs" aria-label={ru?"Навигация по страницам":"Breadcrumbs"}><Link href={pathFor(lang)}>{ru?"Главная":"Home"}</Link><span> / </span><Link href={`${pathFor(lang)}#projects`}>{ru?"Проекты":"Projects"}</Link></nav>
+        <p className="eyebrow">{project.categories.map(c => categories[lang][c]).join(" · ")}</p>
+        <h1>{project.shortTitle[lang]}</h1><p>{project.summary[lang]}</p>
+        <span className={`status-badge ${project.status}`}>{status} · {project.year}</span>
+        <a className="button button-primary" href={contact} target="_blank" rel="noreferrer">{ru?"Обсудить похожий проект":"Discuss a similar project"}<span>↗</span></a>
+      </div>
+      <div className="detail-hero-image"><Image src={cover} alt={`${project.shortTitle[lang]} — ${caption(cover)}`} fill sizes="(max-width: 900px) 100vw, 58vw" priority /><small>{caption(cover)}</small></div>
+    </section>
+    <section className="detail-facts">
+      <div><p className="eyebrow">{ru?"Задача клиента":"The brief"}</p><h2>{ru?"О проекте":"About the project"}</h2><p className="case-brief">{projectBriefs[project.id]?.[lang] ?? project.summary[lang]}</p></div>
+      <dl>
+        <div><dt>{ru?"Площадь":"Area"}</dt><dd>{project.area[lang]}</dd></div>
+        <div><dt>{progress ? (ru?"Плановый срок":"Planned duration") : (ru?"Срок":"Duration")}</dt><dd>{project.duration[lang]}</dd></div>
+        <div><dt>{ru?"Год":"Year"}</dt><dd>{project.year}</dd></div>
+        <div><dt>{ru?"Расположение":"Location"}</dt><dd>{project.district}</dd></div>
+      </dl>
+      <div className="detail-scope"><h3>{progress ? (ru?"Состав проекта":"Project scope") : (ru?"Что сделали":"Our work")}</h3><ol>{project.scope.map((item,i) => <li key={item.en}><span>{String(i+1).padStart(2,"0")}</span>{item[lang]}</li>)}</ol>{project.materials?.length ? <div className="detail-materials"><span>{ru?"Материалы и комплектующие":"Materials and hardware"}</span><div>{project.materials.map(m=><strong key={m}>{m}</strong>)}</div></div>:null}
+        <div className="case-outcome"><h3>{progress ? (ru?"Статус проекта":"Project status") : (ru?"Результат":"The result")}</h3><p>{progress ? (ru?"Проект в процессе реализации. Галерея показывает опубликованные проектные решения и фотографии состояния объекта; завершённые работы пока не представлены.":"The project is in progress. The gallery contains published design proposals and site photographs; completed work is not yet presented.") : (ru?`Работы завершены в ${project.year} году. В галерее — выполненная отделка и/или установленная мебель согласно составу проекта.`:`The project was completed in ${project.year}. The gallery shows the finished interiors and/or installed furniture within the stated scope.`)}</p></div>
+      </div>
+    </section>
+    <section className="detail-gallery" id="gallery">
+      <div className="detail-section-title"><p className="eyebrow">{photos.length} {ru?"фото":"images"}</p><h2>{ru?"Проект в деталях":"Project in detail"}</h2></div>
+      <div className="filter-bar" aria-label={ru?"Этапы проекта":"Project stages"}>
+        {primary.length > 0 && <button type="button" aria-pressed={gallery==="primary"} className={gallery==="primary"?"active":""} onClick={()=>{setGallery("primary");setExpanded(false);}}>{primaryLabel} · {primary.length}</button>}
+        {before.length > 0 && <button type="button" aria-pressed={gallery==="before"} className={gallery==="before"?"active":""} onClick={()=>{setGallery("before");setExpanded(false);}}>{beforeLabel} · {before.length}</button>}
+        {primary.length > 0 && before.length > 0 && <button type="button" aria-pressed={gallery==="all"} className={gallery==="all"?"active":""} onClick={()=>{setGallery("all");setExpanded(false);}}>{ru?"Все фотографии":"All photos"}</button>}
+      </div>
+      <div className="detail-gallery-grid">{visiblePhotos.map((src,i)=><button key={src} type="button" className={i===0?"large":""} aria-label={`${ru?"Открыть":"Open"}: ${caption(src)}, ${i+1}`} onClick={()=>setLightbox(src)}><Image src={src} alt={`${project.shortTitle[lang]}, ${project.district} — ${caption(src)}, ${i+1}`} fill sizes="(max-width: 620px) 100vw, 50vw" /><span>{caption(src)} · {i+1}</span></button>)}</div>
+      {photos.length>12 && <button className="expand-button" type="button" aria-expanded={expanded} onClick={()=>setExpanded(!expanded)}>{expanded?(ru?"Свернуть":"Show fewer"):(ru?`Показать все ${photos.length} фото`:`Show all ${photos.length} photos`)}</button>}
+    </section>
+    <section className="detail-team"><div className="detail-section-title"><p className="eyebrow">{ru?"Команда Space Buro":"Space Buro team"}</p><h2>{ru?"Участники проекта":"Project team"}</h2></div><div>{participants.map(member=><Link href={`${pathFor(lang)}#team-${member.id}`} key={member.id}><div><Image src={member.image} alt={member.name[lang]} fill sizes="160px" /></div><span><strong>{member.name[lang]}</strong><small>{member.role[lang]}</small></span><b>↗</b></Link>)}</div></section>
+    <section className="detail-next"><a className="button button-primary" href={contact} target="_blank" rel="noreferrer">{ru?"Обсудить похожий проект":"Discuss a similar project"}<span>↗</span></a><Link href={projectPath(lang,next)}><span>{ru?"Следующий проект":"Next project"}</span><strong>{next.shortTitle[lang]}</strong><b>→</b></Link></section>
+    <a className="floating-contact" href={contact} target="_blank" rel="noreferrer">WhatsApp · {ru?"Обсудить проект":"Discuss a project"}</a>
+    {lightbox && <section ref={dialogRef} className="detail-lightbox" role="dialog" aria-modal="true" aria-label={`${project.shortTitle[lang]} — ${caption(lightbox)}`} onClick={event=>{if(event.target===event.currentTarget)close();}}><button type="button" onClick={close} aria-label={ru?"Закрыть фотографию":"Close photo"}>×</button><Image src={lightbox} alt={`${project.shortTitle[lang]} — ${caption(lightbox)}`} fill sizes="100vw" /><p>{caption(lightbox)} · {photos.indexOf(lightbox)+1} / {photos.length}</p><div className="lightbox-nav"><button type="button" aria-label={ru?"Предыдущее фото":"Previous photo"} onClick={()=>setLightbox(photos[(photos.indexOf(lightbox)-1+photos.length)%photos.length])}>←</button><button type="button" aria-label={ru?"Следующее фото":"Next photo"} onClick={()=>setLightbox(photos[(photos.indexOf(lightbox)+1)%photos.length])}>→</button></div></section>}
+  </main>;
 }

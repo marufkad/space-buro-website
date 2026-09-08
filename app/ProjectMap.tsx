@@ -1,8 +1,8 @@
 "use client";
 
 import { divIcon, latLngBounds } from "leaflet";
-import { Marker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
-import { useEffect } from "react";
+import { Marker, MapContainer, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
+import { useEffect, useState } from "react";
 import type { Lang, ProjectLocation } from "./data";
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
   selectedId: string;
   lang: Lang;
   fitAll: boolean;
+  viewRequest: number;
   onSelect: (id: string) => void;
 };
 
@@ -22,7 +23,7 @@ const markerIcons = {
   china: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m6 11 10-5 10 5-10 5-10-5Zm0 0v11l10 5 10-5V11M16 16v11"/><path d="M10 8.5 20 14m-8-7 10 5"/></svg>',
 } as const;
 
-function MapController({ project, projects, fitAll }: { project: ProjectLocation; projects: ProjectLocation[]; fitAll: boolean }) {
+function MapController({ project, projects, fitAll, viewRequest }: { project: ProjectLocation; projects: ProjectLocation[]; fitAll: boolean; viewRequest: number }) {
   const map = useMap();
 
   useEffect(() => {
@@ -41,61 +42,50 @@ function MapController({ project, projects, fitAll }: { project: ProjectLocation
   useEffect(() => {
     if (fitAll && projects.length > 1) {
       const bounds = latLngBounds(projects.map((item) => [item.lat, item.lng] as [number, number]));
-      map.fitBounds(bounds, { animate: true, duration: 0.8, maxZoom: 11, padding: [48, 48] });
+      map.fitBounds(bounds, { animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches, duration: 0.8, maxZoom: 11, padding: [48, 48] });
       return;
     }
     map.flyTo(
       [project.lat, project.lng],
-      project.id === "fujairah-trade-centre" ? 10 : 12,
-      { duration: 0.8 },
+      project.id === "fujairah-trade-centre" ? 13 : 14,
+      { duration: 0.8, animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches },
     );
-  }, [fitAll, map, project, projects]);
+  }, [fitAll, map, project, projects, viewRequest]);
 
   return null;
 }
 
-export default function ProjectMap({ projects, selectedId, lang, fitAll, onSelect }: Props) {
-  const selected = projects.find((project) => project.id === selectedId) ?? projects[0];
+function ProjectMarkers({projects, selectedId, lang, onSelect}: Omit<Props,"fitAll" | "viewRequest">) {
+  const [, setView] = useState(0);
+  const map = useMapEvents({zoomend:()=>setView(v=>v+1),moveend:()=>setView(v=>v+1)});
+  const groups: ProjectLocation[][] = [];
+  for (const project of projects) {
+    const point=map.latLngToLayerPoint([project.lat,project.lng]);
+    const group=groups.find(items=>map.getZoom()<16 && point.distanceTo(map.latLngToLayerPoint([items[0].lat,items[0].lng]))<48);
+    if(group) group.push(project); else groups.push([project]);
+  }
+  return <>{groups.map(group=>{
+    const project=group[0];
+    if(group.length>1) {
+      const bounds=latLngBounds(group.map(p=>[p.lat,p.lng] as [number,number]));
+      return <Marker key={group.map(p=>p.id).join("-")} position={bounds.getCenter()} title={lang==="ru"?`${group.length} объектов — увеличить`:`${group.length} projects — zoom in`} icon={divIcon({className:"map-cluster",html:`<span>${group.length}</span>`,iconSize:[46,46]})} eventHandlers={{click:()=>map.fitBounds(bounds,{padding:[60,60],maxZoom:16,animate:!window.matchMedia("(prefers-reduced-motion: reduce)").matches})}} />;
+    }
+    const active=project.id===selectedId;
+    const icon=divIcon({className:"project-map-icon-wrap",html:`<span class="project-map-icon ${project.mapType}${active?" active":""}">${markerIcons[project.mapType]}</span>`,iconSize:active?[44,50]:[36,42],iconAnchor:active?[22,50]:[18,42],popupAnchor:[0,-46]});
+    return <Marker key={project.id} position={[project.lat,project.lng]} icon={icon} title={project.shortTitle[lang]} eventHandlers={{click:()=>onSelect(project.id)}}><Popup><strong>{project.title[lang]}</strong><span>{project.district} · {project.year}</span></Popup></Marker>;
+  })}</>;
+}
 
+export default function ProjectMap({ projects, selectedId, lang, fitAll, viewRequest, onSelect }: Props) {
+  const selected = projects.find(project => project.id === selectedId) ?? projects[0];
+  const [tileError,setTileError]=useState(false);
   if (!selected) return null;
-
-  return (
-    <MapContainer
-      center={[25.14, 55.58]}
-      zoom={9}
-      scrollWheelZoom={false}
-      zoomControl
-      attributionControl
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; CARTO'
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-      />
-      <MapController project={selected} projects={projects} fitAll={fitAll} />
-      {projects.map((project) => {
-        const active = project.id === selected.id;
-        const icon = divIcon({
-          className: "project-map-icon-wrap",
-          html: `<span class="project-map-icon ${project.mapType}${active ? " active" : ""}">${markerIcons[project.mapType]}</span>`,
-          iconSize: active ? [44, 50] : [36, 42],
-          iconAnchor: active ? [22, 50] : [18, 42],
-          popupAnchor: [0, -46],
-        });
-
-        return (
-          <Marker
-            key={project.id}
-            position={[project.lat, project.lng]}
-            icon={icon}
-            eventHandlers={{ click: () => onSelect(project.id) }}
-          >
-            <Popup>
-              <strong>{project.title[lang]}</strong>
-              <span>{project.district} · {project.year}</span>
-            </Popup>
-          </Marker>
-        );
-      })}
+  return <>
+    <MapContainer center={[25.1,55.2]} zoom={11} scrollWheelZoom={false} zoomControl attributionControl>
+      <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>' url={process.env.NEXT_PUBLIC_MAP_TILE_URL || "https://tile.openstreetmap.org/{z}/{x}/{y}.png"} maxZoom={19} eventHandlers={{tileerror:()=>setTileError(true),loading:()=>setTileError(false)}} />
+      <MapController project={selected} projects={projects} fitAll={fitAll} viewRequest={viewRequest} />
+      <ProjectMarkers projects={projects} selectedId={selectedId} lang={lang} onSelect={onSelect} />
     </MapContainer>
-  );
+    {tileError && <div className="map-error" role="status">{lang==="ru"?"Карта временно недоступна. Выберите объект в списке или откройте его расположение.":"The map is temporarily unavailable. Choose a project from the list or open its location."} <a href={`https://www.openstreetmap.org/?mlat=${selected.lat}&mlon=${selected.lng}#map=16/${selected.lat}/${selected.lng}`} target="_blank" rel="noreferrer">{lang==="ru"?"Открыть карту":"Open map"} ↗</a></div>}
+  </>;
 }

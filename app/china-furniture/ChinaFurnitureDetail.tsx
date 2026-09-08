@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { pathFor, whatsapp } from "../site";
 import type { Lang } from "../data";
 
 const copy = {
   ru: {
-    back: "Вернуться на сайт", kicker: "Дубай · Гуанчжоу · Фошань · Чэнду", title: "Мебель из Китая — управляемая комплектация, а не случайная закупка",
+    back: "Вернуться на сайт", kicker: "Дубай · Гуанчжоу · Фошань · Чэнду", title: "Мебель из Китая с доставкой и установкой в Дубае",
     intro: "Собираем ведомость, сравниваем фабрики и контролируем путь заказа до доставки в ОАЭ. Услуга подходит для квартир, вилл, офисов и коммерческих пространств.",
     cta: "Отправить задачу", stepsTitle: "Как проходит заказ", termsTitle: "Условия и ориентировочные сроки",
     steps: [
@@ -30,7 +30,7 @@ const copy = {
     note: "Сроки приведены для планирования и не являются офертой. Финальные условия зависят от фабрики, объёма, кастомизации и способа доставки.",
   },
   en: {
-    back: "Back to website", kicker: "Dubai · Guangzhou · Foshan · Chengdu", title: "Furniture from China — controlled furnishing, not random purchasing",
+    back: "Back to website", kicker: "Dubai · Guangzhou · Foshan · Chengdu", title: "Furniture from China, delivered and installed in Dubai",
     intro: "We build the schedule, compare factories and control the order through UAE delivery. Suitable for apartments, villas, offices and commercial spaces.",
     cta: "Send your brief", stepsTitle: "How the order works", termsTitle: "Terms and planning timelines",
     steps: [
@@ -54,16 +54,15 @@ const copy = {
   },
 } as const;
 
-export default function ChinaFurnitureDetail() {
-  const [lang, setLang] = useState<Lang>("ru");
+export default function ChinaFurnitureDetail({lang}: {lang: Lang}) {
   const t = copy[lang];
 
-  return <main className="china-detail-page">
-    <header className="detail-header"><Link className="logo" href="/"><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></Link><Link href="/#china">← {t.back}</Link><div><button type="button" onClick={() => setLang(lang === "ru" ? "en" : "ru")}>{lang === "ru" ? "EN" : "RU"}</button><a href="https://wa.me/971523569697" target="_blank" rel="noreferrer">WA</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">TG</a></div></header>
-    <section className="china-detail-hero"><div><p className="eyebrow">{t.kicker}</p><h1>{t.title}</h1><p>{t.intro}</p><a className="button button-primary" href="https://wa.me/971523569697" target="_blank" rel="noreferrer">{t.cta}<span>↗</span></a></div><figure><Image src="/media/china-furniture-concept.webp" alt={t.title} fill sizes="(max-width: 900px) 100vw, 55vw" priority /></figure></section>
+  return <main id="content" className="china-detail-page">
+    <header className="detail-header"><Link className="logo" href={pathFor(lang)}><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></Link><Link href={`${pathFor(lang)}#china`}>← {t.back}</Link><div><Link href={pathFor(lang === "ru" ? "en" : "ru", "/china-furniture")} hrefLang={lang === "ru" ? "en" : "ru"}>{lang === "ru" ? "EN" : "RU"}</Link><a href={whatsapp(lang === "ru" ? "Здравствуйте! Хочу обсудить мебель из Китая: подбор, доставку и установку." : "Hello! I would like to discuss sourcing furniture from China, delivery and installation.")} target="_blank" rel="noreferrer">WA</a><a href="https://t.me/marufkad" target="_blank" rel="noreferrer">TG</a></div></header>
+    <section className="china-detail-hero"><div><p className="eyebrow">{t.kicker}</p><h1>{t.title}</h1><p>{t.intro}</p><a className="button button-primary" href={whatsapp(lang === "ru" ? "Здравствуйте! Хочу обсудить мебель из Китая: подбор, доставку и установку." : "Hello! I would like to discuss sourcing furniture from China, delivery and installation.")} target="_blank" rel="noreferrer">{t.cta}<span>↗</span></a></div><figure><Image src="/media/china-furniture-concept.webp" alt={t.title} fill sizes="(max-width: 900px) 100vw, 55vw" priority /><figcaption>{lang === "ru" ? "Визуальная концепция услуги" : "Service concept visual"}</figcaption></figure></section>
     <section className="china-detail-process"><div className="detail-section-title"><p className="eyebrow">01—08</p><h2>{t.stepsTitle}</h2></div><div>{t.steps.map(([number, title, text]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></section>
-    <section className="china-detail-terms"><div><p className="eyebrow">Planning</p><h2>{t.termsTitle}</h2><p>{t.note}</p></div><div>{t.terms.map(([time, text]) => <article key={time}><strong>{time}</strong><p>{text}</p></article>)}</div></section>
+    <section className="china-detail-terms"><div><p className="eyebrow">{lang === "ru" ? "Планирование" : "Planning"}</p><h2>{t.termsTitle}</h2><p>{t.note}</p></div><div>{t.terms.map(([time, text]) => <article key={time}><strong>{time}</strong><p>{text}</p></article>)}</div></section>
     <section className="china-detail-included"><div><p className="eyebrow">Space Buro</p><h2>{t.includedTitle}</h2></div><ol>{t.included.map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, "0")}</span>{item}</li>)}</ol></section>
-    <section className="detail-next"><a className="button button-primary" href="https://wa.me/971523569697" target="_blank" rel="noreferrer">{t.cta}<span>↗</span></a><Link href="/#china"><span>{t.back}</span><strong>Space Buro</strong><b>→</b></Link></section>
+    <section className="detail-next"><a className="button button-primary" href={whatsapp(lang === "ru" ? "Здравствуйте! Хочу обсудить мебель из Китая: подбор, доставку и установку." : "Hello! I would like to discuss sourcing furniture from China, delivery and installation.")} target="_blank" rel="noreferrer">{t.cta}<span>↗</span></a><Link href={`${pathFor(lang)}#china`}><span>{t.back}</span><strong>Space Buro</strong><b>→</b></Link></section>
   </main>;
 }

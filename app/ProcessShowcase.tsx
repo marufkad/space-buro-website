@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { type FocusEvent, type KeyboardEvent, type TouchEvent, useEffect, useState } from "react";
 import { stages, type Lang } from "./data";
+import { useVisible, useReducedMotion } from "./useInteraction";
 
 type ProcessShowcaseProps = {
   lang: Lang;
@@ -15,15 +16,18 @@ export default function ProcessShowcase({ lang, stageLabel, resultLabel }: Proce
   const [paused, setPaused] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const stage = stages[activeStage];
+  const [processRef, processVisible] = useVisible<HTMLDivElement>();
+  const reduced = useReducedMotion();
+  const [manualPause, setManualPause] = useState(false);
 
   useEffect(() => {
-    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused || manualPause || reduced || !processVisible) return;
     const timer = window.setTimeout(
-      () => setActiveStage((current) => (current + 1) % stages.length),
+      () => { if (!document.hidden) setActiveStage((current) => (current + 1) % stages.length); },
       4000,
     );
     return () => window.clearTimeout(timer);
-  }, [activeStage, paused]);
+  }, [activeStage, paused, manualPause, reduced, processVisible]);
 
   function handleTouchStart(event: TouchEvent<HTMLElement>) {
     setTouchStart(event.changedTouches[0]?.clientX ?? null);
@@ -66,13 +70,15 @@ export default function ProcessShowcase({ lang, stageLabel, resultLabel }: Proce
 
   return (
     <div
+      ref={processRef}
       className="process-showcase"
-      data-paused={paused}
+      data-paused={paused || manualPause || !processVisible || reduced}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={handleFocus}
       onBlurCapture={handleBlur}
     >
+      <button className="process-pause" type="button" aria-pressed={manualPause} onClick={()=>setManualPause(!manualPause)}>{manualPause?(lang==="ru"?"Продолжить показ":"Resume slideshow"):(lang==="ru"?"Приостановить показ":"Pause slideshow")}</button>
       <div className="stage-buttons" data-reveal role="tablist" aria-label={stageLabel} onKeyDown={handleKeyDown}>
         {stages.map((item, index) => (
           <button
@@ -108,9 +114,9 @@ export default function ProcessShowcase({ lang, stageLabel, resultLabel }: Proce
             alt={`${stageLabel} ${stage.number} — ${stage.title[lang]}`}
             fill
             sizes="(max-width: 900px) 100vw, 62vw"
-            priority={activeStage === 0}
+
           />
-          <span>{stage.number} / {String(stages.length).padStart(2, "0")}</span>
+          <span>{lang === "ru" ? "Иллюстрация этапа" : "Stage illustration"} · {stage.number} / {String(stages.length).padStart(2, "0")}</span>
         </div>
         <div className="stage-detail-copy">
           <p className="eyebrow">{stageLabel} {stage.number}</p>
