@@ -15,19 +15,15 @@ type Props = {
   onSelect: (id: string) => void;
 };
 
+// Compact, rounded app-icon markers: readable without covering the map with labels.
 const markerIcons = {
-  renovation: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 9h12v6H7V9Zm12 3h4v5m0 0h-3v9"/><path d="m9 23 5-5 4 4-5 5H9v-4Z"/></svg>',
-  furniture: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 15h16v11H8V15Zm3 0V9h10v6M11 26v3m10-3v3M16 9v6"/></svg>',
-  residential: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m5 15 11-9 11 9v12H5V15Zm8 12v-8h6v8"/></svg>',
-  commercial: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 5h18v23H7V5Zm5 5h2m4 0h2m-8 5h2m4 0h2m-8 5h2m4 0h2m-7 8v-4h6v4"/></svg>',
-  architecture: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 26h22M8 26V12l8-6 8 6v14M12 26v-8h8v8M8 13h16M16 6v7"/></svg>',
-  china: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m6 11 10-5 10 5-10 5-10-5Zm0 0v11l10 5 10-5V11M16 16v11"/><path d="M10 8.5 20 14m-8-7 10 5"/></svg>',
+  renovation: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect class="icon-surface" x="5" y="6" width="17" height="8" rx="2"/><path d="M22 10h4v8H15v4"/><rect x="12" y="22" width="6" height="7" rx="2"/></svg>',
+  furniture: '<svg viewBox="0 0 32 32" aria-hidden="true"><path class="icon-surface" d="M8 16V9a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7"/><path d="M8 16H5v10h22V16h-3M8 16v5h16v-5M9 26v3m14-3v3M16 7v13"/></svg>',
+  residential: '<svg viewBox="0 0 32 32" aria-hidden="true"><path class="icon-surface" d="M7 14 16 6l9 8v13H7Z"/><path d="m4 15 12-11 12 11M13 27v-9h6v9"/><path d="M23 9V5"/></svg>',
+  commercial: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect class="icon-surface" x="7" y="4" width="18" height="24" rx="2"/><path d="M12 10h2m4 0h2m-8 5h2m4 0h2M13 28v-7h6v7M4 28h24"/></svg>',
+  architecture: '<svg viewBox="0 0 32 32" aria-hidden="true"><path class="icon-surface" d="M6 27 16 5l10 22H6Z"/><path d="m12 21 4-9 4 9h-8ZM5 27h23M16 3v4M10 17l2 1M8 22l2 1"/></svg>',
+  china: '<svg viewBox="0 0 32 32" aria-hidden="true"><path class="icon-surface" d="m5 10 11-5 11 5v13l-11 5-11-5V10Z"/><path d="m5 10 11 5 11-5M16 15v13M11 7l11 5v6M9 20l3 1.5"/></svg>',
 } as const;
-
-// Leaflet accepts HTML strings for div icons; escape all project copy first.
-const escapeHtml = (value: string) => value.replace(/[&<>"']/g, character => ({
-  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-})[character]!);
 
 function MapController({ project, projects, fitAll, viewRequest }: { project: ProjectLocation; projects: ProjectLocation[]; fitAll: boolean; viewRequest: number }) {
   const map = useMap();
@@ -48,7 +44,7 @@ function MapController({ project, projects, fitAll, viewRequest }: { project: Pr
   useEffect(() => {
     if (fitAll && projects.length > 1) {
       const bounds = latLngBounds(projects.map((item) => [item.lat, item.lng] as [number, number]));
-      map.fitBounds(bounds, { animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches, duration: 0.8, maxZoom: 11, paddingTopLeft: [100, 60], paddingBottomRight: [100, 100] });
+      map.fitBounds(bounds, { animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches, duration: 0.8, maxZoom: 11, paddingTopLeft: [48, 48], paddingBottomRight: [48, 48] });
       return;
     }
     map.flyTo(
@@ -78,7 +74,7 @@ function ProjectMarkers({projects, selectedId, lang, onSelect}: Omit<Props,"fitA
     }
     const active=project.id===selectedId;
     const area=projectAreaLabel(project,lang);
-    const icon=divIcon({className:`project-map-icon-wrap ${project.mapType}${active?" is-active":""}`,html:`<span class="project-map-icon ${project.mapType}${active?" active":""}">${markerIcons[project.mapType]}</span><span class="project-map-label"><strong>${escapeHtml(project.shortTitle[lang])}</strong><small>${escapeHtml(area)}</small></span>`,iconSize:[44,52],iconAnchor:[22,50],popupAnchor:[0,-46]});
+    const icon=divIcon({className:`project-map-icon-wrap ${project.mapType}${active?" is-active":""}`,html:`<span class="project-map-icon ${project.mapType}${active?" active":""}">${markerIcons[project.mapType]}</span>`,iconSize:[48,54],iconAnchor:[24,54],popupAnchor:[0,-50]});
     return <Marker key={project.id} position={[project.lat,project.lng]} icon={icon} title={`${project.shortTitle[lang]} · ${area}`} alt={`${project.shortTitle[lang]} · ${area}`} zIndexOffset={active?1000:0} riseOnHover eventHandlers={{click:()=>onSelect(project.id)}}><Popup><strong>{project.title[lang]}</strong><span>{area}</span><span>{project.district} · {project.year}</span></Popup></Marker>;
   })}</>;
 }
