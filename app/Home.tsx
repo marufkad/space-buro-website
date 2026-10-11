@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import {
-  brands,
   developers,
   projectLocations,
   team,
@@ -15,6 +14,8 @@ import {
   type ProjectMapType,
 } from "./data";
 import ProcessShowcase from "./ProcessShowcase";
+import BrandsMarquee from "./BrandsMarquee";
+import { projectAreaLabel } from "./projectArea";
 import { pathFor, projectPath, whatsapp, businessName } from "./site";
 import { useVisible, useReducedMotion, useDialog } from "./useInteraction";
 
@@ -529,10 +530,7 @@ export default function Home({lang}: {lang: Lang}) {
         {filteredProjects.length > 4 && <button className={`expand-button ${projectsExpanded ? "open" : ""}`} type="button" onClick={() => setProjectsExpanded((value) => !value)}><span>{projectsExpanded ? t.hideProjects : t.showAllProjects}</span><i>↓</i></button>}
       </section>
 
-      <section className="brands-marquee" aria-label={t.brandsKicker}>
-        <p>{t.brandsKicker}</p>
-        <div className="marquee-window"><div className="marquee-track">{[...brands, ...brands].map((brand, index) => <span data-brand={brand.name} aria-hidden={index >= brands.length} key={`${brand.name}-${index}`}><Image src={brand.logo} alt={brand.name} width={176} height={58} /><i>✦</i></span>)}</div></div>
-      </section>
+      <BrandsMarquee lang={lang} title={t.brandsKicker} />
 
       <section id="map" className="section map-section">
         <div className="section-heading" data-reveal>
@@ -547,14 +545,14 @@ export default function Home({lang}: {lang: Lang}) {
             {mapProjects.map((project) => (
               <button key={project.id} type="button" aria-pressed={selected.id === project.id} className={selected.id === project.id ? "active" : ""} onClick={() => selectMapProject(project.id)}>
                 <i className={project.mapType}><MapTypeIcon type={project.mapType} /></i>
-                <span><strong>{project.shortTitle[lang]}</strong><small>{project.district} · {project.year}</small></span><b>↗</b>
+                <span><strong>{project.shortTitle[lang]}</strong><small>{projectAreaLabel(project, lang)} · {project.district}</small></span><b>↗</b>
               </button>
             ))}
           </aside>
         </div>
         <article className="selected-map-card" data-reveal>
           <span className={`status-badge ${selected.status}`}>{t[selected.status]}</span>
-          <div><p>{projectCategoryText(selected, lang)} · {selected.area[lang]}</p><h3>{selected.title[lang]}</h3></div>
+          <div><p>{projectCategoryText(selected, lang)} · {projectAreaLabel(selected, lang)}</p><h3>{selected.title[lang]}</h3></div>
           <p>{selected.summary[lang]}</p>
           {selected.published
             ? <Link href={projectPath(lang,selected)}>{t.mapOpen}<span>↗</span></Link>

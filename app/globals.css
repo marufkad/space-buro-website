@@ -158,23 +158,25 @@ h1 { max-width: 760px; margin: 0; font-size: clamp(34px, 3vw, 48px); line-height
 .expand-button i { color: var(--accent); font-size: 18px; font-style: normal; transition: transform .25s ease; }
 .expand-button.open i { transform: rotate(180deg); }
 
-.brands-marquee { padding: 34px 0 28px; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--white); color: var(--ink); }
+/* Two seamless logo rows, with motion controls shared by both rows. */
+.brands-marquee { padding: 34px 0 24px; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--white); color: var(--ink); }
 .brands-marquee > p { margin: 0 0 24px; color: var(--accent-dark); font-size: 12px; font-weight: 700; letter-spacing: .13em; line-height: 1.35; text-align: center; text-transform: uppercase; }
+.brands-rows { display: grid; gap: 8px; }
 .marquee-window { overflow: hidden; }
-.marquee-track { width: max-content; display: flex; align-items: center; animation: marquee 42s linear infinite; }
-.marquee-track span { width: 310px; height: 108px; padding: 12px 2px; display: flex; align-items: center; justify-content: center; position: relative; background: var(--white); white-space: nowrap; }
-.marquee-track span img { width: 176px; height: 58px; object-fit: contain; transform: scale(1.74); }
-.marquee-track span[data-brand="EGGER"],
-.marquee-track span[data-brand="Mapei"],
-.marquee-track span[data-brand="Legrand"] { width: 210px; }
-.marquee-track span[data-brand="Knauf"] { width: 260px; }
-.marquee-track span[data-brand="Kohler"] { width: 220px; }
+.marquee-track { width: max-content; display: flex; align-items: center; animation: marquee 48s linear infinite; }
+.marquee-track-reverse { animation-direction: reverse; }
+.marquee-group { min-width: 100vw; display: flex; align-items: center; justify-content: space-around; flex-shrink: 0; }
+.marquee-track span { width: 240px; height: 94px; padding: 18px 24px; display: flex; flex-shrink: 0; align-items: center; justify-content: center; position: relative; }
+.marquee-track span img { width: 144px; height: 48px; object-fit: contain; transform: scale(1.5); filter: grayscale(1); opacity: .85; }
 .marquee-track span[data-brand="EGGER"] img,
 .marquee-track span[data-brand="Mapei"] img,
 .marquee-track span[data-brand="Legrand"] img { transform: none; }
-.marquee-track span[data-brand="Knauf"] img { transform: scale(1.45); }
-.marquee-track span[data-brand="Kohler"] img { transform: scale(1.2); }
-.marquee-track i { position: absolute; right: -7px; color: var(--accent); font-size: 12px; font-style: normal; }
+.marquee-track span[data-brand="Knauf"] img { transform: scale(1.3); }
+.marquee-track span[data-brand="Kohler"] img { transform: scale(1.1); }
+.brands-motion-toggle { min-height: 44px; margin: 16px auto 0; padding: 8px 12px; display: flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
+.brands-motion-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.brands-marquee.is-paused .marquee-track { animation-play-state: paused; }
+@media (hover: hover) { .brands-rows:hover .marquee-track { animation-play-state: paused; } }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 .map-section { background: var(--white); }
@@ -459,13 +461,8 @@ footer { min-height: 300px; padding: 50px clamp(24px, 5vw, 76px); display: grid;
   .project-placeholder small { right: 7px; bottom: 7px; font-size: 12px; }
   .brands-marquee { padding: 28px 0 22px; }
   .brands-marquee > p { padding: 0 20px; font-size: 12px; }
-  .marquee-track span { width: 272px; height: 88px; padding: 11px 2px; }
-  .marquee-track span img { width: 154px; height: 50px; }
-  .marquee-track span[data-brand="EGGER"],
-  .marquee-track span[data-brand="Mapei"],
-  .marquee-track span[data-brand="Legrand"] { width: 180px; }
-  .marquee-track span[data-brand="Knauf"] { width: 230px; }
-  .marquee-track span[data-brand="Kohler"] { width: 192px; }
+  .marquee-track span { width: 200px; height: 78px; padding: 15px 20px; }
+  .marquee-track span img { width: 120px; height: 40px; }
   .map-section { padding-right: 14px; padding-left: 14px; }
   .map-layout, .map-shell, .map-shell .leaflet-container, .map-loading { min-height: 480px; }
   .map-projects { max-height: 330px; grid-template-columns: 1fr; }
@@ -753,11 +750,6 @@ body { font-size: 16px; }
 .quick-view { margin: 0 18px 18px; padding: 9px 0; border: 0; border-bottom: 1px solid var(--line); font-size: 13px; background: transparent; cursor: pointer; }
 .section-cta { margin-top: 28px; }
 .expand-button { font-size: 14px; }
-.marquee-track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; }
-.marquee-track span[aria-hidden="true"] { display: none; }
-.marquee-track span { width: 180px !important; height: 80px; padding: 16px; }
-.marquee-track span img { max-width: 150px; max-height: 46px; filter: grayscale(1); opacity: .8; object-fit: contain; }
-.marquee-track i { display: none; }
 .map-shell { position: relative; }
 .map-overview { position: absolute; top: 12px; right: 12px; z-index: 800; padding: 12px; background: white; border: 1px solid var(--line); font-size: 13px; cursor: pointer; }
 .map-cluster { background: var(--ink); border: 3px solid white; border-radius: 50%; color: white; display: grid; place-items: center; font-size: 15px; font-weight: 700; box-shadow: 0 3px 12px #0003; }
@@ -858,7 +850,6 @@ footer { padding-bottom: 110px; }
  .detail-hero-copy h1 { font-size: 32px; }
  .detail-gallery-grid { grid-template-columns: 1fr; }
  .detail-gallery-grid button.large { grid-column: auto; }
- .marquee-track span { width: 50% !important; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 
@@ -866,3 +857,25 @@ footer { padding-bottom: 110px; }
 .filter-bar button.active sup, .stage-buttons > button.active > span, .stage-buttons > button:hover > span { color: white; }
 .stage-buttons .stage-progress { background: #d0d0ca; }
 .calculator-controls input[type="range"], .calculator-controls .vat-toggle input { accent-color: #deded8; }
+
+/* Permanent map labels keep the category colour and confirmed project area visible. */
+.project-map-icon-wrap { --marker-color: var(--ink); }
+.project-map-icon-wrap.renovation { --marker-color: var(--accent); }
+.project-map-icon-wrap.furniture { --marker-color: var(--sage); }
+.project-map-icon-wrap.china { --marker-color: #84627d; }
+.project-map-icon-wrap.commercial { --marker-color: var(--blue); }
+.project-map-icon-wrap.architecture { --marker-color: #5d7775; }
+.project-map-icon-wrap.residential { --marker-color: #b18a56; }
+.project-map-label { position: absolute; top: 55px; left: -64px; width: 172px; padding: 9px 11px; display: flex; flex-direction: column; gap: 4px; border: 1px solid var(--marker-color); border-left-width: 4px; border-radius: 7px; background: #fff; color: #252521; box-shadow: 0 4px 15px #0002; white-space: normal; }
+.project-map-icon-wrap:not(.is-active) .project-map-icon { margin-left: 4px; }
+.project-map-label strong { font-size: 12px; line-height: 1.35; font-weight: 700; }
+.project-map-label small { color: #5f5f56; font-size: 11px; line-height: 1.3; }
+.project-map-icon-wrap.is-active .project-map-label { border-width: 2px; border-left-width: 4px; box-shadow: 0 4px 18px #0003; }
+.project-map-icon-wrap:focus-visible .project-map-label { outline: 3px solid var(--marker-color); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { width: 100%; flex-wrap: wrap; transform: none; }
+  .marquee-group { min-width: 0; width: 100%; flex-wrap: wrap; justify-content: center; }
+  .marquee-group[aria-hidden="true"] { display: none; }
+  .brands-motion-toggle { display: none; }
+  .marquee-track span { width: min(200px, 50%); }
+}

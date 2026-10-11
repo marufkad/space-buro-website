@@ -4,6 +4,7 @@ import { divIcon, latLngBounds } from "leaflet";
 import { Marker, MapContainer, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { useEffect, useState } from "react";
 import type { Lang, ProjectLocation } from "./data";
+import { projectAreaLabel } from "./projectArea";
 
 type Props = {
   projects: ProjectLocation[];
@@ -22,6 +23,11 @@ const markerIcons = {
   architecture: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 26h22M8 26V12l8-6 8 6v14M12 26v-8h8v8M8 13h16M16 6v7"/></svg>',
   china: '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m6 11 10-5 10 5-10 5-10-5Zm0 0v11l10 5 10-5V11M16 16v11"/><path d="M10 8.5 20 14m-8-7 10 5"/></svg>',
 } as const;
+
+// Leaflet accepts HTML strings for div icons; escape all project copy first.
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, character => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+})[character]!);
 
 function MapController({ project, projects, fitAll, viewRequest }: { project: ProjectLocation; projects: ProjectLocation[]; fitAll: boolean; viewRequest: number }) {
   const map = useMap();
@@ -42,7 +48,7 @@ function MapController({ project, projects, fitAll, viewRequest }: { project: Pr
   useEffect(() => {
     if (fitAll && projects.length > 1) {
       const bounds = latLngBounds(projects.map((item) => [item.lat, item.lng] as [number, number]));
-      map.fitBounds(bounds, { animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches, duration: 0.8, maxZoom: 11, padding: [48, 48] });
+      map.fitBounds(bounds, { animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches, duration: 0.8, maxZoom: 11, paddingTopLeft: [100, 60], paddingBottomRight: [100, 100] });
       return;
     }
     map.flyTo(
@@ -71,8 +77,9 @@ function ProjectMarkers({projects, selectedId, lang, onSelect}: Omit<Props,"fitA
       return <Marker key={group.map(p=>p.id).join("-")} position={bounds.getCenter()} title={lang==="ru"?`${group.length} объектов — увеличить`:`${group.length} projects — zoom in`} icon={divIcon({className:"map-cluster",html:`<span>${group.length}</span>`,iconSize:[46,46]})} eventHandlers={{click:()=>map.fitBounds(bounds,{padding:[60,60],maxZoom:16,animate:!window.matchMedia("(prefers-reduced-motion: reduce)").matches})}} />;
     }
     const active=project.id===selectedId;
-    const icon=divIcon({className:"project-map-icon-wrap",html:`<span class="project-map-icon ${project.mapType}${active?" active":""}">${markerIcons[project.mapType]}</span>`,iconSize:active?[44,50]:[36,42],iconAnchor:active?[22,50]:[18,42],popupAnchor:[0,-46]});
-    return <Marker key={project.id} position={[project.lat,project.lng]} icon={icon} title={project.shortTitle[lang]} eventHandlers={{click:()=>onSelect(project.id)}}><Popup><strong>{project.title[lang]}</strong><span>{project.district} · {project.year}</span></Popup></Marker>;
+    const area=projectAreaLabel(project,lang);
+    const icon=divIcon({className:`project-map-icon-wrap ${project.mapType}${active?" is-active":""}`,html:`<span class="project-map-icon ${project.mapType}${active?" active":""}">${markerIcons[project.mapType]}</span><span class="project-map-label"><strong>${escapeHtml(project.shortTitle[lang])}</strong><small>${escapeHtml(area)}</small></span>`,iconSize:[44,52],iconAnchor:[22,50],popupAnchor:[0,-46]});
+    return <Marker key={project.id} position={[project.lat,project.lng]} icon={icon} title={`${project.shortTitle[lang]} · ${area}`} alt={`${project.shortTitle[lang]} · ${area}`} zIndexOffset={active?1000:0} riseOnHover eventHandlers={{click:()=>onSelect(project.id)}}><Popup><strong>{project.title[lang]}</strong><span>{area}</span><span>{project.district} · {project.year}</span></Popup></Marker>;
   })}</>;
 }
 
