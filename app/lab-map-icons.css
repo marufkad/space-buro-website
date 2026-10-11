@@ -1,0 +1,115 @@
+/* A single muted category palette for both markers and their matching list. */
+.map-section .renovation { --marker-color: #494c46; }
+.map-section .furniture { --marker-color: #638474; }
+.map-section .residential { --marker-color: #9b865e; }
+.map-section .commercial { --marker-color: #587a94; }
+.map-section .architecture { --marker-color: #487e80; }
+.map-section .china { --marker-color: #856a88; }
+
+.map-section .project-map-icon-wrap.map-marker-refined {
+  border: 0;
+  background: transparent;
+}
+
+.map-marker-refined .project-map-icon {
+  width: 44px;
+  height: 44px;
+  margin: 2px;
+  border: 1px solid color-mix(in srgb, var(--marker-color) 28%, white);
+  border-radius: 12px;
+  background: var(--paper, #f8f7f4);
+  color: var(--marker-color);
+  box-shadow: 0 2px 5px #10101016, 0 6px 14px #10101012;
+  transition: transform .2s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.map-marker-refined .project-map-icon::after {
+  width: 7px;
+  height: 7px;
+  left: 17px;
+  bottom: -5px;
+  border-right: 1px solid color-mix(in srgb, var(--marker-color) 28%, white);
+  border-bottom: 1px solid color-mix(in srgb, var(--marker-color) 28%, white);
+  background: var(--paper, #f8f7f4);
+}
+
+.map-marker-refined .project-map-icon svg.project-category-icon {
+  width: 27px;
+  height: 27px;
+}
+
+.map-marker-refined .project-map-icon svg.project-category-icon path {
+  stroke-width: 1.5;
+}
+
+.map-section .map-marker-refined.is-active .project-map-icon,
+.map-section .map-marker-refined:focus-visible .project-map-icon {
+  border-color: var(--marker-color);
+  background: var(--marker-color);
+  color: white;
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 4px 12px #10101028, 0 0 0 3px #fff9;
+}
+
+.map-section .map-marker-refined.is-active .project-map-icon::after,
+.map-section .map-marker-refined:focus-visible .project-map-icon::after {
+  border-color: var(--marker-color);
+  background: var(--marker-color);
+}
+
+.map-section .map-marker-refined:focus-visible {
+  outline: 2px solid var(--ink, #252525);
+  outline-offset: 3px;
+  border-radius: 13px;
+}
+
+.map-section .map-projects button > i[class] {
+  border: 1px solid color-mix(in srgb, var(--marker-color) 25%, transparent);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--marker-color) 9%, var(--paper, #f8f7f4));
+  color: var(--marker-color);
+}
+
+.map-section .map-projects button > i svg.project-category-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.map-section .map-projects button.active > i {
+  border-color: var(--marker-color);
+  background: var(--marker-color);
+  color: white;
+}
+
+.map-section .map-cluster.map-cluster-refined {
+  border: 1px solid #fff;
+  border-radius: 13px;
+  background: var(--ink, #252525);
+  color: white;
+  box-shadow: 0 3px 9px #10101026;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.map-section .map-cluster-refined:focus-visible {
+  outline: 2px solid var(--ink, #252525);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .map-section .map-marker-refined:hover .project-map-icon {
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 4px 12px #10101028, 0 0 0 3px #fff9;
+  }
+}
+
+@media (hover: none) {
+  .map-section .map-marker-refined:not(.is-active):hover .project-map-icon { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-section .map-marker-refined .project-map-icon { transition: none; }
+  .map-section .map-marker-refined .project-map-icon,
+  .map-section .map-marker-refined:hover .project-map-icon { transform: none; }
+}

@@ -1,0 +1,47 @@
+/* Normalize the visible artwork, not the often heavily padded SVG canvas. */
+.brands-marquee {
+  --brand-height: 36px;
+  --brand-gap: clamp(48px, 5vw, 76px);
+}
+
+.brands-marquee .brands-rows { gap: 18px; }
+
+.brands-marquee .marquee-group {
+  gap: var(--brand-gap);
+  justify-content: space-around;
+  padding: 14px calc(var(--brand-gap) / 2);
+}
+
+.brands-marquee .marquee-track .brand-mark {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: calc(var(--brand-height) * var(--brand-ratio));
+  height: var(--brand-height);
+  padding: 0;
+  overflow: hidden;
+}
+
+.brands-marquee .marquee-track .brand-mark[data-brand] img {
+  position: absolute;
+  display: block;
+  max-width: none;
+  object-fit: fill;
+  transform: none;
+  filter: none;
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .brands-marquee { --brand-height: 28px; --brand-gap: 42px; }
+  .brands-marquee .brands-rows { gap: 12px; }
+  .brands-marquee .marquee-group { padding-block: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brands-marquee .marquee-group {
+    gap: 26px 32px;
+    justify-content: center;
+    padding-inline: 16px;
+  }
+}

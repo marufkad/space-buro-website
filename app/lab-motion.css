@@ -1,0 +1,35 @@
+/* Small interaction cues accompany one-time scroll motion on every route. */
+.responsive-arrow { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; flex-shrink: 0; }
+.responsive-arrow > svg { display: block; width: 1em; height: 1em; overflow: visible; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.project-card-copy>b i,.button>span,.detail-next>a:last-child>b,.detail-team a>b{display:inline-block;transition:translate .35s cubic-bezier(.2,.7,.2,1)}
+.developers-grid>div{transition:background .35s ease,box-shadow .35s ease}
+.developers-grid .developer-logo{transition:translate .4s cubic-bezier(.2,.7,.2,1)}
+.detail-team>div:last-child>a{transition:background .35s ease,box-shadow .35s ease}
+.detail-gallery-grid>button,.detail-before-grid>button{transition:box-shadow .35s ease,background .35s ease}
+.china-detail-process article,.china-detail-terms article{transition:background .35s ease,box-shadow .35s ease}
+.china-detail-process article>span{display:inline-block;transition:translate .4s cubic-bezier(.2,.7,.2,1)}
+.contact-form input,.contact-form select,.contact-form textarea{transition:background .25s ease,border-color .25s ease,box-shadow .25s ease}
+.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{background:var(--white);box-shadow:0 4px 14px #25252508}
+.project-card:focus-visible .project-card-copy>b i,.button:focus-visible>span,.detail-next>a:last-child:focus-visible>b,.detail-team a:focus-visible>b{translate:3px -2px}
+.detail-team>div:last-child>a:focus-visible{background:var(--paper);box-shadow:inset 0 -2px var(--sage)}
+@media(hover:hover) and (pointer:fine){
+ .project-card:hover .project-card-copy>b i,.button:hover>span,.detail-team a:hover>b{translate:3px -2px}
+ .detail-next>a:last-child:hover>b{translate:5px 0}
+ .developers-grid>div:hover{background:var(--paper-deep);box-shadow:inset 0 -2px var(--sage)}
+ .developers-grid>div:hover .developer-logo{translate:0 -3px}
+ .detail-team>div:last-child>a:hover{background:var(--paper);box-shadow:inset 0 -2px var(--sage)}
+ .detail-gallery-grid>button:hover,.detail-before-grid>button:hover{box-shadow:inset 0 0 0 2px var(--sage);background:var(--surface-soft)}
+ .china-detail-process article:hover,.china-detail-terms article:hover{background:#ffffff70;box-shadow:inset 0 -2px var(--sage)}
+ .china-detail-process article:hover>span{translate:4px 0}
+}
+@media(prefers-reduced-motion:reduce){
+ .project-card-copy>b i,.button>span,.detail-next>a:last-child>b,.detail-team a>b,.developers-grid .developer-logo,.china-detail-process article>span{translate:none!important;transition:none!important}
+}
+/* Touch actions have a stationary horizontal cue; no emulated mouse-hover movement. */
+@media (max-width:700px), (hover:none), (pointer:coarse) {
+ .responsive-arrow > svg { transform: rotate(45deg); }
+ .responsive-arrow,.button>span,.detail-team a>b,.detail-next>a:last-child>b { translate: none !important; animation: none !important; transition: none !important; }
+ .lab-header .lab-header-card-arrow { transform: none !important; }
+ .button:hover { transform: none; }
+ .detail-gallery-grid button:hover img,.detail-before-grid button:hover img { transform: none; }
+}

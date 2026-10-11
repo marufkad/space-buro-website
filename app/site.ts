@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Lang, ProjectLocation } from "./data";
 
-export const siteUrl = "https://www.space-buro.ae";
+export const siteUrl = "https://space-buro-website.vercel.app";
 export const businessName = "Space Buro Technical Services L.L.C-FZ";
 export const pathFor = (lang: Lang, path = "/") => `${lang === "en" ? "/en" : ""}${path === "/" && lang === "en" ? "" : path}`;
 export const projectPath = (lang: Lang, project: ProjectLocation) => pathFor(lang, project.status === "service" ? "/china-furniture" : `/projects/${project.id}`);

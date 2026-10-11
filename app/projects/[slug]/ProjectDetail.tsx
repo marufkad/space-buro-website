@@ -1,8 +1,9 @@
 "use client";
 
+import ResponsiveArrow from "../../ResponsiveArrow";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react";
 import { projectLocations, team, type Lang, type ProjectCategory, type ProjectLocation } from "../../data";
 import { pathFor, projectPath, whatsapp } from "../../site";
 import { projectBriefs } from "../../caseStudies";
@@ -16,6 +17,8 @@ const categories: Record<Lang, Record<ProjectCategory,string>> = {
 export default function ProjectDetail({ project, lang }: { project: ProjectLocation; lang: Lang }) {
   const ru = lang === "ru";
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const ignoreBackdropUntil = useRef(0);
   const [expanded, setExpanded] = useState(false);
   const before = useMemo(() => project.beforeImages ?? [], [project.beforeImages]);
   const primary = useMemo(() => project.images.filter(image => !before.includes(image)), [project.images,before]);
@@ -35,23 +38,47 @@ export default function ProjectDetail({ project, lang }: { project: ProjectLocat
   const progress = project.status === "progress";
   const status = progress ? (ru ? "В процессе" : "In progress") : (ru ? "Завершён" : "Completed");
   const cover = project.cover ?? project.images[0];
+  const moveLightbox = useCallback((direction: number) => {
+    setLightbox(current => current && photos.length > 1 ? photos[(photos.indexOf(current) + direction + photos.length) % photos.length] : current);
+  }, [photos]);
+
+  function startSwipe(event: TouchEvent<HTMLElement>) {
+    const touch = event.touches[0];
+    touchStart.current = event.touches.length === 1 && !(event.target as HTMLElement).closest("button, a")
+      ? { x: touch.clientX, y: touch.clientY }
+      : null;
+  }
+
+  function finishSwipe(event: TouchEvent<HTMLElement>) {
+    const start = touchStart.current;
+    touchStart.current = null;
+    const touch = event.changedTouches[0];
+    if (!start || !touch || event.touches.length) return;
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+    // Mobile browsers may emit a click after touchend; it must not close the
+    // lightbox immediately after a successful horizontal swipe.
+    ignoreBackdropUntil.current = Date.now() + 500;
+    moveLightbox(dx < 0 ? 1 : -1);
+  }
+
   useEffect(() => {
     if (!lightbox) return;
     const move = (event: KeyboardEvent) => {
       if (!["ArrowLeft","ArrowRight"].includes(event.key)) return;
       event.preventDefault();
-      const index = photos.indexOf(lightbox);
-      setLightbox(photos[(index + (event.key === "ArrowRight" ? 1 : -1) + photos.length) % photos.length]);
+      moveLightbox(event.key === "ArrowRight" ? 1 : -1);
     };
     window.addEventListener("keydown", move);
     return () => window.removeEventListener("keydown", move);
-  }, [lightbox, photos]);
+  }, [lightbox, moveLightbox]);
 
   return <main id="content" className="project-detail-page">
     <header className="detail-header">
       <Link className="logo" href={pathFor(lang)}><Image src="/space-buro-logo.png" alt="Space Buro" width={104} height={65} priority /></Link>
       <Link href={`${pathFor(lang)}#projects`}>← {ru ? "Все проекты" : "All projects"}</Link>
-      <div><Link href={projectPath(ru?"en":"ru",project)} hrefLang={ru?"en":"ru"}>{ru?"EN":"RU"}</Link><a href={contact} target="_blank" rel="noreferrer" aria-label="WhatsApp">WA</a></div>
+      <div><Link href={projectPath(ru?"en":"ru",project)} hrefLang={ru?"en":"ru"} aria-label={ru?"English":"Русский"}>{ru?"EN":"RU"}</Link><a href={contact} target="_blank" rel="noreferrer" aria-label="WhatsApp">WA</a></div>
     </header>
     <section className="detail-hero">
       <div className="detail-hero-copy">
@@ -59,7 +86,7 @@ export default function ProjectDetail({ project, lang }: { project: ProjectLocat
         <p className="eyebrow">{project.categories.map(c => categories[lang][c]).join(" · ")}</p>
         <h1>{project.shortTitle[lang]}</h1><p>{project.summary[lang]}</p>
         <span className={`status-badge ${project.status}`}>{status} · {project.year}</span>
-        <a className="button button-primary" href={contact} target="_blank" rel="noreferrer">{ru?"Обсудить похожий проект":"Discuss a similar project"}<span>↗</span></a>
+        <a className="button button-primary" href={contact} target="_blank" rel="noreferrer">{ru?"Обсудить похожий проект":"Discuss a similar project"}<ResponsiveArrow /></a>
       </div>
       <div className="detail-hero-image"><Image src={cover} alt={`${project.shortTitle[lang]} — ${caption(cover)}`} fill sizes="(max-width: 900px) 100vw, 58vw" priority /><small>{caption(cover)}</small></div>
     </section>
@@ -77,17 +104,17 @@ export default function ProjectDetail({ project, lang }: { project: ProjectLocat
     </section>
     <section className="detail-gallery" id="gallery">
       <div className="detail-section-title"><p className="eyebrow">{photos.length} {ru?"фото":"images"}</p><h2>{ru?"Проект в деталях":"Project in detail"}</h2></div>
-      <div className="filter-bar" aria-label={ru?"Этапы проекта":"Project stages"}>
+      <div className="filter-bar" role="group" aria-label={ru?"Этапы проекта":"Project stages"}>
         {primary.length > 0 && <button type="button" aria-pressed={gallery==="primary"} className={gallery==="primary"?"active":""} onClick={()=>{setGallery("primary");setExpanded(false);}}>{primaryLabel} · {primary.length}</button>}
         {before.length > 0 && <button type="button" aria-pressed={gallery==="before"} className={gallery==="before"?"active":""} onClick={()=>{setGallery("before");setExpanded(false);}}>{beforeLabel} · {before.length}</button>}
         {primary.length > 0 && before.length > 0 && <button type="button" aria-pressed={gallery==="all"} className={gallery==="all"?"active":""} onClick={()=>{setGallery("all");setExpanded(false);}}>{ru?"Все фотографии":"All photos"}</button>}
       </div>
-      <div className="detail-gallery-grid">{visiblePhotos.map((src,i)=><button key={src} type="button" className={i===0?"large":""} aria-label={`${ru?"Открыть":"Open"}: ${caption(src)}, ${i+1}`} onClick={()=>setLightbox(src)}><Image src={src} alt={`${project.shortTitle[lang]}, ${project.district} — ${caption(src)}, ${i+1}`} fill sizes="(max-width: 620px) 100vw, 50vw" /><span>{caption(src)} · {i+1}</span></button>)}</div>
-      {photos.length>12 && <button className="expand-button" type="button" aria-expanded={expanded} onClick={()=>setExpanded(!expanded)}>{expanded?(ru?"Свернуть":"Show fewer"):(ru?`Показать все ${photos.length} фото`:`Show all ${photos.length} photos`)}</button>}
+      <div className="detail-gallery-grid" id="project-gallery-photos">{visiblePhotos.map((src,i)=><button key={src} type="button" className={i===0?"large":""} aria-haspopup="dialog" aria-label={`${ru?"Открыть":"Open"}: ${caption(src)}, ${i+1}`} onClick={()=>setLightbox(src)}><Image src={src} alt={`${project.shortTitle[lang]}, ${project.district} — ${caption(src)}, ${i+1}`} fill sizes="(max-width: 620px) 100vw, 50vw" /><span>{caption(src)} · {i+1}</span></button>)}</div>
+      {photos.length>12 && <button className="expand-button" type="button" aria-expanded={expanded} aria-controls="project-gallery-photos" onClick={()=>setExpanded(!expanded)}>{expanded?(ru?"Свернуть":"Show fewer"):(ru?`Показать все ${photos.length} фото`:`Show all ${photos.length} photos`)}</button>}
     </section>
-    <section className="detail-team"><div className="detail-section-title"><p className="eyebrow">{ru?"Команда Space Buro":"Space Buro team"}</p><h2>{ru?"Участники проекта":"Project team"}</h2></div><div>{participants.map(member=><Link href={`${pathFor(lang)}#team-${member.id}`} key={member.id}><div><Image src={member.image} alt={member.name[lang]} fill sizes="160px" /></div><span><strong>{member.name[lang]}</strong><small>{member.role[lang]}</small></span><b>↗</b></Link>)}</div></section>
-    <section className="detail-next"><a className="button button-primary" href={contact} target="_blank" rel="noreferrer">{ru?"Обсудить похожий проект":"Discuss a similar project"}<span>↗</span></a><Link href={projectPath(lang,next)}><span>{ru?"Следующий проект":"Next project"}</span><strong>{next.shortTitle[lang]}</strong><b>→</b></Link></section>
+    <section className="detail-team"><div className="detail-section-title"><p className="eyebrow">{ru?"Команда Space Buro":"Space Buro team"}</p><h2>{ru?"Участники проекта":"Project team"}</h2></div><div>{participants.map(member=><Link href={`${pathFor(lang)}#team-${member.id}`} key={member.id}><div><Image src={member.image} alt={member.name[lang]} fill sizes="160px" /></div><span><strong>{member.name[lang]}</strong><small>{member.role[lang]}</small></span><b><ResponsiveArrow /></b></Link>)}</div></section>
+    <section className="detail-next"><a className="button button-primary" href={contact} target="_blank" rel="noreferrer">{ru?"Обсудить похожий проект":"Discuss a similar project"}<ResponsiveArrow /></a><Link href={projectPath(lang,next)}><span>{ru?"Следующий проект":"Next project"}</span><strong>{next.shortTitle[lang]}</strong><b>→</b></Link></section>
     <a className="floating-contact" href={contact} target="_blank" rel="noreferrer">WhatsApp · {ru?"Обсудить проект":"Discuss a project"}</a>
-    {lightbox && <section ref={dialogRef} className="detail-lightbox" role="dialog" aria-modal="true" aria-label={`${project.shortTitle[lang]} — ${caption(lightbox)}`} onClick={event=>{if(event.target===event.currentTarget)close();}}><button type="button" onClick={close} aria-label={ru?"Закрыть фотографию":"Close photo"}>×</button><Image src={lightbox} alt={`${project.shortTitle[lang]} — ${caption(lightbox)}`} fill sizes="100vw" /><p>{caption(lightbox)} · {photos.indexOf(lightbox)+1} / {photos.length}</p><div className="lightbox-nav"><button type="button" aria-label={ru?"Предыдущее фото":"Previous photo"} onClick={()=>setLightbox(photos[(photos.indexOf(lightbox)-1+photos.length)%photos.length])}>←</button><button type="button" aria-label={ru?"Следующее фото":"Next photo"} onClick={()=>setLightbox(photos[(photos.indexOf(lightbox)+1)%photos.length])}>→</button></div></section>}
+    {lightbox && <section ref={dialogRef} className="detail-lightbox" role="dialog" aria-modal="true" aria-label={`${project.shortTitle[lang]} — ${caption(lightbox)}`} onTouchStart={startSwipe} onTouchEnd={finishSwipe} onTouchCancel={()=>{touchStart.current=null;}} onClick={event=>{if(event.target===event.currentTarget && Date.now() > ignoreBackdropUntil.current)close();}}><button type="button" onClick={close} aria-label={ru?"Закрыть фотографию":"Close photo"}>×</button><Image src={lightbox} alt={`${project.shortTitle[lang]} — ${caption(lightbox)}`} fill sizes="100vw" /><p aria-live="polite" aria-atomic="true">{caption(lightbox)} · {photos.indexOf(lightbox)+1} / {photos.length}</p>{photos.length > 1 && <div className="lightbox-nav"><button type="button" aria-label={ru?"Предыдущее фото":"Previous photo"} onClick={()=>moveLightbox(-1)}>←</button><button type="button" aria-label={ru?"Следующее фото":"Next photo"} onClick={()=>moveLightbox(1)}>→</button></div>}</section>}
   </main>;
 }

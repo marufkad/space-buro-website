@@ -1,0 +1,31 @@
+/* The project page uses the same portrait accordion, in its denser case-study grid. */
+.case-study .case-project-team {
+  padding: var(--case-space) var(--case-gutter);
+}
+
+.case-study .case-project-team .lab-team-heading {
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(24px, 4vw, 64px);
+  margin-bottom: 26px;
+}
+
+.case-study .case-project-team .lab-team-kicker { margin: 5px 0 0; }
+.case-study .case-project-team .lab-team-heading h2 { max-width: 20ch; font-size: clamp(30px, 3vw, 44px); line-height: 1.17; letter-spacing: -.04em; }
+.case-study .case-project-team .lab-team-hint { margin-top: 16px; padding-top: 10px; }
+.case-study .case-project-team .lab-team-portraits { height: clamp(380px, 32vw, 430px); }
+.case-study .case-project-team .lab-team-portrait-caption { left: 24px; bottom: 26px; gap: 8px; }
+.case-study .case-project-team .lab-team-portrait-caption strong { font-size: clamp(27px, 3vw, 42px); }
+.case-study .case-project-team :is(a, button):focus-visible { outline-color: var(--focus-inverse); }
+
+@media (max-width: 900px) {
+  .case-study .case-project-team .lab-team-heading { grid-template-columns: 1fr; gap: 14px; }
+  .case-study .case-project-team .lab-team-kicker { margin: 0; }
+}
+
+@media (max-width: 700px) {
+  .case-study .case-project-team .lab-team-heading { margin-bottom: 22px; }
+  .case-study .case-project-team .lab-team-hint { margin-top: 12px; }
+  .case-study .case-project-team .lab-team-portraits { height: clamp(310px, 85vw, 380px); }
+  .case-study .case-project-team .lab-team-portrait-caption { left: 16px; bottom: 20px; }
+  .case-study .case-project-team .lab-team-portrait-caption strong { font-size: clamp(23px, 6.3vw, 36px); }
+}

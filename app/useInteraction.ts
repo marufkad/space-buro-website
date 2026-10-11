@@ -6,7 +6,10 @@ export function useVisible<T extends HTMLElement>(margin = "0px", once = false) 
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     if (!ref.current) return;
-    const observer = new IntersectionObserver(([entry]) => setVisible(current => once ? current || entry.isIntersecting : entry.isIntersecting), { rootMargin: margin });
+    const observer = new IntersectionObserver(([entry]) => {
+      setVisible(current => once ? current || entry.isIntersecting : entry.isIntersecting);
+      if (once && entry.isIntersecting) observer.disconnect();
+    }, { rootMargin: margin });
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, [margin, once]);
@@ -31,9 +34,22 @@ export function useDialog(open: boolean, close: () => void) {
     const element = ref.current;
     const previousFocus = document.activeElement as HTMLElement | null;
     const overflow = document.body.style.overflow;
-    const focusable = () => Array.from(element.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),input,select,textarea,[tabindex="0"]')).filter(node => node.getClientRects().length);
+    const focusable = () => Array.from(element.querySelectorAll<HTMLElement>('a[href],button,input,select,textarea,[tabindex],[contenteditable="true"]')).filter(node => node.tabIndex >= 0 && !node.matches(':disabled, [type="hidden"]') && !node.closest('[inert]') && node.getClientRects().length);
+    // A modal nested inside <main> must also hide its sibling sections from
+    // assistive technology; aria-modal alone does not disable those controls.
+    const background: Array<[HTMLElement, boolean]> = [];
+    let branch: HTMLElement = element;
+    while (branch.parentElement && branch !== document.body) {
+      for (const sibling of Array.from(branch.parentElement.children)) {
+        if (sibling instanceof HTMLElement && sibling !== branch) {
+          background.push([sibling, sibling.inert]);
+          sibling.inert = true;
+        }
+      }
+      branch = branch.parentElement;
+    }
     document.body.style.overflow = "hidden";
-    focusable()[0]?.focus();
+    focusable()[0]?.focus({ preventScroll: true });
     const keydown = (event: KeyboardEvent) => {
       if (event.key === "Escape") { event.preventDefault(); close(); }
       if (event.key !== "Tab") return;
@@ -43,7 +59,13 @@ export function useDialog(open: boolean, close: () => void) {
       else if (!event.shiftKey && (document.activeElement === last || !element.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
     };
     document.addEventListener("keydown", keydown);
-    return () => { document.body.style.overflow = overflow; document.removeEventListener("keydown", keydown); previousFocus?.focus(); };
+    return () => {
+      document.body.style.overflow = overflow;
+      document.removeEventListener("keydown", keydown);
+      background.forEach(([node, wasInert]) => { node.inert = wasInert; });
+      // Keep a chosen team anchor or the user's existing scroll position intact.
+      if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
+    };
   }, [open, close]);
   return ref;
 }

@@ -1,0 +1,1414 @@
+{
+  "fujairah-trade-centre": {
+    "hero": {
+      "src": "/media/projects/fujairah-office/gallery/01-dsc-9137.webp",
+      "width": 2000,
+      "height": 1333,
+      "alt": {
+        "ru": "Зона встреч с диваном, креслами и деревянными стеновыми панелями.",
+        "en": "Meeting area with a sofa, armchairs and timber wall panels."
+      },
+      "group": "lounge"
+    },
+    "photos": [
+      {
+        "src": "/media/project-fujairah-01.webp",
+        "width": 1800,
+        "height": 1199,
+        "alt": {
+          "ru": "Зона ожидания с тёмным диваном рядом с рабочими местами.",
+          "en": "Waiting area with a dark sofa beside the workstations."
+        },
+        "group": "lounge"
+      },
+      {
+        "src": "/media/project-fujairah-02.webp",
+        "width": 1800,
+        "height": 1201,
+        "alt": {
+          "ru": "Рабочие столы и стеклянная перегородка в светлом офисе.",
+          "en": "Desks and a glazed partition in the light office interior."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/project-fujairah-03.webp",
+        "width": 1800,
+        "height": 1201,
+        "alt": {
+          "ru": "Офисная кухня с открытыми полками и белыми столами.",
+          "en": "Office kitchenette with open shelves and white tables."
+        },
+        "group": "kitchen"
+      },
+      {
+        "src": "/media/project-fujairah-04.webp",
+        "width": 1800,
+        "height": 1201,
+        "alt": {
+          "ru": "Кабинет с рабочим столом и мягкой мебелью у панорамных окон.",
+          "en": "Office with a desk and lounge seating beside panoramic windows."
+        },
+        "group": "lounge"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/01-dsc-9137.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Зона встреч с диваном, креслами и деревянными стеновыми панелями.",
+          "en": "Meeting area with a sofa, armchairs and timber wall panels."
+        },
+        "group": "lounge"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/02-dsc-9158.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Рабочий стол на фоне стеновых панелей и стеклянной перегородки.",
+          "en": "Desk in front of wall panels and a glazed partition."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/03-dsc-9163.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Стеновые панели, скрытая дверь и геометрические потолочные светильники.",
+          "en": "Wall panels, a concealed door and geometric ceiling lights."
+        },
+        "group": "details"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/04-dsc-9234.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Кухня и обеденная зона с белыми столами и деревянными шкафами.",
+          "en": "Kitchenette and dining area with white tables and timber cabinets."
+        },
+        "group": "kitchen"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/05-dsc-9283.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Светлый санузел с подвесной тумбой, зеркальным шкафом и унитазом.",
+          "en": "Light washroom with a floating vanity, mirrored cabinet and toilet."
+        },
+        "group": "bathrooms"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/06-dsc-9296.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Рабочие места вдоль окон с белыми столами и офисными креслами.",
+          "en": "Workstations along the windows with white desks and office chairs."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/07-dsc-9303.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Ряд рабочих столов у окон и встроенные шкафы у стены.",
+          "en": "Row of desks beside the windows and fitted storage along the wall."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/08-dsc-9317.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Открытая рабочая зона со стеклянной перегородкой и деревянными колоннами.",
+          "en": "Open workspace with a glazed partition and timber-clad columns."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/09-dsc-9391.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Вид через проход с деревянными рейками на рабочую зону.",
+          "en": "View through a timber-slatted passage towards the workspace."
+        },
+        "group": "details"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/10-dsc-9408.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Мягкая мебель у стеновой панели рядом с открытой рабочей зоной.",
+          "en": "Lounge seating against wall panelling beside the open workspace."
+        },
+        "group": "lounge"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/11-dsc-9460.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Белые рабочие столы с перегородками и встроенными розетками.",
+          "en": "White desks with dividers and integrated power outlets."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/fujairah-office/gallery/12-dsc-9557.webp",
+        "width": 2000,
+        "height": 1333,
+        "alt": {
+          "ru": "Офисный проход с вертикальными рейками и видом на окна.",
+          "en": "Office passage with vertical slats and a view towards the windows."
+        },
+        "group": "details"
+      },
+      {
+        "src": "/media/projects/fujairah-office/before/01-before.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Офис до ремонта: пустая комната с окнами и плиточным полом.",
+          "en": "Office before renovation: empty room with windows and tiled flooring."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/fujairah-office/before/02-before.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Офис до ремонта: существующие потолки, перегородки и открытое пространство.",
+          "en": "Office before renovation: existing ceilings, partitions and open space."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/fujairah-office/before/03-before.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Офис до ремонта: прежняя отделка стен и потолка в отдельной комнате.",
+          "en": "Office before renovation: previous wall and ceiling finishes in a separate room."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/fujairah-office/before/04-before.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Офис до ремонта: помещение с окнами и существующим потолком.",
+          "en": "Office before renovation: room with windows and the existing ceiling."
+        },
+        "group": "before"
+      }
+    ],
+    "groups": [
+      {
+        "id": "lounge",
+        "label": {
+          "ru": "Зоны встреч",
+          "en": "Lounge areas"
+        }
+      },
+      {
+        "id": "workspaces",
+        "label": {
+          "ru": "Рабочие места",
+          "en": "Workspaces"
+        }
+      },
+      {
+        "id": "kitchen",
+        "label": {
+          "ru": "Кухня",
+          "en": "Kitchen"
+        }
+      },
+      {
+        "id": "details",
+        "label": {
+          "ru": "Детали",
+          "en": "Details"
+        }
+      },
+      {
+        "id": "bathrooms",
+        "label": {
+          "ru": "Санузлы",
+          "en": "Bathrooms"
+        }
+      },
+      {
+        "id": "before",
+        "label": {
+          "ru": "До ремонта",
+          "en": "Before renovation"
+        }
+      }
+    ]
+  },
+  "seventh-heaven-al-barari": {
+    "hero": {
+      "src": "/media/projects/seventh-heaven/gallery/01-finished.webp",
+      "width": 1500,
+      "height": 2000,
+      "alt": {
+        "ru": "Гостиная со светлым диваном и тёмным витринным шкафом у окна.",
+        "en": "Living room with a light sofa and a dark display cabinet by the window."
+      },
+      "group": "living"
+    },
+    "photos": [
+      {
+        "src": "/media/projects/seventh-heaven/gallery/01-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Гостиная со светлым диваном и тёмным витринным шкафом у окна.",
+          "en": "Living room with a light sofa and a dark display cabinet by the window."
+        },
+        "group": "living"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/02-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Угловой диван и журнальный стол рядом с витринным шкафом.",
+          "en": "Corner sofa and coffee table beside a display cabinet."
+        },
+        "group": "living"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/03-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Тёмный витринный шкаф со стеклянными дверями и подсветкой полок.",
+          "en": "Dark display cabinet with glass doors and illuminated shelves."
+        },
+        "group": "details"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/04-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "ТВ-зона с деревянными панелями и подвесной тумбой напротив дивана.",
+          "en": "TV wall with timber panels and a floating unit opposite the sofa."
+        },
+        "group": "living"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/05-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Гостиная с диваном, креслом и ТВ-панелью на тёмной стене.",
+          "en": "Living room with a sofa, armchair and timber TV panel on a dark wall."
+        },
+        "group": "living"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/06-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Деревянная ТВ-панель и длинная тёмная тумба в гостиной.",
+          "en": "Timber TV panel and a long dark unit in the living room."
+        },
+        "group": "details"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/07-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Спальня с деревянным изголовьем, прикроватными тумбами и ковром.",
+          "en": "Bedroom with a timber headboard, bedside units and a rug."
+        },
+        "group": "bedrooms"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/08-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Туалетный столик с зеркалом, подсветкой и светлым пуфом.",
+          "en": "Dressing table with a mirror, lighting and a light upholstered stool."
+        },
+        "group": "bedrooms"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/09-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Светлая спальня со стеновыми панелями и встроенной прикроватной мебелью.",
+          "en": "Light bedroom with wall panels and fitted bedside furniture."
+        },
+        "group": "bedrooms"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/gallery/10-finished.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Витринный шкаф со стеклянными дверями на границе гостиной.",
+          "en": "Glass-fronted display cabinet at the edge of the living area."
+        },
+        "group": "details"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/before/01-before.webp",
+        "width": 2000,
+        "height": 1500,
+        "alt": {
+          "ru": "Комната до установки мебели: пустая стена и деревянный пол.",
+          "en": "Room before furniture installation: empty wall and timber flooring."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/before/02-before.webp",
+        "width": 2000,
+        "height": 1500,
+        "alt": {
+          "ru": "Пустая комната с выходом на террасу до начала мебельных работ.",
+          "en": "Empty room opening onto the terrace before furniture works."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/before/03-before.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Помещение у стеклянных дверей до установки мебели.",
+          "en": "Area beside the glazed doors before furniture installation."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/seventh-heaven/before/04-before.webp",
+        "width": 1500,
+        "height": 2000,
+        "alt": {
+          "ru": "Образцы древесных и однотонных материалов для подбора мебели.",
+          "en": "Timber-look and solid-colour samples for furniture selection."
+        },
+        "group": "before"
+      }
+    ],
+    "groups": [
+      {
+        "id": "living",
+        "label": {
+          "ru": "Гостиная",
+          "en": "Living"
+        }
+      },
+      {
+        "id": "details",
+        "label": {
+          "ru": "Детали",
+          "en": "Details"
+        }
+      },
+      {
+        "id": "bedrooms",
+        "label": {
+          "ru": "Спальни",
+          "en": "Bedrooms"
+        }
+      },
+      {
+        "id": "before",
+        "label": {
+          "ru": "До работ и материалы",
+          "en": "Before and materials"
+        }
+      }
+    ]
+  },
+  "al-furjan-villa": {
+    "hero": {
+      "src": "/media/projects/al-furjan-villa/gallery/07.webp",
+      "width": 1920,
+      "height": 1280,
+      "group": "living",
+      "alt": {
+        "ru": "Обеденный стол у панорамных окон с видом на гостиную.",
+        "en": "Dining table beside floor-to-ceiling windows, looking towards the living room."
+      }
+    },
+    "photos": [
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/03.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "living",
+        "alt": {
+          "ru": "Гостиная со светлым угловым диваном, ТВ-панелью с подсветкой и растениями у окна.",
+          "en": "Living room with a light corner sofa, backlit TV panel and plants by the window."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/06.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "kitchen",
+        "alt": {
+          "ru": "Кухонный остров с мойкой напротив встроенных шкафов и техники.",
+          "en": "Kitchen island with a sink opposite built-in cabinets and appliances."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/01.webp",
+        "width": 1920,
+        "height": 1268,
+        "group": "bedrooms",
+        "alt": {
+          "ru": "Спальня с подсветкой под кроватью, подвесными светильниками и креслом у окна.",
+          "en": "Bedroom with lighting beneath the bed, pendant lights and an armchair by the window."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/15.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "details",
+        "alt": {
+          "ru": "Белая реечная перегородка у лестницы и растение в напольном кашпо.",
+          "en": "White slatted divider beside the staircase and a plant in a floor pot."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/20.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "bathrooms",
+        "alt": {
+          "ru": "Санузел с двумя накладными раковинами, зеркальными шкафами и душевой за стеклом.",
+          "en": "Bathroom with two countertop basins, mirrored cabinets and a glass-enclosed shower."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/16.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "outdoor",
+        "alt": {
+          "ru": "Бассейн вдоль террасы виллы и зона отдыха в глубине двора.",
+          "en": "Pool alongside the villa terrace and a seating area at the far end of the garden."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/07.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "living",
+        "alt": {
+          "ru": "Обеденный стол у панорамных окон с видом на гостиную.",
+          "en": "Dining table beside floor-to-ceiling windows, looking towards the living room."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/04.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "kitchen",
+        "alt": {
+          "ru": "Кухня с островом, тремя барными стульями и высокими шкафами.",
+          "en": "Kitchen with an island, three bar stools and full-height cabinets."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/05.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "living",
+        "alt": {
+          "ru": "Вид от кухонного острова на обеденный стол и гостиную.",
+          "en": "View from the kitchen island towards the dining table and living room."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/08.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "kitchen",
+        "alt": {
+          "ru": "Кухня с двумя рядами шкафов и окном над рабочей поверхностью.",
+          "en": "Kitchen with two rows of cabinets and a window above the worktop."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/09.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "living",
+        "alt": {
+          "ru": "Гостиная и столовая с длинными шторами и потолочной подсветкой.",
+          "en": "Living and dining areas with full-length curtains and ceiling lighting."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/02.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "bedrooms",
+        "alt": {
+          "ru": "ТВ-зона спальни на фоне стеновых панелей и длинных штор.",
+          "en": "Bedroom TV wall with wall panels and full-length curtains."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/10.webp",
+        "width": 1920,
+        "height": 1255,
+        "group": "bedrooms",
+        "alt": {
+          "ru": "Кровать с подсветкой и подвесные тумбы на фоне стеновых панелей.",
+          "en": "Backlit bed and floating bedside units against wall panels."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/11.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "living",
+        "alt": {
+          "ru": "Комната отдыха с диваном, ТВ-зоной и небольшим встроенным шкафом с мойкой.",
+          "en": "Lounge with a sofa, TV area and a small built-in cabinet with a sink."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/12.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "living",
+        "alt": {
+          "ru": "ТВ-зона с подсветкой и встроенный шкаф с мойкой и мини-холодильником.",
+          "en": "Backlit TV area and a built-in cabinet with a sink and mini fridge."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/13.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "details",
+        "alt": {
+          "ru": "Лестница с вертикальными стеновыми рейками и линейной подсветкой.",
+          "en": "Staircase with vertical wall slats and linear lighting."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/14.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "details",
+        "alt": {
+          "ru": "Лестничный марш с панелями и открытые полки в соседнем проходе.",
+          "en": "Stair flight with wall panels and open shelving in the adjoining passage."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/17.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "outdoor",
+        "alt": {
+          "ru": "Фасад виллы, бассейн с шезлонгами и зелёный двор.",
+          "en": "Villa facade, pool with loungers and a landscaped garden."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/18.webp",
+        "width": 1920,
+        "height": 1239,
+        "group": "bedrooms",
+        "alt": {
+          "ru": "Светлая спальня с подвесными светильниками и шторами у стеклянной двери.",
+          "en": "Light bedroom with pendant lights and curtains beside a glazed door."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/19.webp",
+        "width": 1920,
+        "height": 1266,
+        "group": "bedrooms",
+        "alt": {
+          "ru": "ТВ-зона спальни со столом у окна и зеркалом возле двери.",
+          "en": "Bedroom TV area with a desk by the window and a mirror beside the door."
+        }
+      },
+      {
+        "src": "/media/projects/al-furjan-villa/gallery/21.webp",
+        "width": 1920,
+        "height": 1280,
+        "group": "bathrooms",
+        "alt": {
+          "ru": "Санузел с подвесной тумбой, накладной раковиной и ванной за стеклянной перегородкой.",
+          "en": "Bathroom with a wall-mounted vanity, countertop basin and a bath behind a glass screen."
+        }
+      }
+    ],
+    "groups": [
+      {
+        "id": "living",
+        "label": {
+          "ru": "Гостиная",
+          "en": "Living"
+        }
+      },
+      {
+        "id": "kitchen",
+        "label": {
+          "ru": "Кухня",
+          "en": "Kitchen"
+        }
+      },
+      {
+        "id": "bedrooms",
+        "label": {
+          "ru": "Спальни",
+          "en": "Bedrooms"
+        }
+      },
+      {
+        "id": "details",
+        "label": {
+          "ru": "Детали",
+          "en": "Details"
+        }
+      },
+      {
+        "id": "bathrooms",
+        "label": {
+          "ru": "Санузлы",
+          "en": "Bathrooms"
+        }
+      },
+      {
+        "id": "outdoor",
+        "label": {
+          "ru": "Двор",
+          "en": "Outdoors"
+        }
+      }
+    ]
+  },
+  "al-bateen-residences-jbr": {
+    "hero": {
+      "src": "/media/projects/al-bateen-residence/gallery/01.webp",
+      "width": 1920,
+      "height": 1536,
+      "alt": {
+        "ru": "Визуализация кухни с островом, деревянными фасадами и видом на гостиную.",
+        "en": "Kitchen visualisation with an island, timber fronts and a view towards the living room."
+      },
+      "group": "design-kitchen"
+    },
+    "photos": [
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/01.webp",
+        "width": 1920,
+        "height": 1536,
+        "alt": {
+          "ru": "Визуализация кухни с островом, деревянными фасадами и видом на гостиную.",
+          "en": "Kitchen visualisation with an island, timber fronts and a view towards the living room."
+        },
+        "group": "design-kitchen"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/02.webp",
+        "width": 1920,
+        "height": 1536,
+        "alt": {
+          "ru": "Визуализация кухонного острова с барными стульями и подвесным светильником.",
+          "en": "Visualisation of the kitchen island with bar stools and a pendant light."
+        },
+        "group": "design-kitchen"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/03.webp",
+        "width": 1920,
+        "height": 1536,
+        "alt": {
+          "ru": "Визуализация кухни: мойка, высокие шкафы и подсветка острова.",
+          "en": "Kitchen visualisation showing the sink, tall cabinets and illuminated island."
+        },
+        "group": "design-kitchen"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/04.webp",
+        "width": 1920,
+        "height": 1536,
+        "alt": {
+          "ru": "Визуализация столовой и гостиной с обеденным столом и ТВ-зоной.",
+          "en": "Visualisation of the dining and living areas with a dining table and TV wall."
+        },
+        "group": "design-living"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/05.webp",
+        "width": 1920,
+        "height": 1536,
+        "alt": {
+          "ru": "Визуализация обеденной зоны рядом с кухонным островом.",
+          "en": "Visualisation of the dining area beside the kitchen island."
+        },
+        "group": "design-living"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/06.webp",
+        "width": 1920,
+        "height": 1536,
+        "alt": {
+          "ru": "Визуализация гостиной со светлым диваном и столовой на заднем плане.",
+          "en": "Living room visualisation with a light sofa and the dining area behind it."
+        },
+        "group": "design-living"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/07.webp",
+        "width": 1920,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация прохода с деревянными стеновыми панелями и открытыми полками.",
+          "en": "Passage visualisation with timber wall panels and open shelving."
+        },
+        "group": "design-details"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/08.webp",
+        "width": 1920,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация коридора со скруглённой деревянной облицовкой.",
+          "en": "Corridor visualisation with curved timber cladding."
+        },
+        "group": "design-details"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/09.webp",
+        "width": 1920,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация кабинета с двумя рабочими местами и диваном у окна.",
+          "en": "Study visualisation with two workstations and a sofa beside the window."
+        },
+        "group": "design-office"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/10.webp",
+        "width": 1920,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация кабинета с диваном и геометрической стеклянной перегородкой.",
+          "en": "Study visualisation with a sofa and a geometric glazed partition."
+        },
+        "group": "design-office"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/11.webp",
+        "width": 1920,
+        "height": 1036,
+        "alt": {
+          "ru": "Визуализация санузла с двумя зеркалами, подвесной тумбой и душевой.",
+          "en": "Bathroom visualisation with two mirrors, a floating vanity and a shower."
+        },
+        "group": "design-bathrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/12.webp",
+        "width": 1343,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация светлого санузла с душевой и подвесной мебелью.",
+          "en": "Visualisation of a light bathroom with a shower and wall-mounted furniture."
+        },
+        "group": "design-bathrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/13.webp",
+        "width": 1400,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация душевой зоны с металлической сантехникой и стеклянной перегородкой.",
+          "en": "Shower area visualisation with metal fittings and a glass screen."
+        },
+        "group": "design-bathrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/14.webp",
+        "width": 1920,
+        "height": 1536,
+        "alt": {
+          "ru": "Визуализация санузла с деревянным шкафом, зеркалом и душевой.",
+          "en": "Bathroom visualisation with a timber cabinet, mirror and shower."
+        },
+        "group": "design-bathrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/15.webp",
+        "width": 1343,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация вытянутого санузла с встроенной мебелью и душевой зоной.",
+          "en": "Visualisation of a long bathroom with fitted furniture and a shower area."
+        },
+        "group": "design-bathrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/16.webp",
+        "width": 1493,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация санузла со стиральной и сушильной машинами в мебельной нише.",
+          "en": "Bathroom visualisation with a washer and dryer in a fitted furniture niche."
+        },
+        "group": "design-bathrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/17.webp",
+        "width": 1920,
+        "height": 1493,
+        "alt": {
+          "ru": "Визуализация спальни с диваном у кровати и длинными шторами.",
+          "en": "Bedroom visualisation with a sofa beside the bed and full-length curtains."
+        },
+        "group": "design-bedrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/18.webp",
+        "width": 1728,
+        "height": 1920,
+        "alt": {
+          "ru": "Визуализация спальни с рабочим столиком и встроенными шкафами.",
+          "en": "Bedroom visualisation with a small desk and fitted wardrobes."
+        },
+        "group": "design-bedrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/19.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Визуализация спальни с деревянной стеновой панелью за кроватью.",
+          "en": "Bedroom visualisation with timber wall panelling behind the bed."
+        },
+        "group": "design-bedrooms"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/20.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Квартира до ремонта: проём между комнатами и строительные материалы.",
+          "en": "Apartment before renovation: opening between rooms and construction materials."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/21.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Квартира до ремонта: комната у окна со снятой мебелью и материалами.",
+          "en": "Apartment before renovation: room beside the window with removed furniture and materials."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/22.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Квартира до ремонта: прежние обои, стены и потолочные короба.",
+          "en": "Apartment before renovation: previous wallpaper, walls and ceiling bulkheads."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/23.webp",
+        "width": 1440,
+        "height": 1920,
+        "alt": {
+          "ru": "Квартира до ремонта: существующий коридор с потолочной нишей.",
+          "en": "Apartment before renovation: existing corridor with a recessed ceiling."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/24.webp",
+        "width": 1440,
+        "height": 1920,
+        "alt": {
+          "ru": "Квартира до ремонта: узкая комната с окнами и прежней отделкой.",
+          "en": "Apartment before renovation: narrow room with windows and previous finishes."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/25.webp",
+        "width": 1440,
+        "height": 1920,
+        "alt": {
+          "ru": "Санузел до ремонта: существующая плитка, зеркало и стеклянная душевая.",
+          "en": "Bathroom before renovation: existing tiles, mirror and glazed shower."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/26.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Санузел до ремонта: существующий унитаз, зеркало и сантехнические выводы.",
+          "en": "Bathroom before renovation: existing toilet, mirror and plumbing outlets."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/27.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Кухня на этапе демонтажа: снятые шкафы и открытое пространство под потолком.",
+          "en": "Kitchen during strip-out: removed cabinets and an exposed ceiling area."
+        },
+        "group": "before"
+      },
+      {
+        "src": "/media/projects/al-bateen-residence/gallery/28.webp",
+        "width": 1440,
+        "height": 1920,
+        "alt": {
+          "ru": "Вид на кухню после демонтажа прежней мебели и части потолка.",
+          "en": "View of the kitchen after removal of the previous furniture and part of the ceiling."
+        },
+        "group": "before"
+      }
+    ],
+    "groups": [
+      {
+        "id": "design-kitchen",
+        "label": {
+          "ru": "Кухня · дизайн",
+          "en": "Kitchen · design"
+        }
+      },
+      {
+        "id": "design-living",
+        "label": {
+          "ru": "Гостиная · дизайн",
+          "en": "Living · design"
+        }
+      },
+      {
+        "id": "design-details",
+        "label": {
+          "ru": "Детали · дизайн",
+          "en": "Details · design"
+        }
+      },
+      {
+        "id": "design-office",
+        "label": {
+          "ru": "Кабинет · дизайн",
+          "en": "Study · design"
+        }
+      },
+      {
+        "id": "design-bathrooms",
+        "label": {
+          "ru": "Санузлы · дизайн",
+          "en": "Bathrooms · design"
+        }
+      },
+      {
+        "id": "design-bedrooms",
+        "label": {
+          "ru": "Спальни · дизайн",
+          "en": "Bedrooms · design"
+        }
+      },
+      {
+        "id": "before",
+        "label": {
+          "ru": "До ремонта",
+          "en": "Before renovation"
+        }
+      }
+    ]
+  },
+  "sadaf-8-jbr": {
+    "hero": {
+      "src": "/media/projects/sadaf-8-jbr/gallery/01.webp",
+      "width": 1920,
+      "height": 1440,
+      "alt": {
+        "ru": "Ход работ: подготовленные стены, сантехнические выводы и открытые коммуникации.",
+        "en": "Work in progress: prepared walls, plumbing outlets and exposed services."
+      },
+      "group": "progress"
+    },
+    "photos": [
+      {
+        "src": "/media/projects/sadaf-8-jbr/gallery/01.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Ход работ: подготовленные стены, сантехнические выводы и открытые коммуникации.",
+          "en": "Work in progress: prepared walls, plumbing outlets and exposed services."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/sadaf-8-jbr/gallery/02.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Ход работ: стена кухонной зоны с проводкой и сантехническими выводами.",
+          "en": "Work in progress: kitchen wall with wiring and plumbing outlets."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/sadaf-8-jbr/gallery/03.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Ход работ: помещение с подготовленными стенами и строительными подмостями.",
+          "en": "Work in progress: room with prepared walls and a work platform."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/sadaf-8-jbr/gallery/04.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Ход работ: проход в квартиру и открытые потолочные коммуникации.",
+          "en": "Work in progress: passage through the apartment with exposed ceiling services."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/sadaf-8-jbr/gallery/05.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Ход работ: подготовка комнаты и материалы для дальнейшей отделки.",
+          "en": "Work in progress: room preparation and materials for the next finishing stage."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/sadaf-8-jbr/gallery/06.webp",
+        "width": 1920,
+        "height": 1440,
+        "alt": {
+          "ru": "Ход работ: небольшое помещение с подготовленными стенами и открытым проёмом.",
+          "en": "Work in progress: small room with prepared walls and an open doorway."
+        },
+        "group": "progress"
+      }
+    ],
+    "groups": [
+      {
+        "id": "progress",
+        "label": {
+          "ru": "Ход работ",
+          "en": "Work in progress"
+        }
+      }
+    ]
+  },
+  "elemental-day-surgery-clinic": {
+    "hero": {
+      "src": "/media/projects/elemental-day-surgery-clinic/gallery/01.webp",
+      "width": 1920,
+      "height": 1435,
+      "alt": {
+        "ru": "Архитектурная визуализация клиники с золотистой облицовкой кровли.",
+        "en": "Architectural visualisation of the clinic with gold-tone roof cladding."
+      },
+      "group": "design"
+    },
+    "photos": [
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/01.webp",
+        "width": 1920,
+        "height": 1435,
+        "alt": {
+          "ru": "Архитектурная визуализация клиники с золотистой облицовкой кровли.",
+          "en": "Architectural visualisation of the clinic with gold-tone roof cladding."
+        },
+        "group": "design"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/02.webp",
+        "width": 1920,
+        "height": 1420,
+        "alt": {
+          "ru": "Вечерняя визуализация входной зоны клиники и подсветки фасада.",
+          "en": "Evening visualisation of the clinic entrance and facade lighting."
+        },
+        "group": "design"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/03.webp",
+        "width": 1920,
+        "height": 1067,
+        "alt": {
+          "ru": "Визуализация главного фасада клиники с вывеской Elemental.",
+          "en": "Visualisation of the clinic main facade with Elemental signage."
+        },
+        "group": "design"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/04.webp",
+        "width": 1920,
+        "height": 1281,
+        "alt": {
+          "ru": "Ночная визуализация клиники со стороны улицы.",
+          "en": "Night-time visualisation of the clinic viewed from the street."
+        },
+        "group": "design"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/05.webp",
+        "width": 1280,
+        "height": 720,
+        "alt": {
+          "ru": "Визуализация конструкции кровли клиники с открытым металлокаркасом.",
+          "en": "Visualisation of the clinic roof structure with its metal framework exposed."
+        },
+        "group": "design"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/06.webp",
+        "width": 1280,
+        "height": 720,
+        "alt": {
+          "ru": "Визуализация металлокаркаса кровли клиники с видом сверху.",
+          "en": "Top-view visualisation of the clinic roof metal framework."
+        },
+        "group": "design"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/07.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Монтаж металлокаркаса кровли: стойки и верхние балки на площадке.",
+          "en": "Roof framework installation: columns and overhead beams on site."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/08.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Металлокаркас вдоль края кровли на этапе монтажа.",
+          "en": "Metal framework along the roof edge during installation."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/09.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Кровля в процессе работ: металлические стойки и площадка у лестницы.",
+          "en": "Roof work in progress: metal columns and the area beside the steps."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/10.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Общий вид смонтированных стоек и балок металлокаркаса.",
+          "en": "Overall view of the installed metal-frame columns and beams."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/11.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Металлические фермы кровли и центральный проход на площадке.",
+          "en": "Roof trusses and the central passage through the site."
+        },
+        "group": "progress"
+      },
+      {
+        "src": "/media/projects/elemental-day-surgery-clinic/gallery/12.webp",
+        "width": 960,
+        "height": 1280,
+        "alt": {
+          "ru": "Монтаж кровли: верхние балки, стойки и существующее здание.",
+          "en": "Roof installation: overhead beams, columns and the existing building."
+        },
+        "group": "progress"
+      }
+    ],
+    "groups": [
+      {
+        "id": "design",
+        "label": {
+          "ru": "Визуализации",
+          "en": "Visualisations"
+        }
+      },
+      {
+        "id": "progress",
+        "label": {
+          "ru": "Ход работ",
+          "en": "Work in progress"
+        }
+      }
+    ]
+  },
+  "office-vostok-real-estate": {
+    "hero": {
+      "src": "/media/projects/office-vostok-real-estate/gallery/01.webp",
+      "width": 1920,
+      "height": 1280,
+      "alt": {
+        "ru": "Ресепшен Vostok Real Estate с подсвеченным логотипом и деревянными панелями.",
+        "en": "Vostok Real Estate reception with an illuminated logo and timber wall panels."
+      },
+      "group": "reception"
+    },
+    "photos": [
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/01.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Ресепшен Vostok Real Estate с подсвеченным логотипом и деревянными панелями.",
+          "en": "Vostok Real Estate reception with an illuminated logo and timber wall panels."
+        },
+        "group": "reception"
+      },
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/02.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Переговорная с большим столом, ТВ-панелью и открытыми полками.",
+          "en": "Meeting room with a large table, TV wall and open shelving."
+        },
+        "group": "meeting"
+      },
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/03.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Кабинет руководителя с рабочим столом у окна и встроенными шкафами.",
+          "en": "Manager office with a desk by the window and fitted cabinets."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/04.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Общая рабочая зона с диваном, столами и картой на стене.",
+          "en": "Shared workspace with a sofa, desks and a wall map."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/05.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Мини-кухня с мойкой, встроенной микроволновой печью и деревянными шкафами.",
+          "en": "Kitchenette with a sink, built-in microwave and timber cabinets."
+        },
+        "group": "kitchen"
+      },
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/06.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Рабочие места и зона ожидания на фоне деревянных стеновых панелей.",
+          "en": "Workstations and waiting area against timber wall panelling."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/07.webp",
+        "width": 1920,
+        "height": 1280,
+        "alt": {
+          "ru": "Офисные столы с мониторами у стеклянной перегородки.",
+          "en": "Office desks with monitors beside a glazed partition."
+        },
+        "group": "workspaces"
+      },
+      {
+        "src": "/media/projects/office-vostok-real-estate/gallery/08.webp",
+        "width": 1313,
+        "height": 1920,
+        "alt": {
+          "ru": "Встроенные шкафы и узкий проход рядом с мини-кухней.",
+          "en": "Fitted cabinets and a narrow passage beside the kitchenette."
+        },
+        "group": "kitchen"
+      }
+    ],
+    "groups": [
+      {
+        "id": "reception",
+        "label": {
+          "ru": "Ресепшен",
+          "en": "Reception"
+        }
+      },
+      {
+        "id": "meeting",
+        "label": {
+          "ru": "Переговорная",
+          "en": "Meeting room"
+        }
+      },
+      {
+        "id": "workspaces",
+        "label": {
+          "ru": "Рабочие места",
+          "en": "Workspaces"
+        }
+      },
+      {
+        "id": "kitchen",
+        "label": {
+          "ru": "Кухня",
+          "en": "Kitchen"
+        }
+      }
+    ]
+  }
+}
