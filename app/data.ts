@@ -367,7 +367,7 @@ const rawProjectLocations: ProjectLocation[] = [
     coverImages: alBateenMainImages,
     images: alBateenMainImages,
     beforeImages: alBateenBeforeImages,
-    teamIds: ["maruf", "quvvat", "serdar"],
+    teamIds: ["maruf", "georgiy", "serdar", "quvvat", "aygul"],
     scope: [
       { ru: "Дизайн, документация и визуализация", en: "Design, documentation and visualisation" },
       { ru: "Согласования и сертификация", en: "Approvals and certifications" },

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { projectLocations, team, type Lang, type ProjectLocation } from "./data";
 import { projectPath } from "./site";
+import { teamProjectCredits } from "./teamParticipation";
 import "./lab-people-process.css";
 import "./case-team.css";
 
@@ -13,7 +14,7 @@ type LabPerson = {
   id: string;
   name: Record<Lang, string>;
   role: Record<Lang, string>;
-  experience: Record<Lang, string>;
+  experience?: Record<Lang, string>;
   image?: string;
   initials?: Record<Lang, string>;
   responsibilities?: Record<Lang, string[]>;
@@ -38,46 +39,49 @@ const labPeople: LabPerson[] = [
   },
   {
     id: "aygul",
-    name: { ru: "Айгуль", en: "Aygul" },
-    role: { ru: "Разрешения и документация", en: "Permits & Documentation" },
+    name: { ru: "Айгуль Мятиева", en: "Aygul Myatieva" },
+    role: { ru: "Ассистент руководителя", en: "Executive Assistant" },
+    image: "/media/team-aygul.webp",
     initials: { ru: "А", en: "A" },
     experience: {
-      ru: "Занимается документацией и согласованиями, необходимыми для выполнения работ на объекте.",
-      en: "Handles the documentation and approvals required for work on site.",
+      ru: "Более 10 лет опыта в строительной сфере, включая работу с проектными чертежами и объёмами строительных работ. Окончила Московский гуманитарно-экономический университет по специальности «Менеджмент», прошла стажировку в Англии. В Space Buro отвечает за взаимодействие с застройщиками по вопросам документации и разрешений, сопровождение согласований и внутренний документооборот компании.",
+      en: "Over 10 years of experience in construction, including working with project drawings and construction quantities. Graduated from Moscow University for the Humanities and Economics with a degree in Management and completed an internship in England. At Space Buro, she coordinates documentation and permits with developers, supports approvals and manages the company’s internal documentation.",
     },
     responsibilities: {
-      ru: ["Документы по объекту", "Подготовка разрешений", "Сопровождение согласований"],
-      en: ["Project documentation", "Permit preparation", "Approval coordination"],
+      ru: ["Коммуникация с застройщиками.", "Документация и разрешения на проведение работ.", "Сопровождение согласований.", "Внутренние документы компании."],
+      en: ["Communication with developers.", "Documentation and work permits.", "Approval coordination.", "Internal company documents."],
     },
   },
   {
-    id: "pavel",
-    name: { ru: "Павел", en: "Pavel" },
-    role: { ru: "Мебель на заказ", en: "Custom Furniture" },
-    initials: { ru: "П", en: "P" },
-    experience: {
-      ru: "Работает в мебельной команде Space Buro и участвует в реализации мебели на заказ.",
-      en: "Works with the Space Buro furniture team to deliver custom furniture.",
-    },
-    responsibilities: {
-      ru: ["Мебельные работы", "Сборка мебели", "Монтаж на объекте"],
-      en: ["Furniture work", "Furniture assembly", "On-site installation"],
-    },
+    id: "roman",
+    name: { ru: "Роман", en: "Roman" },
+    role: { ru: "Глава отдела маркетинга", en: "Head of Marketing" },
+    image: "/media/team-roman.webp",
+    initials: { ru: "Р", en: "R" },
   },
 ];
 
-const teamOrder = ["maruf", "georgiy", "serdar", "quvvat", "aygul", "pavel"];
+const teamOrder = ["maruf", "georgiy", "serdar", "quvvat", "roman", "aygul"];
 const labTeam = teamOrder.flatMap(id => labPeople.filter(person => person.id === id));
 const portraitSizes: Record<string, [number, number]> = {
   maruf: [900, 1026],
   georgiy: [1190, 1322],
   serdar: [900, 1022],
   quvvat: [900, 991],
+  roman: [1189, 1323],
+  aygul: [1122, 1402],
 };
 
-const teamProjects = new Map(labTeam.map((person) => [person.id, projectLocations.filter((project) =>
-  project.published && project.status !== "service" && project.teamIds.includes(person.id),
-)]));
+type TeamProject = { id: string; title: Record<Lang, string>; project?: ProjectLocation };
+const teamProjects = new Map(labTeam.map((person) => {
+  const credits = teamProjectCredits.filter(credit => credit.teamIds.includes(person.id));
+  const projects: TeamProject[] = projectLocations
+    .filter(project => project.published && project.status !== "service" && project.teamIds.includes(person.id)
+      && !credits.some(credit => credit.replacesProjectId === project.id))
+    .map(project => ({ id: project.id, title: project.shortTitle, project }));
+  projects.push(...credits.map(credit => ({ id: credit.id, title: credit.title })));
+  return [person.id, projects] as const;
+}));
 
 export default function LabTeam({ lang, project }: { lang: Lang; project?: ProjectLocation }) {
   const people = useMemo(() => project ? labTeam.filter((person) => project.teamIds.includes(person.id)) : labTeam, [project]);
@@ -207,30 +211,32 @@ export default function LabTeam({ lang, project }: { lang: Lang; project?: Proje
 
       {!project && <div className="lab-team-details">
         {people.map((person, index) => (
-          <div id={`${infoPrefix}-${person.id}`} className="lab-team-info" key={person.id} hidden={active !== index}>
+          <div id={`${infoPrefix}-${person.id}`} className={`lab-team-info${!person.experience ? " is-profile-pending" : ""}`} key={person.id} hidden={active !== index}>
             <div className="lab-team-biography">
-              <p className="lab-team-small-label">{text.expertise}</p>
+              {person.experience && <p className="lab-team-small-label">{text.expertise}</p>}
               <h3>{person.name[lang]}</h3>
               <p className="lab-team-role">{person.role[lang]}</p>
-              <p>{person.experience[lang]}</p>
+              {person.experience && <p>{person.experience[lang]}</p>}
             </div>
             <div className="lab-team-projects">
-              <p className="lab-team-small-label">{person.responsibilities ? text.responsibilities : text.projects}</p>
-              {person.responsibilities ? (
+              {person.responsibilities && <>
+                <p className="lab-team-small-label">{text.responsibilities}</p>
                 <ul className="lab-team-responsibilities">
                   {person.responsibilities[lang].map((responsibility) => (
                     <li key={responsibility}>{responsibility}</li>
                   ))}
                 </ul>
-              ) : <ul>
-                {teamProjects.get(person.id)?.map((project) => (
-                  <li key={project.id}>
-                    <Link href={projectPath(lang, project)}>
-                      <span>{project.shortTitle[lang]}</span><ResponsiveArrow />
-                    </Link>
+              </>}
+              {Boolean(teamProjects.get(person.id)?.length) && <div className="lab-team-project-list">
+                <p className="lab-team-small-label">{text.projects}</p>
+                <ul>{teamProjects.get(person.id)?.map(item => (
+                  <li key={item.id}>
+                    {item.project ? <Link href={projectPath(lang, item.project)}>
+                      <span>{item.title[lang]}</span><ResponsiveArrow />
+                    </Link> : <span className="lab-team-project-credit">{item.title[lang]}</span>}
                   </li>
-                ))}
-              </ul>}
+                ))}</ul>
+              </div>}
             </div>
           </div>
         ))}
