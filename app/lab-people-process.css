@@ -68,20 +68,24 @@
 .lab-team-hint > span { font-size: 22px; }
 .lab-team-portraits { display: flex; gap: 8px; height: clamp(360px, 37vw, 540px); }
 .lab-team-portrait { min-width: 0; flex: 1 1 0; scroll-margin-top: 100px; transition: flex-grow .72s cubic-bezier(.22, 1, .36, 1); }
-.lab-team-portrait.is-active { flex-grow: 3.1; }
-/* Correct transparent headroom; image height stays constant while cards expand. */
-.lab-team-portrait[data-member="maruf"] { --portrait-light: #aab4a0; --portrait-dark: #697865; --portrait-height: 102.293%; --portrait-top: -2.293%; }
-.lab-team-portrait[data-member="quvvat"] { --portrait-light: #abb8c1; --portrait-dark: #62788b; --portrait-height: 106.559%; --portrait-top: -6.559%; }
-.lab-team-portrait[data-member="serdar"] { --portrait-light: #c5b4a1; --portrait-dark: #897563; --portrait-height: 100.8885%; --portrait-top: -.8885%; }
-.lab-team-portrait[data-member="georgiy"] { --portrait-light: #9daba9; --portrait-dark: #465d61; --portrait-height: 101.458%; --portrait-top: -1.458%; }
-.lab-team-portrait[data-member="aygul"] { --portrait-light: #beb1bf; --portrait-dark: #766578; --portrait-height: 102.0378%; --portrait-top: -2.0378%; }
-.lab-team-portrait[data-member="roman"] { --portrait-light: #b6a68d; --portrait-dark: #73634e; --portrait-height: 100.9153%; --portrait-top: -.9153%; }
+.lab-team-portrait.is-active { flex-grow: 2.85; }
+/* Match hair-to-chin/beard height to ~33% of the frame, keeping the hair tops aligned.
+   Source landmarks (top/chin px): Maruf 25/354, Quvvat 62/399, Serdar 10/350,
+   Georgiy 21/468, Aygul 28/557, Roman 12/600. Portraits keep their natural proportions
+   and the same scale in collapsed/expanded cards, on home and project pages. */
+.lab-team-portrait[data-member="maruf"] { --portrait-light: #aab4a0; --portrait-dark: #697865; --portrait-height: 102.9119%; --portrait-top: -2.5076%; }
+.lab-team-portrait[data-member="quvvat"] { --portrait-light: #abb8c1; --portrait-dark: #62788b; --portrait-height: 97.0415%; --portrait-top: -6.0712%; }
+.lab-team-portrait[data-member="serdar"] { --portrait-light: #c5b4a1; --portrait-dark: #897563; --portrait-height: 99.1941%; --portrait-top: -.9706%; }
+.lab-team-portrait[data-member="georgiy"] { --portrait-light: #9daba9; --portrait-dark: #465d61; --portrait-height: 97.5973%; --portrait-top: -1.5503%; }
+.lab-team-portrait[data-member="aygul"] { --portrait-light: #beb1bf; --portrait-dark: #766578; --portrait-height: 87.4594%; --portrait-top: -1.7467%; }
+.lab-team-portrait[data-member="roman"] { --portrait-light: #b6a68d; --portrait-dark: #73634e; --portrait-height: 74.25%; --portrait-top: -.6735%; }
 .lab-team-select { --team-footer-height: clamp(80px, calc(12vw - 50px), 120px); position: relative; display: block; width: 100%; height: 100%; padding: 0; overflow: hidden; border: 0; background: radial-gradient(ellipse at 50% 28%, var(--portrait-light), var(--portrait-dark) 90%); color: white; text-align: left; cursor: pointer; }
 /* Lower the solid caption base; the longer, translucent fade keeps the waist crop soft. */
 .lab-team-select::after { position: absolute; inset: 0; content: ""; background: linear-gradient(0deg, var(--black) 0, var(--black) var(--team-footer-height), rgba(16, 16, 16, .62) calc(var(--team-footer-height) + 35px), rgba(16, 16, 16, .2) calc(var(--team-footer-height) + 80px), transparent calc(var(--team-footer-height) + 135px)); pointer-events: none; }
 .lab-team-select:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
-.lab-team-photo-frame { position: absolute; top: 24px; right: 0; bottom: 64px; left: 0; -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%); }
-.lab-team-select img { position: absolute; top: var(--portrait-top, 0%); left: 50%; width: auto; max-width: none; height: var(--portrait-height, 100%); transform: translateX(-50%); filter: grayscale(1); transition: filter .55s ease; }
+.lab-team-photo-frame { position: absolute; top: 24px; right: 0; bottom: 64px; left: 0; }
+/* Fade follows each scaled portrait so a smaller photo never ends in a hard edge. */
+.lab-team-select img { position: absolute; top: var(--portrait-top, 0%); left: 50%; width: auto; max-width: none; height: var(--portrait-height, 100%); transform: translateX(-50%); -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 68%, transparent 100%); filter: grayscale(1); transition: filter .55s ease; }
 .lab-team-portrait.is-active img { filter: grayscale(0); }
 .lab-team-monogram { position: absolute; inset: 36px 0 115px; display: grid; place-items: center; overflow: hidden; }
 .lab-team-monogram::before, .lab-team-monogram::after { position: absolute; width: 240px; height: 240px; content: ""; border: 1px solid rgba(255, 255, 255, .22); transform: rotate(-14deg); }
@@ -161,7 +165,7 @@
   .lab-team-hint { font-size: 10px; gap: 15px; }
   .lab-team-portraits { width: 100%; min-width: 0; height: clamp(315px, 88vw, 440px); gap: 6px; padding-bottom: 10px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--muted) transparent; }
   .lab-team-portrait { flex: 0 0 54px; transition: flex-basis .38s cubic-bezier(.22, 1, .36, 1); }
-  .lab-team-portrait.is-active { flex: 0 0 min(64vw, 280px); }
+  .lab-team-portrait.is-active { flex: 0 0 min(61vw, 268px); }
   .lab-team-select:focus-visible { outline-offset: -4px; }
   .lab-team-select { --team-footer-height: 76px; }
   .lab-team-photo-frame { top: 18px; bottom: 56px; }
