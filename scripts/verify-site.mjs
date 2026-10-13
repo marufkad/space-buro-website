@@ -19,7 +19,13 @@ const pages = new Map(walk(base)
     const route = normalize(relative === 'index' ? '/' : `/${relative.replace(/\/index$/, '')}`);
     return [route, readFileSync(file, 'utf8')];
   }));
-assert.equal(pages.size, 20, 'Expected RU/EN home, China furniture, privacy and seven projects.');
+assert.equal(pages.size, 22, 'Expected RU/EN home, calculator, China furniture, privacy and seven projects.');
+for (const route of ['/calculator', '/en/calculator']) {
+  const html = pages.get(route);
+  assert(html?.includes('id="calculator"'), `${route}: calculator rendered at its direct address`);
+  assert(html.includes('type="range"'), `${route}: interactive calculator controls`);
+  assert(!html.includes('id="map"'), `${route}: direct calculator must not load the entire home page`);
+}
 
 const sitemap = readFileSync(path.join(base, 'sitemap.xml.body'), 'utf8');
 const robots = readFileSync(path.join(base, 'robots.txt.body'), 'utf8');

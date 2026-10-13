@@ -335,6 +335,8 @@ h1 { max-width: 760px; margin: 0; font-size: clamp(34px, 3vw, 48px); line-height
 .estimate-timeline b { color: var(--white); font-size: 13px; font-weight: 600; }
 .estimate-box > p { max-width: 650px; margin: 0 0 28px; color: var(--subtle-inverse); font-size: 12px; line-height: 1.55; }
 .estimate-box .button { border-color: var(--white); background: var(--white); color: var(--ink); }
+.estimate-box .calculator-contact-fallback { margin: 20px 0 0; }
+.calculator-contact-fallback a { text-decoration: underline; text-underline-offset: 3px; }
 
 .team-section { padding-top: 92px; background: var(--white); }
 .team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }

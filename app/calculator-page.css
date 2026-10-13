@@ -1,0 +1,25 @@
+.calculator-page { min-height: 100svh; background: var(--ink); color: var(--white); }
+.calculator-page-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px clamp(20px, 5vw, 76px); background: var(--paper); color: var(--ink); }
+.calculator-page-logo { width: 84px; height: auto; }
+.calculator-page-header nav { display: flex; align-items: center; gap: clamp(22px, 4vw, 48px); }
+.calculator-page-header nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; font-weight: 500; }
+.calculator-page .calculator-section { padding-block: clamp(36px, 6vw, 88px); }
+.calculator-page .calculator-copy { position: static; }
+.calculator-page .calculator-copy h1 { max-width: 650px; margin: 0; font-size: clamp(32px, 3.15vw, 50px); font-weight: 500; line-height: 1.13; letter-spacing: -.025em; }
+.calculator-page .calculator-copy > p:last-child { margin-top: 20px; }
+.calculator-page .calculator-section > * { min-width: 0; }
+.calculator-page-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 16px 28px; padding: 24px clamp(20px, 5vw, 76px) calc(24px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line-inverse); color: var(--muted-inverse); font-size: 11px; }
+.calculator-page-footer span { margin-right: auto; }
+.calculator-page :is(a, button, input):focus-visible { outline: 2px solid var(--focus-inverse); outline-offset: 4px; }
+.calculator-page-header a:focus-visible { outline-color: var(--focus); }
+@media (max-width: 700px) {
+  .calculator-page-header { padding-block: 10px; }
+  .calculator-page-logo { width: 68px; }
+  .calculator-page .calculator-section { gap: 28px; padding: 28px 20px 40px; }
+  .calculator-page .calculator-copy > p:last-child { font-size: 13px; line-height: 1.6; }
+  .calculator-page .calculator-controls { padding: 26px 20px; }
+  .calculator-page .calculator-controls fieldset div { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .calculator-page .calculator-controls fieldset div.two-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .calculator-page .calculator-controls fieldset button { font-size: 11px; overflow-wrap: anywhere; }
+  .calculator-page .estimate-box { padding: 26px 20px; }
+}
