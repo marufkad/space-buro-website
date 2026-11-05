@@ -10,59 +10,6 @@ import { teamProjectCredits } from "./teamParticipation";
 import "./lab-people-process.css";
 import "./case-team.css";
 
-type LabPerson = {
-  id: string;
-  name: Record<Lang, string>;
-  role: Record<Lang, string>;
-  experience?: Record<Lang, string>;
-  image?: string;
-  initials?: Record<Lang, string>;
-  responsibilities?: Record<Lang, string[]>;
-};
-
-const labPeople: LabPerson[] = [
-  ...team,
-  {
-    id: "georgiy",
-    name: { ru: "Георгий", en: "Georgiy" },
-    role: { ru: "Менеджер проектов", en: "Project Manager" },
-    image: "/media/team-georgiy-lab.webp",
-    initials: { ru: "Г", en: "G" },
-    experience: {
-      ru: "Ведёт организационную работу по проектам и помогает команде согласовывать задачи на объекте.",
-      en: "Coordinates project activity and helps the team align tasks on site.",
-    },
-    responsibilities: {
-      ru: ["Организация работ", "Координация команды", "Сопровождение проекта"],
-      en: ["Work planning", "Team coordination", "Project support"],
-    },
-  },
-  {
-    id: "aygul",
-    name: { ru: "Айгуль Мятиева", en: "Aygul Myatieva" },
-    role: { ru: "Ассистент руководителя", en: "Executive Assistant" },
-    image: "/media/team-aygul.webp",
-    initials: { ru: "А", en: "A" },
-    experience: {
-      ru: "Более 10 лет опыта в строительной сфере, включая работу с проектными чертежами и объёмами строительных работ. Окончила Московский гуманитарно-экономический университет по специальности «Менеджмент», прошла стажировку в Англии. В Space Buro отвечает за взаимодействие с застройщиками по вопросам документации и разрешений, сопровождение согласований и внутренний документооборот компании.",
-      en: "Over 10 years of experience in construction, including working with project drawings and construction quantities. Graduated from Moscow University for the Humanities and Economics with a degree in Management and completed an internship in England. At Space Buro, she coordinates documentation and permits with developers, supports approvals and manages the company’s internal documentation.",
-    },
-    responsibilities: {
-      ru: ["Коммуникация с застройщиками.", "Документация и разрешения на проведение работ.", "Сопровождение согласований.", "Внутренние документы компании."],
-      en: ["Communication with developers.", "Documentation and work permits.", "Approval coordination.", "Internal company documents."],
-    },
-  },
-  {
-    id: "roman",
-    name: { ru: "Роман", en: "Roman" },
-    role: { ru: "Глава отдела маркетинга", en: "Head of Marketing" },
-    image: "/media/team-roman.webp",
-    initials: { ru: "Р", en: "R" },
-  },
-];
-
-const teamOrder = ["maruf", "georgiy", "serdar", "quvvat", "roman", "aygul"];
-const labTeam = teamOrder.flatMap(id => labPeople.filter(person => person.id === id));
 const portraitSizes: Record<string, [number, number]> = {
   maruf: [900, 1026],
   georgiy: [1190, 1322],
@@ -73,7 +20,7 @@ const portraitSizes: Record<string, [number, number]> = {
 };
 
 type TeamProject = { id: string; title: Record<Lang, string>; project?: ProjectLocation };
-const teamProjects = new Map(labTeam.map((person) => {
+const teamProjects = new Map(team.map((person) => {
   const credits = teamProjectCredits.filter(credit => credit.teamIds.includes(person.id));
   const projects: TeamProject[] = projectLocations
     .filter(project => project.published && project.status !== "service" && project.teamIds.includes(person.id)
@@ -84,7 +31,7 @@ const teamProjects = new Map(labTeam.map((person) => {
 }));
 
 export default function LabTeam({ lang, project }: { lang: Lang; project?: ProjectLocation }) {
-  const people = useMemo(() => project ? labTeam.filter((person) => project.teamIds.includes(person.id)) : labTeam, [project]);
+  const people = useMemo(() => project ? team.filter((person) => project.teamIds.includes(person.id)) : team, [project]);
   const sectionId = project ? "case-team" : "team";
   const titleId = project ? "case-team-title" : "lab-team-title";
   const memberPrefix = project ? "case-team" : "team";

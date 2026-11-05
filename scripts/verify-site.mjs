@@ -37,6 +37,7 @@ const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => new
 assert.equal(sitemapUrls.length, pages.size, 'Sitemap covers every public page exactly once.');
 const sitemapRoutes = new Set(sitemapUrls.map(url => {
   assert.equal(url.origin, origin, 'Sitemap production origin.');
+  assert(url.pathname.endsWith('/'), `Sitemap URL needs its canonical trailing slash: ${url.pathname}`);
   const route = normalize(url.pathname);
   assert(pages.has(route), `Sitemap route does not exist: ${route}`);
   return route;
@@ -87,6 +88,7 @@ for (const [route, html] of pages) {
   const canonical = new URL(canonicalHref);
   assert.equal(canonical.origin, origin, `${route}: canonical production origin`);
   assert.equal(normalize(canonical.pathname), route, `${route}: self canonical`);
+  assert(canonical.pathname.endsWith('/'), `${route}: canonical trailing slash`);
   assert(sitemapRoutes.has(route), `${route}: sitemap entry`);
   for (const alternate of ['ru-AE', 'en-AE', 'x-default']) {
     const href = linkTags.find(item => item.rel === 'alternate' && item.hreflang === alternate)?.href;
@@ -123,4 +125,29 @@ for (const [route, html] of pages) {
 
 const aliases = JSON.parse(readFileSync('app/media-aliases.json', 'utf8'));
 for (const source of Object.values(aliases)) checkAsset(source, '/');
+
+// Collapsed galleries render only six photos; validate every image in their data.
+const projectMedia = JSON.parse(readFileSync('app/project-media.json', 'utf8'));
+for (const [slug, media] of Object.entries(projectMedia)) {
+  for (const photo of [media.hero, ...media.photos]) {
+    assert(photo?.src, `${slug}: missing photo source`);
+    checkAsset(photo.src, `/projects/${slug}`);
+  }
+}
+
+const teamOrder = ['maruf', 'georgiy', 'serdar', 'quvvat', 'roman', 'aygul'];
+for (const route of ['/', '/en']) {
+  const html = pages.get(route);
+  const header = html.match(/<header\b[^>]*class="lab-header"[^>]*>[\s\S]*?<\/header>/)?.[0] ?? '';
+  const menuMembers = [...header.matchAll(/<a\b[^>]*>/g)]
+    .map(match => attributes(match[0]).href)
+    .filter(href => href?.startsWith('#team-'))
+    .map(href => href.slice('#team-'.length));
+  const portraitMembers = [...html.matchAll(/<article\b[^>]*>/g)]
+    .map(match => attributes(match[0]))
+    .filter(item => item.class?.split(/\s+/).includes('lab-team-portrait'))
+    .map(item => item['data-member']);
+  assert.deepEqual(menuMembers, teamOrder, `${route}: all six team members appear in menu order`);
+  assert.deepEqual(portraitMembers, teamOrder, `${route}: team portraits follow the same order`);
+}
 console.log(`Verified ${pages.size} production pages, ${links} links/fragments and ${assets} asset references; indexing, languages, canonical URLs and sitemap passed.`);

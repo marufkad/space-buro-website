@@ -10,9 +10,10 @@ npm ci
 npm run dev
 ```
 
-Before publishing, run `npm run lint`, `npm run build`, then `npm run verify`.
-Verification checks the 20 generated pages, indexing, canonical and language URLs,
-sitemap, internal links, fragments and local media.
+Before publishing, run `npm run lint`, `npm test`, `npm run build`, then `npm run verify`.
+The calculator regression tests preserve the agreed prices, VAT, rounding and timelines.
+Verification checks the 22 generated pages, indexing, canonical and language URLs,
+sitemap, internal links, fragments, all gallery media and team order in both languages.
 
 ## Production deployment
 

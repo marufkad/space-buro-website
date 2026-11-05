@@ -2,7 +2,7 @@
 .calculator-page-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px clamp(20px, 5vw, 76px); background: var(--paper); color: var(--ink); }
 .calculator-page-logo { width: 84px; height: auto; }
 .calculator-page-header nav { display: flex; align-items: center; gap: clamp(22px, 4vw, 48px); }
-.calculator-page-header nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; font-weight: 500; }
+.calculator-page-header nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; font-size: 12px; font-weight: 500; }
 .calculator-page .calculator-section { padding-block: clamp(36px, 6vw, 88px); }
 .calculator-page .calculator-copy { position: static; }
 .calculator-page .calculator-copy h1 { max-width: 650px; margin: 0; font-size: clamp(32px, 3.15vw, 50px); font-weight: 500; line-height: 1.13; letter-spacing: -.025em; }
