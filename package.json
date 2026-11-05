@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "node --test scripts/calculator.test.mjs",
+    "test": "node --test scripts/*.test.mjs",
     "verify": "node scripts/verify-site.mjs"
   },
   "dependencies": {

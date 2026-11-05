@@ -3,7 +3,12 @@ import type { Lang, ProjectLocation } from "./data";
 
 export const siteUrl = "https://space-buro-website.vercel.app";
 export const businessName = "Space Buro Technical Services L.L.C-FZ";
-export const pathFor = (lang: Lang, path = "/") => `${lang === "en" ? "/en" : ""}${path === "/" && lang === "en" ? "" : path}`;
+export function pathFor(lang: Lang, path = "/") {
+  const suffixAt = path.search(/[?#]/);
+  const pathname = suffixAt < 0 ? path : path.slice(0, suffixAt);
+  const suffix = suffixAt < 0 ? "" : path.slice(suffixAt);
+  return `${lang === "en" ? "/en" : ""}${pathname.endsWith("/") ? pathname : `${pathname}/`}${suffix}`;
+}
 export const projectPath = (lang: Lang, project: ProjectLocation) => pathFor(lang, project.status === "service" ? "/china-furniture" : `/projects/${project.id}`);
 export const whatsapp = (text: string) => `https://wa.me/971523569697?text=${encodeURIComponent(text)}`;
 

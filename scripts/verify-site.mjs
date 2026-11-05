@@ -37,6 +37,7 @@ const sitemapUrls = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => new
 assert.equal(sitemapUrls.length, pages.size, 'Sitemap covers every public page exactly once.');
 const sitemapRoutes = new Set(sitemapUrls.map(url => {
   assert.equal(url.origin, origin, 'Sitemap production origin.');
+  assert(url.pathname.endsWith('/'), `Sitemap URL needs its canonical trailing slash: ${url.pathname}`);
   const route = normalize(url.pathname);
   assert(pages.has(route), `Sitemap route does not exist: ${route}`);
   return route;
@@ -87,6 +88,7 @@ for (const [route, html] of pages) {
   const canonical = new URL(canonicalHref);
   assert.equal(canonical.origin, origin, `${route}: canonical production origin`);
   assert.equal(normalize(canonical.pathname), route, `${route}: self canonical`);
+  assert(canonical.pathname.endsWith('/'), `${route}: canonical trailing slash`);
   assert(sitemapRoutes.has(route), `${route}: sitemap entry`);
   for (const alternate of ['ru-AE', 'en-AE', 'x-default']) {
     const href = linkTags.find(item => item.rel === 'alternate' && item.hreflang === alternate)?.href;
