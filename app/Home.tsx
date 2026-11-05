@@ -13,6 +13,8 @@ import {
   type ProjectLocation,
 } from "./data";
 import LabIntro from "./LabIntro";
+import SelectedHero from "./SelectedHero";
+import "./selected-contact.css";
 import LabHeader from "./LabHeader";
 import LabAdvantages from "./LabAdvantages";
 import LabTeam from "./LabTeam";
@@ -286,10 +288,10 @@ export default function Home({lang}: {lang: Lang}) {
   }
 
   return (
-    <main id="content" className="lab-home"><span id="top" />
+    <main id="content" className="lab-home selected-design-home"><span id="top" />
       <LabHeader lang={lang} items={t.nav} />
 
-      <LabIntro lang={lang} onOpenProject={openProject} />
+      <LabIntro lang={lang} onOpenProject={openProject} hero={<SelectedHero lang={lang} />} />
 
       <LabAdvantages lang={lang} kicker={t.advantagesKicker} title={t.advantagesTitle} items={t.advantages} />
 

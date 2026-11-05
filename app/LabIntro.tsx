@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { projectLocations, type Lang, type ProjectLocation } from "./data";
 import { createLiquidTrail, type LiquidController } from "./labLiquid";
 import ResponsiveArrow from "./ResponsiveArrow";
@@ -38,9 +38,10 @@ const mosaicPhotos = [
 ];
 const mosaicRows = [[0, 3, 6, 1, 8, 10], [4, 7, 9, 10, 2, 5], [8, 1, 11, 3, 5, 7]].map(row => row.map(index => mosaicPhotos[index]));
 
-type Props = { lang: Lang; onOpenProject: (project: ProjectLocation) => void };
+type Props = { lang: Lang; onOpenProject: (project: ProjectLocation) => void; hero?: ReactNode };
 
-export default function LabIntro({ lang, onOpenProject }: Props) {
+export default function LabIntro({ lang, onOpenProject, hero }: Props) {
+  const hasCustomHero = hero !== undefined;
   const [activeIndex, setActiveIndex] = useState(0);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [featuredHovered, setFeaturedHovered] = useState(false);
@@ -76,6 +77,7 @@ export default function LabIntro({ lang, onOpenProject }: Props) {
   const ru = lang === "ru";
 
   useEffect(() => {
+    if (hasCustomHero) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const coarse = matchMedia("(pointer: coarse)");
     const update = () => { setReducedMotion(reduced.matches); setCoarsePointer(coarse.matches); setMotionReady(true); };
@@ -87,7 +89,7 @@ export default function LabIntro({ lang, onOpenProject }: Props) {
       reduced.removeEventListener("change", update); coarse.removeEventListener("change", update);
       document.removeEventListener("visibilitychange", visibility);
     };
-  }, []);
+  }, [hasCustomHero]);
 
   useEffect(() => {
     const card = featuredRef.current;
@@ -95,29 +97,30 @@ export default function LabIntro({ lang, onOpenProject }: Props) {
     const observer = new IntersectionObserver(entries => setFeaturedVisible(entries[0].isIntersecting), { threshold: .15 });
     observer.observe(card);
     return () => observer.disconnect();
-  }, []);
+  }, [hasCustomHero]);
 
   useEffect(() => {
-    if (featuredHovered || featuredFocused || reducedMotion || !featuredVisible || !pageVisible) return;
+    if (hasCustomHero || featuredHovered || featuredFocused || reducedMotion || !featuredVisible || !pageVisible) return;
     const timer = window.setInterval(() => setFeaturedIndex(index => (index + 1) % featuredPhotos.length), 3000);
     return () => window.clearInterval(timer);
-  }, [featuredHovered, featuredFocused, reducedMotion, featuredVisible, pageVisible]);
+  }, [hasCustomHero, featuredHovered, featuredFocused, reducedMotion, featuredVisible, pageVisible]);
 
   useEffect(() => {
     liquidSourceRef.current = backgroundSource;
     liquidRef.current?.setImage(backgroundSource);
   }, [backgroundSource]);
   useEffect(() => {
+    if (hasCustomHero) return;
     liquidEnabledRef.current = effectEnabled;
     photoModeRef.current = !effectEnabled || reducedMotion;
     liquidRef.current?.setEnabled(effectEnabled && !reducedMotion);
     const header = document.querySelector<HTMLElement>(".lab-header, .site-header");
     header?.classList.toggle("has-intro-photo", photoModeRef.current && header.classList.contains("has-intro-reveal"));
-  }, [effectEnabled, reducedMotion]);
+  }, [effectEnabled, reducedMotion, hasCustomHero]);
 
   useEffect(() => {
     // Position the photograph in every mode, but allocate the renderer only when motion is allowed.
-    if (!motionReady) return;
+    if (hasCustomHero || !motionReady) return;
     const opening = openingRef.current, surface = surfaceRef.current, canvas = canvasRef.current;
     const mosaic = mosaicSectionRef.current;
     if (!opening || !surface || !canvas || !mosaic) return;
@@ -247,17 +250,17 @@ export default function LabIntro({ lang, onOpenProject }: Props) {
       document.removeEventListener("visibilitychange", visibility);
       touchPointRef.current = null; touchCountRef.current = 0;
     };
-  }, [motionReady, reducedMotion]);
+  }, [hasCustomHero, motionReady, reducedMotion]);
 
   useEffect(() => { liquidRef.current?.setVisible(visible && pageVisible); }, [visible, pageVisible]);
   useEffect(() => {
-    if (paused || reducedMotion || !visible || !pageVisible) return;
+    if (hasCustomHero || paused || reducedMotion || !visible || !pageVisible) return;
     const interval = window.setInterval(() => setActiveIndex(index => (index + 1) % curatedPhotos.length), 5000);
     return () => window.clearInterval(interval);
-  }, [paused, reducedMotion, visible, pageVisible]);
+  }, [hasCustomHero, paused, reducedMotion, visible, pageVisible]);
 
   useEffect(() => {
-    if (!coarsePointer || reducedMotion || !effectEnabled || !visible || !pageVisible) return;
+    if (hasCustomHero || !coarsePointer || reducedMotion || !effectEnabled || !visible || !pageVisible) return;
     let frame = 0, previous = window.scrollY;
     const scroll = () => {
       if (frame) return;
@@ -280,7 +283,7 @@ export default function LabIntro({ lang, onOpenProject }: Props) {
     };
     window.addEventListener("scroll", scroll, { passive: true });
     return () => { window.removeEventListener("scroll", scroll); cancelAnimationFrame(frame); };
-  }, [coarsePointer, reducedMotion, effectEnabled, visible, pageVisible]);
+  }, [hasCustomHero, coarsePointer, reducedMotion, effectEnabled, visible, pageVisible]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -471,6 +474,7 @@ export default function LabIntro({ lang, onOpenProject }: Props) {
 
   const shiftWall = (direction: number) => mosaicControlRef.current?.shift(direction);
   return <div className={`lab-intro${!effectEnabled || reducedMotion ? " is-photo-visible" : ""}`}>
+    {hasCustomHero ? hero : <>
     <div className="lab-liquid-surface" ref={surfaceRef} aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="lab-liquid-background" src={backgroundSource} alt="" decoding="async" />
@@ -507,6 +511,7 @@ export default function LabIntro({ lang, onOpenProject }: Props) {
         </div>
       </section>
     </div>
+    </>}
     <section className="lab-mosaic-section" ref={mosaicSectionRef} id="lab-mosaic" aria-label={ru ? "Галерея наших объектов" : "Our project gallery"}>
       <div className="lab-mosaic-heading"><span className="lab-eyebrow">[ {ru ? "НАШИ ПРОСТРАНСТВА" : "OUR SPACES"} / 04 ]</span><span>{ru ? "ДЕТАЛИ СКЛАДЫВАЮТСЯ В ЦЕЛОЕ" : "DETAILS BECOME A WHOLE"}</span></div>
       <div className={`lab-mosaic-viewport${activeMosaic ? " has-active" : ""}`} ref={viewportRef} role="region" aria-label={ru ? "Панорама фотографий. Листайте по горизонтали" : "Photo panorama. Scroll horizontally"} tabIndex={0} onKeyDown={event => { if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); shiftWall(event.key === "ArrowLeft" ? -1 : 1); } }}>
