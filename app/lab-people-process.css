@@ -119,9 +119,10 @@
 .lab-team-responsibilities li { min-height: 50px; padding: 15px 0; border-bottom: 1px solid var(--lab-rule); color: var(--lab-light); font-size: 12px; line-height: 1.5; }
 
 .lab-process { border-top: 1px solid var(--lab-rule); }
-.lab-process-list { --lab-process-progress: 0; position: relative; margin: 0; padding: 0; list-style: none; }
-.lab-process-list::before, .lab-process-list::after { position: absolute; inset: 0 auto 0 0; content: ""; width: 1px; background: var(--lab-rule); pointer-events: none; }
-.lab-process-list::after { width: 2px; background: var(--muted-inverse); transform: scaleY(var(--lab-process-progress)); transform-origin: top; will-change: transform; }
+.lab-process-track { position: relative; }
+.lab-process-list { position: relative; margin: 0; padding: 0; list-style: none; }
+.lab-process-track::before, .lab-process-progress { position: absolute; inset: 0 auto 0 0; content: ""; width: 1px; background: var(--lab-rule); pointer-events: none; }
+.lab-process-progress { width: 2px; background: var(--muted-inverse); transform: scaleY(0); transform-origin: top; }
 .lab-process-stage { position: relative; min-height: 260px; padding: 28px 0 28px 30px; border-bottom: 1px solid var(--lab-rule); }
 .lab-process-stage-content { position: relative; display: grid; grid-template-columns: .65fr 1.15fr 1.4fr; align-items: center; gap: clamp(18px, 2.8vw, 42px); transform: scale(.985); opacity: .78; transition: transform .65s cubic-bezier(.22, 1, .36, 1), opacity .55s ease; }
 .lab-process-stage.is-active .lab-process-stage-content { transform: scale(1.012); opacity: 1; }

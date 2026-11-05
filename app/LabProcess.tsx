@@ -8,6 +8,7 @@ import "./lab-people-process.css";
 
 export default function LabProcess({ lang }: { lang: Lang }) {
   const listRef = useRef<HTMLOListElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
   const [active, setActive] = useState(0);
   const text = lang === "ru" ? {
     label: "Этапы работы",
@@ -27,7 +28,8 @@ export default function LabProcess({ lang }: { lang: Lang }) {
 
   useEffect(() => {
     const list = listRef.current;
-    if (!list) return;
+    const progress = progressRef.current;
+    if (!list || !progress) return;
     const rows = [...list.querySelectorAll<HTMLElement>("[data-lab-stage]")];
     const photos = [...list.querySelectorAll<HTMLElement>(".lab-process-image")];
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -73,7 +75,7 @@ export default function LabProcess({ lang }: { lang: Lang }) {
       lastTime = time;
       current = motion.matches ? target : current + (target - current) * (1 - Math.exp(-elapsed / 90));
       if (Math.abs(target - current) < .0002) current = target;
-      list.style.setProperty("--lab-process-progress", String(current));
+      progress.style.transform = `scaleY(${current})`;
       if (current !== target) frame = window.requestAnimationFrame(draw);
       else lastTime = 0;
     };
@@ -119,6 +121,8 @@ export default function LabProcess({ lang }: { lang: Lang }) {
         </div>
       </header>
 
+      <div className="lab-process-track">
+      <span className="lab-process-progress" ref={progressRef} aria-hidden="true" />
       <ol className="lab-process-list" ref={listRef}>
         {stages.map((stage, index) => (
           <li className={`lab-process-stage${active === index ? " is-active" : ""}${index < active ? " is-complete" : ""}`} key={stage.number} id={`process-stage-${stage.number}`} data-lab-stage={index} aria-current={active === index ? "step" : undefined}>
@@ -141,6 +145,7 @@ export default function LabProcess({ lang }: { lang: Lang }) {
           </li>
         ))}
       </ol>
+      </div>
     </section>
   );
 }

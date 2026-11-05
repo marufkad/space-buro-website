@@ -519,10 +519,57 @@ export const stages = [
   { number: "08", icon: "handover", image: "/media/stages/08-handover.webp", title: { ru: "Передача", en: "Handover" }, text: { ru: "Проверяем качество, закрываем замечания и передаём гарантию.", en: "We inspect, close snags and hand over the warranty." }, result: { ru: "Готовый объект", en: "Completed project" } },
 ];
 
-export const team = [
+type TeamMember = {
+  id: string;
+  name: Localized;
+  role: Localized;
+  experience?: Localized;
+  image: string;
+  initials?: Localized;
+  responsibilities?: Record<Lang, string[]>;
+};
+
+export const team: TeamMember[] = [
   { id: "maruf", name: { ru: "Маруф Кодиров", en: "Maruf Kodirov" }, role: { ru: "Основатель · Архитектор", en: "Founder · Architect" }, image: "/media/team-maruf-lab.webp", experience: { ru: "Более 5 лет работает в архитектуре, строительстве вилл, fit-out и ремонте помещений, развивает направление мебели на заказ. Выпускник Белорусского национального технического университета по специальности «Архитектура». Отвечает за концепцию, планировку и целостность реализации проекта.", en: "Over five years of experience across architecture, villa construction, fit-out, renovation and bespoke furniture. A graduate of the Belarusian National Technical University in Architecture, Maruf leads concepts, planning and the overall integrity of project delivery." } },
-  { id: "quvvat", name: { ru: "Кувват Худайяров", en: "Quvvat Khudayyarov" }, role: { ru: "Главный инженер", en: "Lead Engineer" }, image: "/media/team-quvvat-lab.webp", experience: { ru: "Более 8 лет занимается системами кондиционирования, электромонтажными и электромеханическими работами. Контролирует инженерные решения, качество монтажа и технический надзор на строительных объектах.", en: "More than eight years of experience in air-conditioning, electrical and electromechanical systems. Quvvat oversees engineering decisions, installation quality and technical supervision across construction sites." } },
+  {
+    id: "georgiy",
+    name: { ru: "Георгий", en: "Georgiy" },
+    role: { ru: "Менеджер проектов", en: "Project Manager" },
+    image: "/media/team-georgiy-lab.webp",
+    initials: { ru: "Г", en: "G" },
+    experience: {
+      ru: "Ведёт организационную работу по проектам и помогает команде согласовывать задачи на объекте.",
+      en: "Coordinates project activity and helps the team align tasks on site.",
+    },
+    responsibilities: {
+      ru: ["Организация работ", "Координация команды", "Сопровождение проекта"],
+      en: ["Work planning", "Team coordination", "Project support"],
+    },
+  },
   { id: "serdar", name: { ru: "Сердар Пиркулиев", en: "Serdar Pirkuliev" }, role: { ru: "Координатор проектов", en: "Project Coordinator" }, image: "/media/team-serdar-lab.webp", experience: { ru: "Более 12 лет работает в строительстве и архитектуре, включая практику в Дубае в области fit-out, ремонта и мебели на заказ. Выпускник Харьковского национального университета городского хозяйства по специальности «Строительство». Координирует площадку, снабжение и сроки.", en: "More than twelve years in construction and architecture, including Dubai experience in fit-out, renovation and bespoke furniture. A Construction graduate of O. M. Beketov National University, Serdar coordinates site activity, procurement and schedules." } },
+  { id: "quvvat", name: { ru: "Кувват Худайяров", en: "Quvvat Khudayyarov" }, role: { ru: "Главный инженер", en: "Lead Engineer" }, image: "/media/team-quvvat-lab.webp", experience: { ru: "Более 8 лет занимается системами кондиционирования, электромонтажными и электромеханическими работами. Контролирует инженерные решения, качество монтажа и технический надзор на строительных объектах.", en: "More than eight years of experience in air-conditioning, electrical and electromechanical systems. Quvvat oversees engineering decisions, installation quality and technical supervision across construction sites." } },
+  {
+    id: "roman",
+    name: { ru: "Роман", en: "Roman" },
+    role: { ru: "Глава отдела маркетинга", en: "Head of Marketing" },
+    image: "/media/team-roman.webp",
+    initials: { ru: "Р", en: "R" },
+  },
+  {
+    id: "aygul",
+    name: { ru: "Айгуль Мятиева", en: "Aygul Myatieva" },
+    role: { ru: "Ассистент руководителя", en: "Executive Assistant" },
+    image: "/media/team-aygul.webp",
+    initials: { ru: "А", en: "A" },
+    experience: {
+      ru: "Более 10 лет опыта в строительной сфере, включая работу с проектными чертежами и объёмами строительных работ. Окончила Московский гуманитарно-экономический университет по специальности «Менеджмент», прошла стажировку в Англии. В Space Buro отвечает за взаимодействие с застройщиками по вопросам документации и разрешений, сопровождение согласований и внутренний документооборот компании.",
+      en: "Over 10 years of experience in construction, including working with project drawings and construction quantities. Graduated from Moscow University for the Humanities and Economics with a degree in Management and completed an internship in England. At Space Buro, she coordinates documentation and permits with developers, supports approvals and manages the company’s internal documentation.",
+    },
+    responsibilities: {
+      ru: ["Коммуникация с застройщиками.", "Документация и разрешения на проведение работ.", "Сопровождение согласований.", "Внутренние документы компании."],
+      en: ["Communication with developers.", "Documentation and work permits.", "Approval coordination.", "Internal company documents."],
+    },
+  },
 ];
 
 export const brands = [
